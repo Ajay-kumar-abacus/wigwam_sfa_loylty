@@ -1,0 +1,151 @@
+<!--
+  Generated template for the LoyaltyMenuPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{'Menu' | translate}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <div class="sidebar"  [ngClass] ="{'active' : toggle == true}" >
+    <div class="side-menu">
+        <ion-list>
+
+             
+            <ion-item class="transparent" (click)="goToProfile();">
+                <ion-icon item-start color="primary">
+                    <i class="material-icons">person</i>
+                </ion-icon>
+                {{'Profile'|translate}}
+            </ion-item>
+            <ion-item class="transparent" (click)="goOnPointeListPage()">
+                <ion-icon item-start color="primary">
+                  <i class="material-icons">receipt_long</i>
+                </ion-icon>
+                {{'Wallet'|translate}}
+            </ion-item>
+            <ion-item class="transparent" (click)="goOnDigitalcatPage();">
+                <ion-icon item-start color="primary">
+                    <i class="material-icons">picture_as_pdf</i>
+                </ion-icon>
+                {{'E-Catalogue' |translate}}
+            </ion-item>
+
+            <ion-item class="transparent" (click)="goToTracker();">
+                <ion-icon item-start color="primary">
+                    <i class="material-icons">fmd_good</i>
+                </ion-icon>
+                {{'Track Redemption'|translate}}
+            </ion-item>
+
+
+
+           
+          
+            
+            
+            <ion-item class="transparent" (click)="goToDetail()">
+                <ion-icon item-start color="primary">
+                    <i class="material-icons">card_giftcard</i>
+                </ion-icon>
+                {{'Rewards'|translate}}
+            </ion-item>
+            
+            
+          
+            
+            
+            
+            <ion-item class="transparent" (click)="goToVideo();">
+                <ion-icon item-start color="primary">
+                    <i class="material-icons">play_circle</i>
+                </ion-icon>
+                {{'Videos'|translate}}
+            </ion-item>
+
+                <!-- <ion-item class="transparent" >
+                <ion-icon item-start color="primary">
+                    <i class="material-icons ">poll</i>
+                    
+                </ion-icon>
+                {{'Survey' |translate}}
+            </ion-item> -->
+
+         
+
+
+                <ion-item class="transparent" (click)="goToSupport();">
+                <ion-icon item-start color="primary">
+                    <i class="material-icons">help</i>
+
+                    
+                </ion-icon>
+                {{'Ticket Raise'|translate}}
+            </ion-item>
+
+
+            <ion-item class="transparent" (click)="goToSpin();">
+              <ion-icon item-start color="primary">
+                  <i class="material-icons">sports_soccer</i>
+              </ion-icon>
+              {{'Spin & Win'|translate}}
+          </ion-item>
+
+
+          <ion-item class="transparent" (click)="Super30Page();">
+            <ion-icon item-start color="primary">
+                <i class="material-icons">leaderboard</i>
+
+                
+            </ion-icon>
+            {{'Leader Board'|translate}}
+        </ion-item>
+
+            
+            <ion-item class="transparent" (click)="goToAbout();">
+                <ion-icon item-start color="primary">
+                    <i class="material-icons">info</i>
+                </ion-icon>
+                {{'About Us'|translate}}
+            </ion-item>
+            
+            <ion-item class="transparent" (click)="goToContact();">
+                <ion-icon item-start color="primary">
+                    <i class="material-icons">contact_phone</i>
+                </ion-icon>
+                {{'Contact Us'|translate}}
+            </ion-item>
+
+         
+            
+         
+
+            <ion-item class="transparent" (click)="goOnfaqPage();">
+              <ion-icon item-start color="primary">
+                <div class="icons"><i class="material-icons">fmd_good</i></div>
+              </ion-icon>
+              {{'Faq'|translate}}
+          </ion-item>
+
+          
+
+            <ion-item class="transparent" (click)="gotoChangeLang();">
+                <ion-icon item-start color="primary">
+                    <i class="material-icons">g_translate</i>
+                   
+                </ion-icon>
+                {{'Change Language'|translate}}
+            </ion-item>
+
+
+
+        </ion-list>
+    </div>
+</div>
+
+</ion-content>

@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Redeem Request Detail</ion-title>
+    <ion-title>{{'Redeem Request Detail'|translate}}</ion-title>
   </ion-navbar>
 </ion-header>
 <ion-content>
@@ -11,66 +11,68 @@
   <div>
     <table>
       <tr>
-        <td>{{'Date'}}</td>
+        <td>{{'Date'|translate}}</td>
         <td>{{redeemDetail.date_created | date:'d MMM y'}}</td>
       </tr>
       <tr>
-        <td>{{'Req. ID'}}</td>
+        <td>{{'Req. ID'|translate}}</td>
         <td>{{redeemDetail.req_id}}</td>
       </tr>
       <tr>
-        <td>{{'Title'}}</td>
+        <td>{{'Title'|translate}}</td>
         <td>{{redeemDetail.gift_name}}</td>
       </tr>
       <tr>
-        <td>{{'Redeem Type'}}</td>
+        <td>{{'Redeem Type'|translate}}</td>
         <td>{{redeemDetail.redeem_type}}</td>
       </tr>
       <tr>
-        <td>{{'Redeem Points'}}</td>
+        <td>{{'Redeem Points'|translate}}</td>
         <td>{{redeemDetail.redeem_type == 'Gift' ? redeemDetail.gift_point_value : redeemDetail.point}}</td>
       </tr>
       <ng-container *ngIf="redeemDetail.redeem_type == 'Cash'">
+        <!-- <tr>
+          <td>{{'Point '|translate}}</td>
+          <td>{{redeemDetail.range_start}}</td>
+        </tr> -->
         <tr>
-          <td>{{'Per Point Value'}}</td>
+          <td>{{'Amount Value'|translate}}</td>
           <td>{{redeemDetail.point_range_value}}</td>
         </tr>
         <tr>
-          <td>{{'Redeem Amount'}}</td>
-          <td>{{redeemDetail.cash_point}}</td>
+          <td>{{'TDS Amount'|translate}}</td>
+          <td>{{redeemDetail.tds_amount}}</td>
         </tr>
         <tr>
-          <td>{{'Point Range'}}</td>
-          <td>{{redeemDetail.range_start}} to {{redeemDetail.range_end}}</td>
+          <td>{{'Actual Amount' | translate}}</td>
+          <td>{{redeemDetail.point_range_value - redeemDetail.tds_amount}}</td>
         </tr>
-        <tr>
-          <td>{{'1 Point Value'}}</td>
-          <td>{{redeemDetail.point_range_value}} Point</td>
-        </tr>
+     
+       
       </ng-container>
 
       <tr *ngIf="redeemDetail.account_holder_name">
-        <td>{{'Account Holder Name'}}</td>
+        <td>{{'Account Holder Name'|translate}}</td>
         <td>{{redeemDetail.account_holder_name}}</td>
       </tr>
       <tr *ngIf="redeemDetail.bank_name">
-        <td>{{'Bank Name'}}</td>
+        <td>{{'Bank Name'|translate}}</td>
         <td>{{redeemDetail.bank_name}}</td>
       </tr>
       <tr *ngIf="redeemDetail.account_no">
-        <td>{{'Account Number'}}</td>
+        <td>{{'Account Number'|translate}}</td>
         <td>{{redeemDetail.account_no}}</td>
       </tr>
       <tr *ngIf="redeemDetail.ifsc_code">
-        <td>{{'IFSC Code'}}</td>
+        <td>{{'IFSC Code'|translate}}</td>
         <td>{{redeemDetail.ifsc_code}}</td>
       </tr>
       <tr *ngIf="redeemDetail.status">
-        <td>{{'Redeem Status'}}</td>
+        <td>{{'Redeem Status'|translate}}</td>
         <td class="{{redeemDetail.status}}"><strong>{{redeemDetail.status}}</strong></td>
       </tr>
       <tr *ngIf="redeemDetail.reject_reason">
-        <td>{{'Reject Reason'}}</td>
+        <td>{{'Reject Reason'|translate}}</td>
         <td>{{redeemDetail.reject_reason}}</td>
       </tr>
       <!-- <tr  *ngIf="redeemDetail.gift_status && redeemDetail.status != 'Reject'">
@@ -82,44 +84,44 @@
           <td>{{'Transfer Date'}}</td>
           <td><strong>{{redeemDetail.transfer_date | date:'d MMM y'}}</strong></td>
         </tr>
-        <tr *ngIf="redeemDetail.razorpay_payout_id || redeemDetail.transaction_id">
-          <td>{{'Transaction Id'}}</td>
-          <td><strong>{{redeemDetail.razorpay_payout_id || redeemDetail.transaction_id }}</strong></td>
+        <tr *ngIf="redeemDetail.utr_no">
+          <td>{{'UTR  No.'}}</td>
+          <td><strong>{{redeemDetail.utr_no}}</strong></td>
         </tr>
         <tr *ngIf="redeemDetail.transfer_remark">
           <td>{{'Remark'}}</td>
-          <td><strong>{{redeemDetail.transfer_remark.replaceAll('_',' ') | titlecase }}</strong></td>
+          <td><strong>{{redeemDetail.transfer_remark}}</strong></td>
         </tr>
       </ng-container>
       <tr *ngIf="editAddress == false &&  redeemDetail.redeem_type == 'Gift'">
-        <td>Shipping Address</td>
+        <td>{{'Shipping Address'|translate}}</td>
         <td>{{redeemDetail.shipping_address ? redeemDetail.shipping_address : '---'}}</td>
       </tr>
       <tr *ngIf="redeemDetail.shipped_date != '0000-00-00 00:00:00'">
-        <td>Shipped Date</td>
+        <td>{{'Shipped Date'|translate}}</td>
         <td><strong>{{redeemDetail.shipped_date | date :'dd MMM yyyy'}}</strong></td>
       </tr>
       <tr *ngIf="redeemDetail.shipping_type != ''">
-        <td>Shipping Type </td>
+        <td>{{'Shipping Type'|translate}}</td>
         <td><strong>{{redeemDetail.shipping_type}}</strong></td>
       </tr>
       <tr *ngIf="redeemDetail.shipping_remark != ''">
-        <td>Shipping Remark </td>
+        <td>{{'Shipping Remark'|translate}} </td>
         <td><strong>{{redeemDetail.shipping_remark}}</strong></td>
       </tr>
       <tr *ngIf="redeemDetail.recieved_date != '0000-00-00 00:00:00'">
-        <td>{{'Recieved Date'}}</td>
+        <td>{{'Recieved Date'|translate}}</td>
         <td><strong>{{redeemDetail.recieved_date | date :'dd MMM yyyy'}}</strong></td>
       </tr>
     </table>
     <div class="pt16 pl16 pr16" *ngIf="editAddress == true">
-      <textarea palceholder="Shipping address" name="shipping_address " #shipping_address="ngModel"
+      <textarea placeholder="{{'Shipping address'|translate}}" name="shipping_address " #shipping_address="ngModel"
         [(ngModel)]="redeemDetail.shipping_address"></textarea>
     </div>
     <div class="padding16" *ngIf="redeemDetail.redeem_type == 'Gift' && redeemDetail.status == 'Pending'">
       <button ion-button round block color="secondary"
         (click)="editAddress == false ? changeAddress() : updateAddress()">
-        {{editAddress == false ? 'Change Shipping Address' : 'Update'}}
+        {{editAddress == false ? ('Change Shipping Address' |translate) : ('Update' |translate)}}
       </button>
     </div>
   </div>

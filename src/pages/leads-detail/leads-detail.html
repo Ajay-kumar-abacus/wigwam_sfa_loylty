@@ -143,6 +143,20 @@
             <i class="material-icons">monetization_on</i>
             
         </div>
+        <div class="main-btn mt16 mb10" *ngIf="DrType == 3 || DrType == 1" (click)="getInventory();">
+            <div>
+                <p>Product Inventory</p>
+            </div>
+            <i class="material-icons">inventory_2</i>
+            
+        </div>
+        <div class="main-btn mt16 mb10" *ngIf="DrType == 8 || DrType == 13" (click)="gotoWallet();">
+            <div>
+                <p>Wallet</p>
+            </div>
+            <i class="material-icons">receipt_long</i>
+            
+        </div>
 
 
 

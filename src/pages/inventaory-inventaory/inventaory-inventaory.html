@@ -1,0 +1,127 @@
+<ion-header class="catalogue-header">
+  <ion-navbar>
+      <ion-title> Product Inventory</ion-title>
+
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+  <div class="fix-container">
+      <div class="attendance-list flat-list">
+          <div class="center-block">
+              <div class="circle">{{navParams.get('company_name')?.trim().substring(0,1).toUpperCase()}}</div>
+              <h1>{{navParams.get('company_name')}}</h1>
+              <p>{{navParams.get('name')}} - {{navParams.get('mobile')}}</p>
+              <a class="cell-phone" href="tel:{{userDetail?.mobile}}"><i class="material-icons">phone</i></a>
+          </div>
+      </div>
+      <div class="">
+        <ion-segment [(ngModel)]="tab_type" (ionChange)="getInventory()">
+          <ion-segment-button value="Ply Expert"> 
+            Ply Expert
+          </ion-segment-button>
+          <ion-segment-button value="Ambassador">
+            Ambassador
+          </ion-segment-button>
+        </ion-segment>
+        
+      </div>
+  </div>
+
+
+
+  <div [ngSwitch]="tab_type" class="pl16 pr16 mb50" *ngIf="productData && productData.length > 0">
+      <ng-container *ngSwitchCase="'Ply Expert'">
+        <div class="summary-heading"> PLY Expert</div>
+
+
+        <div class="attendance-list" *ngFor="let row of productData;let i = index;">
+            <div class="center-block flat-block"
+              >
+                <h1>{{row.product_name}} ({{row.product_code}})</h1>
+              
+            </div>
+            <div class="slab slab-three boder-top1 pt10 mt10">
+
+                <div class="slab-day">
+                    <p>{{row.segment_name ? row.segment_name : 'NA'}}</p>
+                    <span>Category</span>
+                </div>
+                <div class="slab-day">
+                    <p>{{row.quantity_ply_expert ? row.quantity_ply_expert : 0}}</p>
+                    <span>Current Stock</span>
+                </div>
+                <div class="slab-day">
+                    <p>{{row.purchase_inreview_qty_ply ? row.purchase_inreview_qty_ply : 0}}</p>
+                    <span>Purchase in review</span>
+                </div>
+
+              
+
+
+
+            </div>
+        </div>
+
+
+         
+
+         
+       
+      </ng-container>
+
+
+
+
+      <ng-container *ngSwitchCase="'Ambassador'">
+          <div class="summary-heading">Ambassador</div>
+
+
+          <div class="attendance-list" *ngFor="let row of productData;let i = index;">
+            <div class="center-block flat-block"
+              >
+                <h1>{{row.product_name}} ({{row.product_code}})</h1>
+              
+            </div>
+            <div class="slab slab-three boder-top1 pt10 mt10">
+
+                <div class="slab-day">
+                    <p>{{row.segment_name ? row.segment_name : 'NA'}}</p>
+                    <span>Category</span>
+                </div>
+                <div class="slab-day">
+                    <p>{{row.quantity_ambassador ? row.quantity_ambassador : 0}}</p>
+                    <span>Current Stock</span>
+                </div>
+                <div class="slab-day">
+                    <p>{{row.purchase_inreview_qty_Ambassador ? row.purchase_inreview_qty_Ambassador : 0}}</p>
+                    <span>Purchase in review</span>
+                </div>
+
+              
+
+
+
+            </div>
+        </div>
+          
+      </ng-container>
+
+
+      <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)" >
+        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+  </div>
+
+  <div class="nothing-here" style="height: 50%;"  *ngIf="!productData || productData.length <= 0">
+    <div class="outer">
+      <div class="innear">
+        <img src="assets/imgs/no_found.svg" alt="">
+        <p>Data Not Available</p>
+      </div>
+    </div>
+  </div>
+</ion-content>
+

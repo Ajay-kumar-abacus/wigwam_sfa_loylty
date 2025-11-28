@@ -1,0 +1,185 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{'Purchase Detail' | translate}}</ion-title>
+  </ion-navbar>
+        <!-- <button  (click)="EditPurchase()" *ngIf="conDetail.status=='Pending' && this.tabType=='My'"> <i
+            class="material-icons">edit</i></button> -->
+</ion-header>
+
+
+
+<ion-content>
+  <div class="attendance-list flat-list">
+    <div class="slab slab-bg">
+      
+      <div class="slab-day">
+        <p>{{conDetail.pur_id }}</p>
+      </div>
+      <div class="slab-day" >
+        <p>{{conDetail.date_created |date:'d MMM y' }}</p>
+        <span>{{'Claim Date'| translate}}</span>
+
+       
+      </div>
+    
+    
+    </div>
+ 
+
+    <div class="center-block" >
+      <div class="circle">{{conDetail.dealer_name ?.toUpperCase()| slice:0:1}}</div>
+      <h1 class="f12">{{conDetail.dealer_name ?.toUpperCase()}}</h1>
+      <p>{{'Mobile No' | translate}}. : {{conDetail.dealer_mobile}}</p>
+      <a class="cell-phone" href="tel:{{conDetail.dealer_mobile}}"><i class="material-icons">phone</i></a>
+    </div>
+    
+  
+    <div class="other-block">
+      <p *ngIf="cons.UserLoggedInData.loggedInUserType!='Other'"><strong> {{conDetail.influencer_type}} :</strong> {{conDetail.name |titlecase}}({{conDetail.mobile}})</p>
+
+      <p  *ngIf="conDetail.status!='Pending' && conDetail.validated_by_name"><strong>{{'Validated  By' | translate}} :</strong> {{conDetail.validated_by_name |titlecase}} - {{conDetail.validated_by_mobile}}</p>
+
+      <!-- <p><strong>{{'Bill No.'}} :</strong> {{conDetail.bill_no}}</p> -->
+      <p  *ngIf="conDetail.status_updated_by_name && conDetail.status!='Pending' && conDetail.status!='Validated'"><strong>{{'Status Updated By' | translate}} :</strong> {{conDetail.status_updated_by_name |titlecase}} - {{conDetail.status_updated_by_mobile}}</p>
+
+      
+    </div>
+    <div class="slab">
+      <div class="slab-day">
+        <p class="{{conDetail.status}}">{{conDetail.status}}</p>
+        <span>{{'Status' | translate}}</span>
+      </div>
+      <div class="slab-day">
+        <p style="text-align:center">{{total_qty}}</p>
+        <span>{{'Total Sheet' | translate}}</span>
+      </div>
+      
+      <div class="slab-day" >
+        <p style="text-align:center">{{conDetail.transfer_point}}</p>
+        <span *ngIf="conDetail.status=='Approved'">{{'Total Point Earned' | translate}}</span>
+        <span *ngIf="conDetail.status!='Approved'">{{'Total Point' | translate}}</span>
+
+        <!-- <span  *ngIf="userId">Points Transfer</span> -->
+      </div>
+
+    
+      
+      <!-- <div class="slab-day" *ngIf="conDetail.status_updated_by_name">
+        <p>{{conDetail.status_updated_by_name |titlecase}} -({{conDetail.status_updated_by_mobile}})</p>
+        <span>Status Updated By</span>
+      </div> -->
+    </div>
+
+    <div class="action-buttons"*ngIf="cons.UserLoggedInData.loggedInUserType!='Other' && conDetail.status == 'Pending' && conDetail.purchase_right=='Yes'">
+      <button class="approve-button" (click)="updatestatus(conDetail.id,'Validated',conDetail.transfer_points,conDetail.dealer_mobile)">
+        {{'Approve'| translate}}
+      </button>
+      <button class="reject-button" (click)="updatestatus(conDetail.id,'Reject',conDetail.transfer_points,'')">
+        {{'Reject'| translate}}
+      </button>
+    </div>
+    
+    <div class="other-block" *ngIf=" conDetail.status=='Reject'">
+      <p >
+        <strong>{{'Reason' | translate}} :</strong> {{conDetail.status_reason |titlecase}}
+      </p>
+    </div>
+  </div>
+  
+  <div class="pl10 pr10 mb16">
+
+    <ng-container >
+      <div class="cs-list mt15" style="border-radius:0px">
+        <div class="top-block">
+          <p><strong>{{'PURCHASE INFO:' | translate}}</strong></p>
+        </div>
+        <div class="middle-block">
+          <div class="three-block">
+            <p>{{'Invoice No.' | translate}}:<strong>{{conDetail.invoice_no}}</strong>  </p>
+            <p>{{'Invoice Date'| translate}}:<strong>{{conDetail.invoice_date |date:'d MMM y'}}</strong>  </p>
+    
+          </div>
+         
+          <div class="three-block">
+            <p>{{'Customer Name' | translate}} : <strong>{{conDetail.customer_name | titlecase}}</strong>  </p>
+            <p>{{'Mobile' | translate}} : <strong>{{conDetail.customer_mobile_no}}</strong>  </p>
+
+    
+    
+          </div>
+    
+        
+         
+          
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="cs-list mt15" style="border-radius:0px">
+      <div class="top-block">
+        <p><strong>{{'YOUR PRODUCT:' | translate}}</strong></p>
+      </div>
+      <div class="middle-block" style="border-bottom: 1px dashed #ccc;" *ngFor="let row of itemDetail;let i=index">
+        <div class="three-block">
+      
+          <p>{{row.product_detail}} {{row.product_code}} </p>
+          <!-- <button><i class="material-icons red-clr" (click)="listdelete(i)">delete_sweep</i></button> -->
+        
+          
+        </div>
+        <div class="three-block">
+          <p>{{'Point You May Earn' | translate}} :<strong>{{row.per_item_point}}</strong>  </p>
+          <p>{{'QTY' | translate}} : <strong>{{row.qty}}</strong> </p>
+      
+      
+        </div>
+      
+      
+       
+        
+      </div>
+      </div>
+
+
+    
+      
+  
+    <div class="border-container mt16">
+      <div class="summary-heading">{{'Proof Of Purchase' | translate}}</div>
+      <ng-container>
+        <div class="upload-doc mt10">
+          <ul class="no-padding">
+            
+            <li class="image-upload" *ngFor="let row of conDetail.image" (click)="imageModal(upload_url + row.image)" >
+              <img src="{{upload_url + row.image}}" *ngIf="row.image!=''">
+              
+            </li>
+          </ul>
+          
+        </div>
+        
+        
+      </ng-container>
+    </div> 
+
+    <div class="border-container mt16">
+      <div class="summary-heading">{{'Live Site Image' | translate}}</div>
+      <ng-container>
+        <div class="upload-doc mt10">
+          <ul class="no-padding">
+            
+            <li class="image-upload" *ngFor="let row of conDetail.site_image" (click)="imageModal(upload_url + row.site_image)">
+              <img src="{{upload_url + row.site_image}}" *ngIf="row.site_image!=''">
+              
+            </li>
+          </ul>
+          
+        </div>
+        
+        
+      </ng-container>
+    </div> 
+    
+  </div>
+</ion-content>
+

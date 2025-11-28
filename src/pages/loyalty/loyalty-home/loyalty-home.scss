@@ -1,5 +1,1105 @@
 page-loyalty-home {
 
- 
+    .slide-image img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    // menu part tab css start --------------------------
+
+    .menu-icons {
+        background-color: #fecc00;
+        text-align: center;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+    .menu-icons i {
+        color: #676766;
+        font-size: 25px;
+        line-height: 35px;
+    }
+    .menu-cont {
+        padding-top: 10px;
+    }
+    .menu-cont h6 {
+        font-size: 12px;
+        line-height: 14px;
+        color: #212529e0;
+        font-weight: 600;
+        text-align: center;
+    }
+    .menu-tabs {
+        background-color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 8px;
+        padding: 6px;
+
+    }
+    .menu-prnt {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        column-gap: 6px;
+        row-gap: 6px;
+        margin: 0px 20px 0px 20px;
+    }
+    section {
+        background-color: #f8f8f8;
+        padding: 10px 0px;
+    }
+
+    // menu part tab css end --------------------------
+
+
+   // leaderboard////
+
+   .leaderboard-prnt {
+    background-color: #ffffff;
+    padding: 18px 0px 17px 0px;
+    margin: 0px 20px;
+    border-radius: 15px;
+}
+    .leadernew-prnt {
+        display: flex;
+        justify-content: space-around;
+        background-color: #FFE076;
+        align-items: center;
+        margin: 0px 10px;
+        border-radius: 5px;
+        padding: 6px;
+        border: 1px solid rgb(179, 132, 13);
+        margin-top: 20px;
+    }
+
+    .leaderboard-icons {
+        background-color: #ffffff;
+        width: 55px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50px;
+    }
+
+    // Refer part css start --------------------------
+    .refer-prnt {
+        display: flex;
+        justify-content: space-around;
+        background-color: #E0ECFF;
+        align-items: center;
+        margin: 0px 20px;
+        border-radius: 10px;
+        padding: 15px;
+    }
+
+    
+
+    
+    .refer-icons {
+        background-color: #ffffff;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50px;
+    }
+    .refr-cnt h6 {
+        font-size: 13px;
+        line-height: 16px;
+        color: #212529e0;
+        font-weight: 500;
+        padding-left: 10px;
+    }
+    .rfr-btn a {
+        font-size: 14px;
+        line-height: 24px;
+        color: #FF9F00;
+        text-decoration: none;
+    }
+    .rfr-btn {
+        background-color: #FFF2DD;
+        padding: 5px 20px;
+        border-radius: 50px;
+    }
+
+    // Refer part css end --------------------------
+
+    // Profile part css start --------------------------
+
+    .profile-head h4 {
+        font-size: 20px;
+        line-height: 30px;
+        font-weight: 600;
+        padding-left: 22px;
+        padding-bottom: 10px;
+    }
+    .main-logo img {
+        width: 150px;
+        height: 30px;
+        object-fit: contain;
+        margin-left: 10px;
+    }
+    .prf-prnt p {
+        font-size: 14px;
+        line-height: 20px;
+        color: #43BF57;
+    }
+    .kyc-btn p {
+        font-size: 14px;
+        line-height: 23px;
+        text-decoration: none;
+        text-align: center;
+        color: #ffffff;
+        font-weight: 400;
+    }
+    .kyc-btn {
+        background-color: #FE7E52;
+        height: 50px;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .prf-prnt {
+        background-color: #ffffff;
+        padding: 18px 25px 17px 25px;
+        margin: 0px 20px;
+        border-radius: 15px;
+    }
+    .prf-cnt p {
+        font-size: 14px;
+        line-height: 18px;
+        color: #2B3348;
+        padding-bottom: 10px;
+
+    }
+    .prf-prnt .progress {
+        margin-left: 0px;
+        width: 100%;
+    }
+
+
+    // Profile part css end --------------------------
+
+
+    // Points part css start --------------------------
+
+    .ponts-cnt-prnt {
+        background-color: #f1f1f1;
+        display: flex;
+        justify-content: space-around;
+        // height: 75px;
+        align-items: center;
+        // margin: 0px 20px;
+        border-radius: 10px;
+        padding: 11px 0px 10px 0px;
+    }
+    .count-ponts h4 {
+        color: #171a17;
+        font-size: 22px;
+        line-height: 30px;
+        text-align: center;
+    }
+    .count-ponts h6 {
+        font-size: 13px;
+        line-height: 25px;
+        color: #171a17;
+        font-weight: 400;
+    }
+    .points-prnt {
+        background-color: #f1f1f1;
+        padding: 15px;
+        border-bottom-left-radius:0px;
+        border-bottom-right-radius:0px;
+    }
+    .prfl-name-prnt {
+        display: flex;
+        // justify-content: space-between;
+        padding-bottom: 15px;
+        margin: 0px 0px 0px 3px;
+    }
+    .prf-icn {
+        background-color: #a0daff;
+        font-size: 20px;
+        line-height: 38px;
+        color: #ffffff;
+        border-radius: 50%;
+        width: 45px;
+        height: 45px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        // margin-left: 25px;
+    }
+    .rnk-profile-prt .prf-icn {
+        margin-left: 0px;
+    }
+    .rnk-num h4 img {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+    }
+    .rnk-num h4 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .noti-icn {
+        color: #ffffff;
+        font-size: 30px;
+        line-height: 30px;
+        margin-right: 20px;
+        padding-top: 5px;
+    }
+    .prfl-notif {
+        // margin-right: 20px;
+        margin-top: 5px;
+    }
+    .prfl-notif img {
+        width: 25px;
+        line-height: 35px;
+    }
+    .prfl-nm h2 {
+        font-size: 17px;
+        line-height: 23px;
+        color: #171a17;
+    }
+    .prfl-parent {
+        display: flex;
+        width: calc(100% - 40px);
+        justify-content: space-between;
+    }
+    .prfl-nm {
+        margin-left: 20px;
+    }
+    .prfl-nm h6 {
+        color: #171a17;
+        font-size: 13px;
+        line-height: 23px;
+        font-weight: 400;
+    }
+    .prfl-img img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50px;
+    }
+    .prfl-img {
+        width: 40px;
+    }
+    section.prfl-sec {
+        padding: 0px;
+        position: sticky;
+        top: 0;
+        z-index: 999999;
+        background-color: transparent;
+    }
+
+    // Points part css end --------------------------
+
+    // Progress part css start --------------------------
+
+    .prg-head h5 {
+        font-size: 16px;
+        line-height: 26px;
+        font-weight: 500;
+        padding-left: 20px;
+        padding-bottom: 15px;
+    }
+    .prg-cnt-prt {
+        background-color: #FF9F00;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        padding: 12px 0px 10px 0px;
+    }
+    .prg-num p {
+        text-align: end;
+        color: #ffffff;
+        font-size: 12px;
+        line-height: 20px;
+    }
+    .prg-img img {
+        width: 20px;
+        height: 20px;
+    }
+    .prg-icn i {
+        color: #FF9F00;
+        font-size: 25px;
+        line-height: 35px;
+    }
+    .prg-cnt h4 {
+        font-size: 12px;
+        line-height: 18px;
+        color: #ffffff;
+    }
+    .prg-cnt {
+        padding: 4px 20px 3px 20px;
+    }
+    .prg-num h5 {
+        font-size: 14px;
+        line-height: 25px;
+        color: #ffffff;
+    }
+    .prg-cnt p {
+        font-size: 13px;
+        line-height: 23px;
+        color: #ffffff;
+        padding-top: 5px;
+    }
+    .prg_num p {
+        font-size: 13px;
+        line-height: 23px;
+        color: #ffffff;
+    }
+    .prg-club p {
+        font-size: 12px;
+        line-height: 18px;
+        padding-bottom: 5px;
+    }
+    .rate-prt {
+        display: flex;
+        justify-content: space-around;
+        padding-top: 10px;
+        padding-bottom: 12px;
+    }
+    .prg-club {
+        padding: 15px 20px 12px 20px;
+    }
+    .linr-color {
+        border-radius: 20px;
+        margin: 0px 20px;
+        background-color: #fff;
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+        border-radius: 20px;
+    }
+    .out {
+        width: 100%;
+        height: 16px;
+        background: #eae7e7;
+        margin: 10px 0px;
+        border-radius: 10px;
+        position: relative;
+        overflow: hidden;
+    }
+    .out .in {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0%;
+        height: 100%;
+        // background: -webkit-gradient(linear, right top, left top, from(#2a7a0e), to(#52c234));
+        // background: linear-gradient(to left, #2a7a0e, #52c234);
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        background-color: #43BF57;
+    }
+    .progress-bar {
+        background-color: #43BF57;
+        padding-left: 5px;
+        height: 20px;
+        display: flex;
+        justify-content: left;
+        align-items: center;
+        text-align: left;
+    }
+    .progress {
+        width: 79%;
+        background: #efefef;
+        height: 19px !important;
+        border-radius: 10px;
+        margin-top: 10px;
+        position: relative;
+        overflow: hidden;
+        font-size: 14px;
+        line-height: 18px;
+        color: #ffffff;
+        margin: 0 auto;
+        margin-top: 12px;
+    }
+    section.tabs-sec {
+        position: sticky;
+        bottom: 0;
+        background-color: #ffffff;
+        z-index: 999999;
+    }
+    // Progress part css end --------------------------
+
+    // leaderboard part css start --------------------------
+
+
+    .leaderp-prnt p {
+        font-size: 14px;
+        line-height: 20px;
+        color: #212529e0;
+    }
+    .leader-prnt {
+        display: flex;
+        justify-content: space-between;
+    }
+    .leader-icn {
+        padding-right: 18px;
+    }
+    .leader-icn h4 i {
+        font-size: 26px;
+        line-height: 6px;
+        position: relative;
+        top: 7px;
+    }
+    .rnk-head h5 {
+        font-size: 14px;
+        line-height: 22px;
+        color: #2B3348;
+        padding-bottom: 15px;
+    }
+    .leader-icn h4 {
+        color: brown;
+        font-size: 13px;
+        line-height: 23px;
+        font-weight: 500;
+    }
+    .rank-part {
+        background-color: #ffffff;
+        padding: 20px;
+        margin: 0px 20px 0px 20px;
+        border-radius: 15px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center bottom;
+    }
+    .rnk-profile-prt {
+        border: 1px solid goldenrod;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #f7da85;
+        padding: 5px;
+        border-radius: 7px;
+    }
+    .rnk-num h4 i {
+        font-size: 25px;
+        line-height: 35px;
+        position: relative;
+        top: 6px;
+        margin-top: -9px;
+    }
+    .rnk-cnt h2 {
+        font-size: 12px;
+        line-height: 10px;
+        color: #2B3348;
+        font-weight: 700;
+    }
+    .rnk-cnt h6 {
+        font-size: 10px;
+        line-height: 20px;
+        font-weight: 500;
+    }
+    // leaderboard part css end --------------------------
+
+    // slider part css start --------------------------
+
+    .slide-zoom {
+        margin-left: 25px;
+    }
+    .slider-cnt h6 {
+        font-size: 15px;
+        line-height: 17px;
+        color: #fff;
+        font-weight: 400;
+    }
+    .slider-cnt p {
+        font-size: 14px;
+        line-height: 15px;
+        color: #fff;
+        font-weight: 400;
+    }
+    .swiper-pagination-bullet-active {
+        background: #ff9600 !important;
+    }
+
+    // slider part css end --------------------------
+
+    // sections css
+
+    section.menu-sec {
+        padding-top: 20px;
+    }
+    section.refer-sec {
+        padding-bottom: 20px;
+    }
+
+    // tabs css start-------------------
+
+    .all-tabs-prnt {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background-color: #ffffff;
+        padding: 0px 0px 10px 0px;
+    }
+    .tabs-img {
+        padding-top: 15px;
+    }
+    section.tabs-sec {
+        padding: 0px;
+    }
+    .tabs-img img {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 5px;
+    }
+    .all-tabs-bg {
+        background-color: #fecc00;
+        border-radius: 50px;
+        width: 60px;
+        height: 60px;
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .tabs-icons i {
+        font-size: 35px;
+        line-height: 45px;
+        color: #676766;
+    }
+    .active-tabs {
+        border-top: 2px solid #fecc00;
+    }
+    // tabs css end---------------------
+
+    // points earn css start---------------------
+
+    .promo-img img {
+        width: 88%;
+        height: 140px;
+        object-fit: fill;
+        border-radius: 15px;
+    }
+    .promo-img {
+        text-align: center;
+    }
+    // points css end---------------------
+
+    // graph css 
+
+    .scroll-content {
+        background-color: #f8f8f8;
+    }
+    ion-card {
+        border-radius: 20px !important;
+    }
+    // chart customizations end
+
+    .indicators {
+        position: absolute;
+        top: 100%;
+        z-index: 3;
+        width: 100%;
+
+        ul {
+            display: flex;
+            width: 90%;
+            grid-column-gap: 20px;
+            margin: auto;
+            justify-content: center;
+            flex-wrap: wrap;
+
+            li {
+                flex: wrap;
+                font-weight: bold;
+                color: #777;
+                font-size: 12px;
+                position: relative;
+                margin-bottom: 3px;
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    left: -10px;
+                    height: 8px;
+                    width: 8px;
+                }
+            }
+        }
+
+        .targetIndicator {
+            &::before {
+                background-color: #1bb3e8;
+            }
+        }
+
+        .acheiveIndicator {
+            &::before {
+                background-color: #172b4d;
+            }
+        }
+    }
+
+    .enquiryIndicators {
+        ul {
+            .winIndicator {
+                &::before {
+                    background-color: #007abb;
+                }
+            }
+
+            .lostIndicator {
+                &::before {
+                    background-color: #ff9b00;
+                }
+            }
+
+            .inProgressIndicator {
+                &::before {
+                    background-color: #00b5b1;
+                }
+            }
+        }
+    }
+
+    .card-head {
+        padding: 4px;
+        z-index: 2;
+        position: relative;
+        overflow: visible;
+
+        .card-title {
+            border-bottom: 1px solid #ccc;
+            padding: 4px;
+
+            h2 {
+                font-weight: bold;
+                font-size: 14px;
+            }
+        }
+    }
+
+    .enquiryDetailsBox,
+    .overdueByRegionDetailsBox {
+        display: flex;
+        justify-content: space-between;
+        grid-column-gap: 2px;
+        padding: 3px;
+
+        .detailBox {
+            border-radius: 4px;
+            flex: 1;
+            text-align: center;
+            background-color: white;
+            padding-top: 3px;
+
+            .valueBox {
+                font-size: 18px;
+                font-weight: bold;
+                line-height: 20px;
+            }
+
+            .titleBox {
+                font-size: 12px;
+                line-height: 16px;
+                font-weight: 200;
+                font-weight: bold;
+                color: #777;
+            }
+        }
+
+    }
+
+    .enquiryDetailsBox {
+        .detailBox:nth-child(1) {
+            .valueBox {
+                color: #007abb;
+            }
+        }
+
+        .detailBox:nth-child(2) {
+            .valueBox {
+                color: #ff9b00;
+            }
+        }
+
+        .detailBox:nth-child(3) {
+            .valueBox {
+                color: #00b5b1;
+            }
+        }
+    }
+
+    .card-md {
+        margin: 0 20px !important;
+        width: calc(95% - 20px) !important;
+    }
+
+
+
+    ///Point section ////
+    .pointsec-prnt {
+        background-color: #ffffff;
+        padding: 18px 0px 0px 0px;
+        margin: 0px 20px;
+        border-radius: 10px;
+    }
+
+    .point-name-prnt {
+        display: flex;
+        // justify-content: space-between;
+        padding-bottom: 15px;
+        margin: 0px 0px 0px 3px;
+    }
+
+    .point-img img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50px;
+    }
+    .pr-img {
+        width: 40px;
+    }
+
+    .pointt-parent {
+        display: flex;
+        width: calc(100% - 40px);
+        justify-content: space-between;
+    }
+
+    .pt-nm {
+        margin-left: 20px;
+    }
+    .pt-nm h6 {
+        color: #171a17;
+        font-size: 13px;
+        line-height: 23px;
+        font-weight: 400;
+    }
+
+    #enquiryPieChart {
+        width: 100%;
+        height: 250px;
+      }
+
+
+      .my-profile-container {
+        background: linear-gradient(0deg, #e1e1e1, #ffffff);
+        padding: 16px;
+    
+    
+        button {
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            height: 45px;
+            text-transform: inherit !important;
+    
+            ion-icon {
+                font-size: 32px;
+            }
+        }
+    
+        .time-slot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 40px;
+            background: #ffffff;
+            border: 1px dashed #ffffff;
+            margin-bottom: 10px;
+            padding: 0px 10px;
+            font-size: 15px;
+            box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+    
+    
+            span {
+                font-weight: bold;
+                font-size: 16px;
+            }
+        }
+    
+        .User_detail {
+            h1 {
+                font-size: 20px;
+                line-height: 24px;
+            }
+    
+            p {
+                font-size: 14px;
+                line-height: 20px;
+                margin: 6px 0px !important;
+            }
+    
+            &.fix-arrow {
+                position: relative;
+                padding-right: 40px;
+    
+                i {
+                    position: absolute;
+                    top: 50%;
+                    right: 10px;
+                    transform: translateY(-50%);
+                    font-weight: bold;
+                    font-size: 30px;
+                }
+            }
+        }
+    
+        .em_info {
+            // display: flex;
+            // flex-direction: row;
+            // align-items: center;
+            // justify-content: space-between;
+            background-color: rgba(118, 161, 179, .4);
+            border: 1px solid #1e576d;
+            border-radius: 10px;
+            margin: 0px;
+            padding: 10px 10px;
+            margin-top: 16px;
+    
+            .timeclass {
+                font-size: 10px;
+                // display: inline-block;
+                text-align: center;
+                padding: 5px;
+                background-color: rgba(0, 143, 181, .4);
+            }
+    
+            .stopandcheckinBox {
+                display: flex;
+                justify-content: space-between;
+    
+            }
+    
+            .Start_work {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                // border-bottom: 1px dashed black;
+    
+                .icon {
+                    width: 22px;
+                    height: 20px;
+                }
+    
+                p {
+                    padding-left: 4px;
+                    color: #fff;
+                }
+    
+            }
+    
+            ion-toggle {
+                width: 34px;
+                color: #35c222 !important;
+                --background-checked: red !important;
+            }
+        }
+    }
+
+
+    .disabled-tileIcon{
+        background-color: #000000 !important;
+        border-radius: 20% !important;
+    }
+    .disabled-tab
+    {
+        opacity: 0.6;
+
+    }
+    .arrow{
+        display: flex;
+        justify-content: flex-end;
+        font-size: 20px;
+    }
+    .ver-icon{
+       font-size: 18px; 
+       vertical-align: middle;
+    }
+
+    /* CSS */
+.progress-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 20px;
+  }
+  
+  .step-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .step {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px; 
+    color: white;
+    font-weight: bold;
+  }
+  
+  .step.active {
+    background-color: #4caf50; /* Green for active steps */
+  }
+  
+  .step.current {
+    background-color: #2196f3; /* Blue for current step */
+  }
+  
+  .connector {
+    flex-grow: 1;
+    height: 2px;
+    background-color: #e0e0e0;
+  
+    margin-bottom: 34px;
+  }
+  
+  .connector.active {
+    background-color: #4caf50; /* Green for active connectors */
+  }
+  
+  .step-label {
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333030;
+  }
+  .step-label2 {
+   
+    font-size: 10px;
+    color: #757575;
+  }
+
+  .progress-section {
+    .progress-header {
+        text-align: center;
+        margin-bottom: 20px;
+
+        h3 {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        p {
+            font-size: 1em;
+            color: #666;
+        }
+    }
+}
+
+.prg-head h5 {
+    font-size: 16px;
+    line-height: 26px;
+    font-weight: 500;
+    padding-left: 20px;
+    padding-bottom: 15px;
+}
+
+.prg-cnt-prt {
+    background-color: #FF9F00;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    padding: 12px 0px 10px 0px;
+}
+.progress-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 20px;
+}
+
+.milestone-header {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.milestone-header h5 {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.milestone-date {
+    font-size: 0.8em;
+    color: #666;
+}
+
+/* points-balance.component.scss */
+.points-section {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 15px;
+  }
+  
+  .piggy-container {
+    margin-right: 20px;
+  }
+  
+  .piggy-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ddd;
+  }
+  
+  .piggy-icon {
+    width: 50px;
+    height: 50px;
+    filter: invert(80%) sepia(54%) saturate(5000%) hue-rotate(360deg) brightness(100%) contrast(106%);
+  }
+  
+  .points-info {
+    flex: 1;
+  }
+  
+  .points-value {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0;
+    color: #333;
+  }
+  
+  .points-label {
+    margin: 5px 0 0;
+    color: #777;
+    font-size: 10px;
+  }
+  
+  .view-details-btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    color: #d9a036;
+    border: 1px solid #d9a036;
+    font-size: 10px; 
+  }
+  
+  .view-details-btn ion-icon {
+    margin-left: 5px;
+  }
 
 }

@@ -1,0 +1,39 @@
+<ion-content  class="transprant-bg" >
+  <div class="work-modal">
+      <div class="work-modal-bg">
+          <div>
+              
+              <div class="head">
+                  <p *ngIf="data.status == 'Validated'">{{'We have sent OTP on'|translate}} <span style="color:green;font-weight: 800;">{{data.dealer_mobile}}</span></p>
+
+                  <h2 *ngIf="data.status == 'Reject'">Change Status</h2>
+
+                  <a class="close" (click)="dismiss()"><i class="material-icons">close</i></a>
+              </div>
+              <div class="form padding0 mb10" >
+              <ion-list>
+                    <ion-item class="cs-input" *ngIf="data.status == 'Validated'">
+                      <ion-label floating>{{'ENTER OTP' | translate}}<strong class="red-text">*</strong></ion-label>
+                      <ion-input type="tel"  name="purchase_otp" #purchase_otp="ngModel" [(ngModel)]="data.purchase_otp"  minlength="6"    maxlength="6"(ngModelChange)="otpvalidation()" required></ion-input>
+                    </ion-item>
+
+                    <div class="resend-otp" *ngIf="data.status == 'Validated' && sendFlag">{{"Didn't receive?"| translate}} <button ion-button [disabled]='time == true' clear
+                      (click)="getOtpDetail('resend',data.id)">{{'Resend' | translate}}</button> {{maxTime ? '00:'+maxTime+'' : ''}}</div>
+                 
+                      
+                      <ion-item *ngIf="data.status == 'Reject'">
+                        <ion-label floating>{{'Reason' | translate}}<strong class="red-text">*</strong></ion-label>
+                        <ion-textarea name="reason" #reason="ngModel" [(ngModel)]="data.reason" required></ion-textarea>
+                      </ion-item>
+              </ion-list>
+              </div>
+              
+              <div class="text-right mt32">
+                <button class="capitalize"  *ngIf="data.status!= 'Reject' && otp_value" (click)="updateStatus()" [disabled]="saveFlag" ion-button round full><ion-spinner *ngIf="spinner == true"></ion-spinner>{{'Update' | translate}}</button>
+            <button class="capitalize"  *ngIf="data.status == 'Reject'" (click)="updateStatus()" [disabled]="saveFlag" ion-button round full><ion-spinner *ngIf="spinner == true"></ion-spinner>{{'Update' | translate}}</button>
+              </div>
+          </div>
+      </div>
+      
+  </div>
+</ion-content>

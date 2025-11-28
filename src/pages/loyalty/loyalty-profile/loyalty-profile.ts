@@ -9,7 +9,10 @@ import { MyserviceProvider } from '../../../providers/myservice/myservice';
 import { RegistrationPage } from '../../login-section/registration/registration';
 import { SelectRegistrationTypePage } from '../../select-registration-type/select-registration-type';
 import { Diagnostic } from '@ionic-native/diagnostic';
-import { CameraModalPage } from '../../camera-modal/camera-modal';
+import { TranslateService } from '@ngx-translate/core';
+import * as jwt_decode from "jwt-decode";
+import OneSignal from 'onesignal-cordova-plugin';
+
 
 /**
 * Generated class for the LoyaltyProfilePage page.
@@ -32,11 +35,15 @@ export class LoyaltyProfilePage {
   loading: Loading;
   edit: any = '';
   edit1: any = '';
-  lang: any = '';
+  lang: any = 'en';
   upload_url: any = ''
   tokenInfo: any = {};
-  constructor(public diagnostic: Diagnostic,public navCtrl: NavController, public app: App, public navParams: NavParams, public service: MyserviceProvider, public loadingCtrl: LoadingController, public storage: Storage, public events: Events, public actionSheetController: ActionSheetController, private camera: Camera, public alertCtrl: AlertController, public modalCtrl: ModalController, public db: DbserviceProvider, private socialSharing: SocialSharing, public constant: ConstantProvider) {
+  constructor(public diagnostic: Diagnostic,public navCtrl: NavController, public app: App, public navParams: NavParams, public service: MyserviceProvider, public loadingCtrl: LoadingController, public storage: Storage, public events: Events, public actionSheetController: ActionSheetController, private camera: Camera, public alertCtrl: AlertController, public modalCtrl: ModalController, public db: DbserviceProvider, private socialSharing: SocialSharing, public constant: ConstantProvider,public  translate:TranslateService) {
     this.upload_url = constant.influencer_doc;
+    this.translate.setDefaultLang(this.lang);
+    this.translate.use(this.lang);
+    this.get_user_lang()
+
     this.getKarigarDetail();
   }
 
@@ -60,6 +67,8 @@ export class LoyaltyProfilePage {
         {
           text: 'Yes',
           handler: () => {
+            OneSignal.logout();
+            this.storage.set('onesignaltoken', '');
             this.storage.set('token', '');
             this.storage.set('role', '');
             this.storage.set('displayName', '');
@@ -92,6 +101,7 @@ export class LoyaltyProfilePage {
   ok: any = "";
   upl_file: any = "";
   save_succ: any = "";
+  sales_User_detail:any={};
   ionViewDidLoad() {
     this.cam = "Camera"
     this.gal = "Gallery"
@@ -109,6 +119,8 @@ export class LoyaltyProfilePage {
     this.service.addData({}, 'AppInfluencer/influencerDetail').then((result) => {
       if (result['statusCode'] == 200) {
         this.karigar_detail = result['detail'];
+        
+
         this.service.dismissLoading();
       }
       else {
@@ -131,8 +143,7 @@ export class LoyaltyProfilePage {
         text: this.cam,
         icon: 'camera',
         handler: () => {
-          // this.takePhoto();
-          this.cameraModal('camera');
+          this.takePhoto();
         }
       },
       {
@@ -153,26 +164,6 @@ export class LoyaltyProfilePage {
     });
     actionsheet.present();
   }
-
-  cameraModal(type) {
-    let modal = this.modalCtrl.create(CameraModalPage,{'type':type});
-
-    modal.onDidDismiss(data => {
-      console.log(data)
-      if (data != undefined && data != null) {  
-        this.karigar_detail.profile = data
-      if (this.karigar_detail.profile) {
-        this.uploadImage(this.karigar_detail.profile);
-      } 
-    }
-    
-    
-      
-    });
-
-    modal.present();
-  }
-
   takePhoto() {
     this.diagnostic.requestCameraAuthorization().then((isAvailable: any) => {
     const options: CameraOptions = {
@@ -230,15 +221,17 @@ export class LoyaltyProfilePage {
     if (this.karigar_detail.referral_code != "") {
       this.ref_code = ' and use my Code *' + this.karigar_detail.referral_code + '* to get points back in your wallet'
     }
-    this.socialSharing.share('Hey There ! here is an awesome app from Basiq   ..Give it a try https://play.google.com/store/apps/details?id=com.basiq.app' + this.ref_code).then(() => {
+    this.socialSharing.share('Hey There ! here is an awesome app Wigwam Ply   ..Give it a try market://details?id=com.basiq.wigwamply&hl=en' + this.ref_code).then(() => {
     }).catch((e) => {
       this.service.errorToast('Something Went wrong , Please Try Again Later')
     });
   }
 
-  updateProfile() {
+  updateProfile(edit_type) {
     this.karigar_detail.edit_profile = 'edit_profile';
-    this.navCtrl.push(RegistrationPage, { 'data': this.karigar_detail, "mode": 'edit_page' })
+    this.karigar_detail.edit_type = edit_type;
+
+    this.navCtrl.push(RegistrationPage, { 'data': this.karigar_detail, "mode": 'edit_page', })
   }
 
 
@@ -247,6 +240,39 @@ export class LoyaltyProfilePage {
     let inputChar = String.fromCharCode(event.charCode);
     if (event.keyCode != 8 && !pattern.test(inputChar)) {
       event.preventDefault();
+    }
+  }
+
+
+  get_user_lang() {
+    this.storage.get("token")
+      .then(resp => {
+        this.tokenInfo = this.getDecodedAccessToken(resp);
+        console.log(this.tokenInfo)
+
+        this.service.addData({ "login_id": this.tokenInfo.id }, 'Login/userLanguage').then(result => {
+          if (result['statusCode'] == 200) {
+            this.lang = result['result']['app_language'];
+            if (this.lang == "") {
+              this.lang = "en";
+            }
+            this.translate.use(this.lang);
+          }
+          else {
+            this.service.errorToast(result['statusMsg']);
+            this.service.dismissLoading();
+          }
+        })
+      })
+  }
+
+
+  getDecodedAccessToken(token: string): any {
+    try {
+      return jwt_decode(token);
+    }
+    catch (Error) {
+      return null;
     }
   }
 

@@ -20,7 +20,7 @@ export class LoyaltyVideoPage {
   video_list:any=[];
   SafeResourceUrl;
   tokenInfo:any={};
-  lang:any='';
+  lang:any='en';
   ok:any="";
   constructor(public navCtrl: NavController, public navParams: NavParams,public service:MyserviceProvider,public dom:DomSanitizer,private app:App) {
     this.getVideoList();

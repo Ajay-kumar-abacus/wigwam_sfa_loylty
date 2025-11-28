@@ -23,7 +23,7 @@
       <h1 class="f14">Basic Information</h1>
       <ion-list no-lines class="padding10">
         <!-- <------------------------------------------ Optional in Ambassador, Not required in Ply Expert, Mandatory for others ---------------------------------------------->
-        <!-- <div *ngIf="Type == 13 ">
+        <div *ngIf="Type == 13 ">
           <ion-item>
             <ion-label floating>Firm Name </ion-label>
             <ion-input type="text" name="company_name" #company_name="ngModel" [(ngModel)]="form.company_name"
@@ -31,8 +31,8 @@
             </ion-input>
           </ion-item>
 
-        </div> -->
-        <div *ngIf="Type != 8">
+        </div>
+        <div *ngIf="Type != 13 && Type != 8">
           <ion-item [ngClass]="{'error':f.submitted &&company_name?.invalid}">
             <ion-label floating>Firm Name <strong class="red-text">*</strong></ion-label>
             <ion-input type="text" name="company_name" #company_name="ngModel" [(ngModel)]="form.company_name" required
@@ -170,8 +170,8 @@
         <div *ngIf="f.submitted &&city.invalid" class="eror">
           <p *ngIf="city.errors.required">{{'Field is Required'}}</p>
         </div> 
-        <ion-item  *ngIf="Type ==1 ||Type ==3||Type ==7 ">
-          <ion-label floating>division <strong class="red-text">*</strong></ion-label>
+        <ion-item  *ngIf="Type ==1 ||Type ==3||Type ==7 ||Type ==8 ||Type ==13">
+          <ion-label floating>Division <strong class="red-text">*</strong></ion-label>
           <ion-select interface="action-sheet" name="division_name" name="division_name" #division_name="ngModel" [(ngModel)]="form.division_name" multiple
              required>
             <ion-option *ngFor="let row of division_list;let i=index;" value="{{row.division_name}}">{{row.division_name |

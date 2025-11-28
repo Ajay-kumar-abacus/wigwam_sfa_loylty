@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { ActionSheetController, AlertController, IonicPage, ModalController, NavController, NavParams } from 'ionic-angular';
+import { ActionSheetController, AlertController, IonicPage, NavController, NavParams } from 'ionic-angular';
 import { MyserviceProvider } from '../../../../providers/myservice/myservice';
 import { SendPointRequestListingPage } from '../send-point-request-listing/send-point-request-listing';
 import { IonicSelectableComponent } from 'ionic-selectable';
@@ -7,7 +7,6 @@ import { ConstantProvider } from '../../../../providers/constant/constant';
 import { Camera,CameraOptions } from '@ionic-native/camera';
 import { Device } from '@ionic-native/device';
 import { Diagnostic } from '@ionic-native/diagnostic';
-import { CameraModalPage } from '../../../camera-modal/camera-modal';
 declare let cordova:any ;
 @IonicPage()
 @Component({
@@ -31,7 +30,7 @@ export class SendPointRequestAddPage {
     
     
     
-    constructor(public diagnostic: Diagnostic,public Device:Device,public navCtrl: NavController, public navParams: NavParams,public service: MyserviceProvider,public alertCtrl: AlertController,public constant: ConstantProvider,public actionSheetController: ActionSheetController, private camera: Camera,public modalCtrl: ModalController) {
+    constructor(public diagnostic: Diagnostic,public Device:Device,public navCtrl: NavController, public navParams: NavParams,public service: MyserviceProvider,public alertCtrl: AlertController,public constant: ConstantProvider,public actionSheetController: ActionSheetController, private camera: Camera,) {
         
         this.loginDrData = this.constant.UserLoggedInData;
         console.log(this.loginDrData);
@@ -275,8 +274,7 @@ export class SendPointRequestAddPage {
                 text: 'Camera',
                 icon:'camera',
                 handler: () => {
-                    this.cameraModal('camera');
-                    // this.takePhoto();
+                    this.takePhoto();
                 }
             },
             {
@@ -298,22 +296,6 @@ export class SendPointRequestAddPage {
         });
         actionsheet.present();
     }
-
-      cameraModal(type) {
-        let modal = this.modalCtrl.create(CameraModalPage,{'type':type});
-    
-        modal.onDidDismiss(data => {
-          console.log(data)
-          if (data != undefined && data != null) {
-            this.selectImage.push(data);
-        }
-        
-        
-          
-        });
-    
-        modal.present();
-      }
     takePhoto()
     {
         this.diagnostic.requestCameraAuthorization().then((isAvailable: any) => {

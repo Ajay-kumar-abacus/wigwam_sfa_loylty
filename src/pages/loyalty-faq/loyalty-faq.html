@@ -1,0 +1,54 @@
+<!--
+  Generated template for the LoyaltyFaqPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+
+
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{'Faq List'|translate}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+
+
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+    pullingIcon="arrow-dropdown"
+    pullingText="Pull to refresh"
+    refreshingSpinner="circles"
+    refreshingText="Refreshing...">
+  </ion-refresher-content>
+</ion-refresher>
+
+ 
+  <div class="image-detail" *ngIf="question_list_faq.length == 0">
+    <img src="assets/imgs/no_found.svg">
+</div>
+<ng-container *ngFor="let list of question_list_faq; let i=index">
+  <div class="gift-item" >
+    <div class="top-items">
+      
+      <div class="">
+        <div class="qr_ty">
+          <h4 class="counter">{{i+1}}.</h4>
+          <div class="faq_hd">
+            <h5>{{list.question | titlecase}}</h5>
+          </div>
+         
+        </div>
+       <div class="faq_prt">
+        <p>Ans . {{list.answer | titlecase}}</p>
+       </div>
+       
+       
+      </div>
+    </div>
+  </div>
+</ng-container>
+ 
+</ion-content>

@@ -18,7 +18,7 @@ export class CancelpolicyModalPage {
 
     constructor(public navCtrl: NavController, public navParams: NavParams,private app:App,public serv: MyserviceProvider,public events: Events) {
       events.subscribe('state', (data) => {
-
+        console.log(data);
         if(data=='online'){
           this.reload();
         }

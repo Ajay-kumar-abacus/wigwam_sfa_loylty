@@ -7,6 +7,9 @@ import { MyserviceProvider } from '../../../providers/myservice/myservice';
 import { DealerHomePage } from '../../dealer-home/dealer-home';
 import { LoyaltyHomePage } from '../loyalty-home/loyalty-home';
 import { CancelationPolicyPage } from '../../cancelation-policy/cancelation-policy';
+import { TranslateService } from '@ngx-translate/core';
+import * as jwt_decode from "jwt-decode";
+
 
 
 /**
@@ -35,15 +38,27 @@ export class LoyaltyRedeemRequestPage {
   info: any = {};
   gift_type: any;
   paymentMode:any;
+ tokenInfo:any={};
+
+ state_list: any = [];
+  district_list: any = [];
+  city_list: any = [];
+  all_State_district:any={};
+
+
+  lang:any='en'
+
 
   constructor(public navCtrl: NavController, public viewCtrl: ViewController, public navParams: NavParams, public service: MyserviceProvider,
     public loadingCtrl: LoadingController, private app: App, public storage: Storage,
-    public db: DbserviceProvider, public constant: ConstantProvider, public toastCtrl: ToastController) {
+    public db: DbserviceProvider, public constant: ConstantProvider, public toastCtrl: ToastController,public  translate:TranslateService) {
+      this.translate.setDefaultLang(this.lang);
+    this.translate.use(this.lang);
+    this.get_user_lang();
     this.uploadUrl = constant.upload_url1 + 'gift_gallery/';
     this.gift_id = this.navParams.get('gift_id');
     this.gift_type = this.navParams.get('gift_type');
     this.paymentMode= this.navParams.get('payment_mode');
-    console.log(this.paymentMode)
 
 
     if (this.gift_type == 'Cash') {
@@ -56,6 +71,12 @@ export class LoyaltyRedeemRequestPage {
     this.service.presentLoading();
     // this.getOtpDetail('');
     this.getGiftDetail(this.gift_id);
+    if(this.gift_type == 'Gift'){
+    this.getstatelist();
+
+
+    }
+
   }
 
   ionViewDidLoad() {
@@ -174,6 +195,11 @@ export class LoyaltyRedeemRequestPage {
       return;
     }
 
+    if (this.gift_type == 'Gift' && this.data.check1!=true && !this.data.pincode) {
+      this.service.errorToast('Pincode is required');
+      return;
+    }
+
     if (this.karigar_detail.country == 'india') {
       if ((this.gift_type == 'Cash') && (this.paymentMode=='Bank') && ((this.karigar_detail.account_holder_name == '' || this.karigar_detail.bank_name == '') || (this.karigar_detail.account_no == '' || this.karigar_detail.ifsc_code == ''))) {
         this.service.errorToast('Bank details not updated yet. Update bank details and retry');
@@ -194,6 +220,8 @@ export class LoyaltyRedeemRequestPage {
       return;
     }
     this.data.gift_id = this.gift_id,
+    this.data.payment_mode='Bank'
+
       this.saveFlag = true;
     this.service.presentLoading();
 
@@ -210,6 +238,13 @@ export class LoyaltyRedeemRequestPage {
 
         this.service.successToast(result['statusMsg']);
       }
+      // else if(result['statusCode'] == 400){
+      //   this.service.dismissLoading();
+      //   this.service.errorToast(result['status']);
+      //   this.saveFlag = false;
+
+
+      // }
       else {
         this.service.dismissLoading();
         this.service.errorToast(result['statusMsg']);
@@ -233,4 +268,90 @@ export class LoyaltyRedeemRequestPage {
   }
 
 
+
+
+get_user_lang()
+{
+  this.storage.get("token")
+  .then(resp=>{
+    this.tokenInfo = this.getDecodedAccessToken(resp );
+    console.log(this.tokenInfo)
+    
+    this.service.addData({"login_id":this.tokenInfo.id}, 'Login/userLanguage').then(result => {
+      if (result['statusCode'] == 200) {
+        this.lang = result['result']['app_language'];
+        if(this.lang == "")
+        {
+          this.lang = "en";
+        }
+        this.translate.use(this.lang);
+      }
+      else {
+        this.service.errorToast(result['statusMsg']);
+        this.service.dismissLoading();
+      }
+    })
+  })
+}
+
+
+getDecodedAccessToken(token: string): any {
+  try{
+    return jwt_decode(token);
+  }
+  catch(Error){
+    return null;
+  }
+}
+
+
+getstatelist() {
+  this.service.addData({}, 'AppInfluencerSignup/getStates').then(result => {
+    if (result['statusCode'] == 200) {
+      this.state_list = result['all_state'];
+    }
+    else {
+      this.service.errorToast(result['statusMsg'])
+    }
+  });
+}
+
+getDistrictList(state_name) {
+  this.service.addData({ 'state_name': state_name }, 'AppInfluencerSignup/getDistrict').then(result => {
+    if (result['statusCode'] == 200) {
+      this.district_list = result['all_district'];
+    }
+    else {
+      this.service.errorToast(result['statusMsg'])
+    }
+  });
+}
+getaddress(pincode) {
+  if (this.data.pincode.length == '6') {
+    this.service.addData({ 'pincode': pincode }, 'AppInfluencerSignup/PinCodeWiseState').then((result) => {
+      console.log(result);
+
+      if (result['statusCode'] == 200) {
+        this.all_State_district = result['all_State_district'];
+
+        if (this.all_State_district != null) {
+          this.data.state = this.all_State_district.state_name;
+          this.getDistrictList(this.data.state)
+          this.data.district = this.all_State_district.district_name;
+          this.data.city = this.all_State_district.city_name;
+          console.log(this.data);
+        }
+
+      }
+      else {
+        this.service.errorToast(result['statusMsg'])
+      }
+
+    });
+  }
+
+}
+
+
+  
 }

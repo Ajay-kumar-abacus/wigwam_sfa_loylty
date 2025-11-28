@@ -5,9 +5,6 @@
             <div class="buttons">
             </div>
             <div style="position: relative;">
-                  <button (click)="initSpeech()" style="position: relative; background: none; border: none; cursor: pointer; padding: 0; display: inline-block;">
-                    <ion-icon name="mic" style="font-size: 24px;"></ion-icon>
-                </button>
                 <button (click)="announcementModal()" style="position: relative; background: none; border: none; cursor: pointer; padding: 0; display: inline-block;">
                     <ion-icon name="notifications" style="font-size: 24px;"></ion-icon>
                     <span style="position: absolute; top: -5px; right: -5px; background-color: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px; line-height: 1;">
@@ -492,7 +489,38 @@
                         <span>Pricing</span>
                     </div>
 
-                     <div class="btns-group" (click)="goToTrackDetail()" *ngIf="team_count  > 0">
+                 
+
+                    <div class="btns-group" (click)="gotoPurchaseList()">
+                        <div class="rel">
+                            <i class="material-icons">card_giftcard</i>
+                            <ng-container *ngIf="purchasecount > 0">
+                                <span [ngClass]="{'new-dot': purchasecount > 0}">{{purchasecount}}</span>
+                            </ng-container>
+                        </div>
+                        <span>Claim</span>
+                    </div>
+
+                    <div class="btns-group" (click)="gotoWallet()">
+                        <div class="rel">
+                            <i class="material-icons">card_giftcard</i>
+                            <ng-container *ngIf="purchasecount > 0">
+                                <span [ngClass]="{'new-dot': purchasecount > 0}">{{purchasecount}}</span>
+                            </ng-container>
+                        </div>
+                        <span>Wallet</span>
+                    </div>
+
+                    <!-- <div class="btns-group" (click)="gotoInventatory()">
+                        <div class="rel">
+                            <i class="material-icons">card_giftcard</i>
+                            <ng-container *ngIf="purchasecount > 0">
+                                <span [ngClass]="{'new-dot': purchasecount > 0}">{{purchasecount}}</span>
+                            </ng-container>
+                        </div>
+                        <span>Inventatory</span>
+                    </div> -->
+      <div class="btns-group" (click)="goToTrackDetail()" *ngIf="team_count  > 0">
                         <div class="rel yellow-icon">
                             <i class="material-icons">my_location</i>
                         </div>

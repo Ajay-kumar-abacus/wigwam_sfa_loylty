@@ -82,6 +82,10 @@ import { AppVersion } from '@ionic-native/app-version';
 import { Market } from "@ionic-native/market"
 import { CheckinSummaryPage } from '../checkin-summary/checkin-summary';
 import { PriceListPage } from '../price-list/price-list';
+import { LoyaltyPurchaseListPage } from '../loyalty-purchase-list/loyalty-purchase-list';
+import { InventaoryInventaoryPage } from '../inventaory-inventaory/inventaory-inventaory';
+import { WalletInfluencerWalletPage } from '../wallet-influencer-wallet/wallet-influencer-wallet';
+
 import { CameraModalPage } from '../camera-modal/camera-modal';
 import { TeamTrackDetailPage } from '../team-track-detail/team-track-detail';
 import { PrimaryOrderAddPage } from '../primary-order-add/primary-order-add';
@@ -149,6 +153,8 @@ export class DashboardPage {
     influencerUser: any = [];
     attendence_button: any;
     followupcount: any;
+    purchasecount: any;
+
     read_enquiry_count: any;
     AuthorizationStatus: any;
     test_user_flag: any = 0
@@ -1006,6 +1012,7 @@ export class DashboardPage {
         else if (this.last_attendence_data.Total_Working_Time != '' && this.last_attendence_data.start_time != '' && this.last_attendence_data.manual_absent == 1 && this.last_attendence_data.stop_time == '00:00:00') {
             msg = "Your <strong>Attendence</strong> has been stopped. Contact To Admin Now.."
         }
+
         else if (this.last_attendence_data.Total_Working_Time != '' && this.last_attendence_data.start_time != '' && this.last_attendence_data.manual_absent == 1 && this.last_attendence_data.stop_time == '00:00:00') {
             msg = "Your <strong>Attendence</strong> has been stopped. Contact To Admin Now.."
         }
@@ -1041,6 +1048,10 @@ export class DashboardPage {
         this.navCtrl.push(PriceListPage, { 'view_type': 'price_list' });
     }
 
+    gotoPurchaseList() {
+        console.log(this.user_id)
+        this.navCtrl.push(LoyaltyPurchaseListPage,{'login_id':this.user_id,'login_data':this.user_data});
+    }
     scanProduct() {
         const options: BarcodeScannerOptions = {
             prompt: ""
@@ -1088,7 +1099,6 @@ export class DashboardPage {
     goToPopRequisition() {
         this.navCtrl.push(PopRequisitionPage)
     }
-
     goToAddLeave() {
         this.navCtrl.push(AddLeavePage)
     }
@@ -1132,7 +1142,6 @@ export class DashboardPage {
     goToTravel1(type) {
         this.navCtrl.push(TravelListNewPage, { 'view_type': type, 'page_type': 'mjp' });
     }
-
     GoToProfile() {
         this.navCtrl.push(ProfilePage);
     }
@@ -1209,6 +1218,12 @@ export class DashboardPage {
 
     goOnDigitalcatPage() {
         this.navCtrl.push(LoyaltyCataloguePage)
+    }
+    gotoInventatory(){
+        this.navCtrl.push(InventaoryInventaoryPage)
+    }
+    gotoWallet(){
+        this.navCtrl.push(WalletInfluencerWalletPage)
     }
 
     announcementModal() {

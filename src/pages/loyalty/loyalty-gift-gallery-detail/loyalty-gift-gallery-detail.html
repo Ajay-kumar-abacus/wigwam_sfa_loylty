@@ -1,12 +1,12 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Redeem Points</ion-title>
+    <ion-title>{{'Redeem Points' | translate}}</ion-title>
   </ion-navbar>
 </ion-header>
 <ion-content>
   <div class="fix">
     <div class="top-nav">
-      <p>{{'Balance Points'}}</p>
+      <p>{{'Balance Points' | translate}}</p>
       <h1>{{influencer_point.wallet_point}}</h1>
     </div>
   </div>
@@ -21,72 +21,87 @@
     </div>
     <div class="gift-content">
       <h1>{{gift_detail.title | titlecase}}</h1>
-      <h2 *ngIf="gift_detail.gift_type == 'Gift'">{{gift_detail.gift_point}} {{'Points'}}</h2>
-      <h2 *ngIf="gift_detail.gift_type == 'Cash'">{{gift_detail.range_start}} to {{gift_detail.range_end}} {{'Points'}}
+      <h2 *ngIf="gift_detail.gift_type == 'Gift'">{{gift_detail.gift_point}} {{'Points' | translate}}</h2>
+      <h2 *ngIf="gift_detail.gift_type == 'Cash'">{{gift_detail.range_start}} {{'Points' | translate}}
       </h2>
-      <p *ngIf="gift_detail.termsNcondition"><span>Description</span>:- {{gift_detail.termsNcondition}}</p>
+      <p *ngIf="gift_detail.termsNcondition"><span>{{'Description' | translate}}</span>:- {{gift_detail.termsNcondition}}</p>
     </div>
     <div class="form padding0" *ngIf="gift_detail.gift_type=='Cash'">
       <ion-list no-lines>
         <ion-item>
           <ion-label floating>{{'Redeem Point'}}<span>*</span></ion-label>
           <ion-input type="tel" name="cash_point" #cash_point="ngModel" [(ngModel)]="data.cash_point" readonly
-          (ngModelChange)="getValue(data.cash_point)" required></ion-input>
-        </ion-item>
+          required></ion-input>
+      </ion-item>
         
         <ion-item>
-          <ion-label floating>{{'Redeem Point Value'}}<span>*</span></ion-label>
+          <ion-label floating>{{'Amount Value' | translate}}<span>*</span></ion-label>
           <ion-input type="tel" name="cash_value" #cash_value="ngModel" [(ngModel)]="data.cash_value"
           readonly></ion-input>
         </ion-item>
         
-        <ion-item *ngIf="influencer_point.country=='india'">
-          <ion-label floating>{{'Select Payment Mode'}}<span>*</span></ion-label>
+        <ion-item *ngIf="influencer_point.country=='India'">
+          <ion-label floating>{{'Select Payment Mode' | translate}}<span>*</span></ion-label>
           <ion-select name="payment_mode" #payment_mode="ngModel" [(ngModel)]="data.payment_mode">
-            <!-- <ion-option value="Paytm">Paytm</ion-option> -->
-            <ion-option value="Bank">Bank</ion-option>
+            <!-- <ion-option value="UPI">{{'UPI'| translate}}</ion-option> -->
+            <ion-option value="Bank">{{'Bank' | translate}}</ion-option>
           </ion-select>
         </ion-item>
         
-        <!-- <ion-item *ngIf="data.payment_mode=='Paytm'">
-          <ion-label floating>{{'Enter Paytm No.'}}<span>*</span></ion-label>
-          <ion-input type="text" name="wallet_no" #wallet_no="ngModel" [(ngModel)]="data.wallet_no" minlength="10"
-          maxlength="10" (keypress)="mobileNoCheck($event)"></ion-input>
+        <!-- <ion-item *ngIf="data.payment_mode=='UPI'">
+          <ion-label floating>{{'Enter UPI ID'}}<span>*</span></ion-label>
+          <ion-input type="text" name="upi_id" #upi_id="ngModel" [(ngModel)]="data.upi_id"
+         [required]="data.payment_mode=='UPI'"></ion-input>
         </ion-item> -->
         
-        <ion-item *ngIf="influencer_point.country=='nepal'">
+        <!-- <ion-item *ngIf="influencer_point.country=='nepal'">
           <ion-label floating>{{'Enter Khalti No.'}}<span>*</span></ion-label>
           <ion-input type="text" name="wallet_no" #wallet_no="ngModel" [(ngModel)]="data.wallet_no" minlength="10"
           maxlength="10" (keypress)="mobileNoCheck($event)"></ion-input>
-        </ion-item>
+        </ion-item> -->
       </ion-list>
     </div>
-    <ng-container
-    *ngIf="data.payment_mode =='Bank' && (influencer_point.payout_kyc_status == '' ||  influencer_point.payout_kyc_status == 'Reject')">
-    <div class="error-bg"
-    [ngClass]="{'kyc-reject': influencer_point.payout_kyc_status == '' || influencer_point.payout_kyc_status == 'Reject'}">
-    <ng-container *ngIf="influencer_point.payout_kyc_status == ''">
-      Your Bank Detail Is Not Updated. Please Update Bank Detail<a class="kyc-reject-text"
-      (click)="updateBankDetail()"> Update Now</a>
+    <ng-container  *ngIf=" (influencer_point.account_holder_name=='' || influencer_point.account_no=='' || influencer_point.bank_name=='' || influencer_point.ifsc_code==''    || influencer_point.adhar_no=='' || influencer_point.document_image==''  || influencer_point.document_image_back=='' || influencer_point.kyc_status != 'Verified'  ) ">
+      <div class="error-bg" [ngClass]="{'kyc-reject': influencer_point.account_holder_name == '' || influencer_point.account_no == '' || influencer_point.bank_name == '' || influencer_point.ifsc_code == '' || influencer_point.kyc_status != 'Verified'}">
+        <ng-container>
+          {{'Your Bank Detail Is Not Updated and Document Details And Kyc Details is not Approved. Please Update Bank Detail and Document Details' | translate}}<a class="kyc-reject-text"
+            (click)="updateBankDetail()"> {{'Update Now' | translate}}</a>
+        </ng-container>
+        <!-- <ng-container *ngIf="influencer_point.payout_kyc_status == 'Reject'">
+          Your Bank Detail Is Rejected Due To <strong>{{influencer_point.payout_kyc_pending_reason.replaceAll('_', ' ')
+            | titlecase}}</strong> . Please Update Bank Detail<a class="kyc-reject-text"
+            (click)="updateBankDetail()">Update Now</a>
+        </ng-container> -->
+      </div>
     </ng-container>
-    <ng-container *ngIf="influencer_point.payout_kyc_status == 'Reject'">
-      Your Bank Detail Is Rejected Due To <strong>{{influencer_point.payout_kyc_pending_reason.replaceAll('_', ' ')
-        | titlecase}}</strong> . Please Update Bank Detail<a class="kyc-reject-text"
-        (click)="updateBankDetail()">Update Now</a>
-      </ng-container>
-    </div>
-  </ng-container>
-  <ng-container *ngIf="data.payment_mode =='Bank' && (influencer_point.payout_kyc_status == 'Pending')">
+  <!-- <ng-container *ngIf="data.payment_mode =='Bank' && (influencer_point.payout_kyc_status == 'Pending')">
     <div class="error-bg" [ngClass]="{'kyc-pending': influencer_point.payout_kyc_status == 'Pending'}">
       Your KYC status is {{influencer_point.kyc_status}}. After KYC is Verified send redeem request. For more
       information contact us at {{contact.contact_number}}
     </div>
-  </ng-container>
+  </ng-container> -->
   
-  <button ion-button round block color="secondary"
-  [disabled]="(influencer_point.country=='india'  ? (data.payment_mode=='Bank' ?  influencer_point.payout_kyc_status!='Approved' : !data.wallet_no.length) : !data.wallet_no)"
+  <!-- <button ion-button round block color="secondary"
+  [disabled]="(influencer_point.country=='India'  ? (data.payment_mode=='Bank' ?  influencer_point.payout_kyc_status!='Approved' : !data.wallet_no.length) : !data.wallet_no)"
   (click)="SendRequest()">
   Send Redeem Request
+</button> -->
+
+
+<button ion-button round block color="secondary"
+[disabled]="(influencer_point.account_holder_name=='' || influencer_point.account_no=='' || influencer_point.bank_name=='' || influencer_point.ifsc_code=='' || influencer_point.kyc_status != 'Verified' || influencer_point.adhar_no=='' || influencer_point.document_image==''  || influencer_point.document_image_back==''  )"
+(click)="SendRequest()">
+{{'Send Redeem Request' | translate}}
 </button>
+
+<!-- <button ion-button round block color="secondary" *ngIf="data.payment_mode=='UPI'"
+[disabled]="(data.upi_id =='') && gift_detail.gift_type == 'Cash'"  (click)="SendRequest()">
+{{'Send Redeem Request'}}
+</button> -->
+
+<!-- <button ion-button round block color="secondary" *ngIf="gift_detail.gift_type=='Gift'"(click)="SendRequest()">
+{{'Send Redeem Request'}}
+</button> -->
+
 </div>
 </ion-content>
