@@ -1,0 +1,547 @@
+<!--
+  Generated template for the ComplaintDetailPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>Complaint Detail</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <div class="detais">
+    <div class="capsule-tabs" style="border-bottom: 0px;">
+      <ul>
+        <li [ngClass]="{'active':complaint_type == 'Details'}" (click)="complaint_type = 'Details';">
+          <p>Details</p>
+        </li>
+        <li [ngClass]="{'active':complaint_type == 'Remark'}" (click)="complaint_type = 'Remark';">
+          <p>Remark</p>
+        </li>
+        <li [ngClass]="{'active':complaint_type == 'Inspection'}" (click)="complaint_type = 'Inspection';"
+          *ngIf="complaint_detail.inspection_status=='Done'">
+          <p>Inspection</p>
+        </li>
+        <li [ngClass]="{'active':complaint_type == 'Close'}"
+          (click)="complaint_type = 'Close';goToClosePage(complaint_detail.id,complaint_detail.customer_mobile,complaint_detail.closing_type)"
+          *ngIf="complaint_detail.complaint_status=='Closed'">
+          <p>Close</p>
+        </li>
+        <li [ngClass]="{'active':complaint_type == 'Cancel'}" (click)="complaint_type = 'Cancel'"
+          *ngIf="complaint_detail.complaint_status=='Cancel'">
+          <p>Cancel</p>
+        </li>
+      </ul>
+    </div>
+
+    <!-- <div class="border-container mt16" *ngIf="complaint_type == 'Details'">
+      <div class="summary-heading">Basic Details</div>
+      <ng-container>
+        <div class="">
+
+          <table>
+            <tr>
+              <th class="w100">Created By</th>
+              <td>{{complaint_detail.created_name ? complaint_detail.created_name : '---'}}</td>
+            </tr>
+            <tr>
+              <th class="w100">Complaint Id</th>
+              <td>{{complaint_detail.complain_no ? complaint_detail.complain_no : '---'}}</td>
+            </tr>
+            <tr>
+              <th>Date Created</th>
+              <td>{{complaint_detail.date_created | date:'d MMM y'}}</td>
+            </tr>
+
+            <tr>
+              <th>Customer Name</th>
+              <td>{{complaint_detail.customer_name ? (complaint_detail.customer_name | titlecase) : '---'}}</td>
+            </tr>
+            <tr>
+              <th>Customer Mobile</th>
+              <td>{{complaint_detail.customer_mobile ? complaint_detail.customer_mobile : '---'}}</td>
+            </tr>
+            <tr>
+              <th>Nature Of Problem</th>
+              <td>{{complaint_detail.nature_of_problem ? (complaint_detail.nature_of_problem | titlecase) : '---'}}</td>
+            </tr>
+            <tr>
+              <th>Complaint Status</th>
+              <td>{{complaint_detail.complaint_status ? complaint_detail.complaint_status :'---'}}</td>
+            </tr>
+            <tr>
+              <th>Inspection Status</th>
+              <td>{{complaint_detail.inspection_status ? ( complaint_detail.inspection_status) :'---'}}</td>
+            </tr>
+
+          </table>
+        </div>
+        <div class="upload-doc mt16">
+          <ul class="no-padding">
+
+            <li class="image-upload" *ngFor="let row of complaint_images" (click)="imageModal(bannerURL + row.image)">
+              <img src="{{bannerURL + row.image}}">
+
+            </li>
+          </ul>
+
+        </div>
+      </ng-container>
+    </div> -->
+
+
+    <div class="attendance-list flat-list" *ngIf="complaint_type == 'Details'">
+      <div class="slab slab-bg">
+        <div class="slab-day">
+          <p>
+            {{complaint_detail.date_created | date:'d MMM y'}}
+          </p>
+          <span>Date Created</span>
+        </div>
+        <div class="slab-day">
+          <p>{{complaint_detail.created_name ? (complaint_detail.created_name |titlecase): '---'}}</p>
+          <span>Created By</span>
+        </div>
+        <div class="slab-day">
+          <p>{{complaint_detail.complain_no ? complaint_detail.complain_no : '---'}}</p>
+          <span>Id</span>
+        </div>
+        <div class="slab-day">
+          <p>{{complaint_detail.pending_at ? complaint_detail.pending_at : '---'}}</p>
+          <span>TAT</span>
+        </div>
+
+      </div>
+      <div class="center-block">
+        <div class="circle">{{complaint_detail.customer_name?.substring(0,1).toUpperCase()}}</div>
+        <h1 class="f12">{{complaint_detail.customer_name ? (complaint_detail.customer_name | titlecase) : '---'}}</h1>
+        <p>{{complaint_detail.customer_mobile ? complaint_detail.customer_mobile : '---'}}</p>
+
+      </div>
+      <div class="other-block">
+        <p>
+          <strong>Address :</strong>{{ complaint_detail.city | titlecase }} , {{complaint_detail.district |
+          titlecase }} , {{complaint_detail.state |
+          titlecase}} , {{complaint_detail.pincode}}
+        </p>
+      </div>
+      <div class="slab">
+        <div class="slab-day">
+          <p>{{complaint_detail.nature_of_problem ? (complaint_detail.nature_of_problem | titlecase) : '---'}}</p>
+          <span>Nature Of Problem</span>
+        </div>
+        <!-- <div class="slab-day">
+              <p>{{installtion_detail.inspection_status ? ( installtion_detail.inspection_status | titlecase) :'---'}}</p>
+              <span>D.O.B</span>
+            </div> -->
+        <div class="slab-day">
+          <p class="bold">{{complaint_detail.complaint_status ? complaint_detail.complaint_status :'---'}}</p>
+          <span>Status</span>
+        </div>
+        <!-- <div class="slab-day">
+              <p class="bold">
+              </p>
+              <span>D.O.A</span>
+            </div> -->
+      </div>
+
+      <!-- <div class="other-block pb0">
+            <p><strong>GPS Location :</strong> </p>
+          </div> -->
+
+
+      <div class="upload-doc mt16">
+        <ul class="no-padding">
+
+          <li class="image-upload" *ngFor="let row of complaint_images" (click)="imageModal(bannerURL + row.image)">
+            <img src="{{bannerURL + row.image}}">
+
+          </li>
+        </ul>
+      </div>
+    </div>
+
+
+    <!-- inspection button -->
+
+    <div class="border-container mt16" *ngIf="complaint_type == 'Remark'">
+      <div class="summary-heading">Remarks</div>
+      <ng-container>
+        <div class="pb100">
+          <div class="remarkSent" *ngFor="let row of complaint_remark">
+            <p class="remarkMsg">{{row.msg | titlecase }}</p>
+            <div class="dateCreated"><span>({{row.created_by_type | titlecase}})</span> <span>{{row.date_created |
+                date:'d MMM
+                y'}}</span></div>
+          </div>
+
+          <div class="nothing-here" *ngIf="complaint_remark == 0">
+            <div class="outer">
+              <div class="innear">
+                <img src="assets/imgs/no_found.svg" alt="">
+                <p>Data Not Available</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </ng-container>
+    </div>
+
+    <!-- <div class="border-container mt16" *ngIf="showInsepction == true && complaint_detail.inspection_status =='Done'">
+      <div class="summary-heading">Inspection Details</div>
+      <ng-container>
+
+        <div class="">
+
+          <table>
+            <tr>
+              <th class="w100">Complaint Id</th>
+              <td>{{complaint_detail.complain_no ? complaint_detail.complain_no : '---'}}</td>
+            </tr>
+            <tr>
+              <th>Inspection Date</th>
+              <td>{{complaint_detail.inspection_date != '0000-00-00 00:00:00' ? (complaint_detail.inspection_date |
+                date:'d MMM y') :'--'}}</td>
+            </tr>
+            <tr>
+              <th>Serial Number</th>
+              <td>{{complaint_detail.serial_no ? complaint_detail.serial_no :'---'}}</td>
+            </tr>
+            <tr>
+              <th>Product Name</th>
+              <td>{{complaint_detail.product_name ? complaint_detail.product_name : '---'}}</td>
+            </tr>
+            <tr>
+              <th>Product Code</th>
+              <td>{{complaint_detail.product_code ? complaint_detail.product_code : '---'}}</td>
+            </tr>
+            <tr>
+              <th>Warranty Status</th>
+              <td>{{complaint_detail.warranty_status ? complaint_detail.warranty_status : '---'}}</td>
+            </tr>
+            <tr>
+              <th>Inspection Remark</th>
+              <td>{{complaint_detail.inspection_remark ? (complaint_detail.inspection_remark | titlecase) : '---'}}</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="upload-doc mt16">
+          <ul class="no-padding">
+
+            <li *ngIf="complaint_detail.bill_copy_img != ''" class="image-upload"
+              (click)="imageModal(complaint_detail.bill_copy_img)">
+              <img src="{{complaint_detail.bill_copy_img}}">
+
+            </li>
+            <li *ngIf="complaint_detail.warranty_card_copy_img != ''" class="image-upload"
+              (click)="imageModal(complaint_detail.warranty_card_copy_img)">
+              <img src="{{complaint_detail.warranty_card_copy_img}}">
+
+            </li>
+          </ul>
+
+        </div>
+
+      </ng-container>
+
+    </div> -->
+
+
+    <!--#################################       inspection details          ####################### -->
+
+
+    <div class="attendance-list flat-list"
+      *ngIf="complaint_detail.inspection_status =='Done' && complaint_type == 'Inspection'">
+      <!-- <div class="border-container mb16">
+        <div class="summary-heading">Inspection Details</div>
+      </div> -->
+      <div class="slab slab-bg">
+        <div class="slab-day">
+          <p>
+            {{complaint_detail.inspection_date != '0000-00-00 00:00:00' ? (complaint_detail.inspection_date |
+            date:'d MMM y') :'--'}}
+          </p>
+          <span>Inspection Date</span>
+        </div>
+
+
+        <!-- <div class="slab-day">
+          <p>{{complaint_detail.warranty_status ? complaint_detail.warranty_status : '---'}}</p>
+          <span>Warranty Status</span>
+        </div> -->
+
+      </div>
+      <div class="other-block">
+        <h1 class="f12">{{complaint_detail.warranty_status ? complaint_detail.warranty_status : '---'}}</h1>
+        <p>Warranty Status</p>
+
+      </div>
+
+      <div class="slab">
+        <div class="slab-day">
+          <p>{{complaint_detail.product_name ? (complaint_detail.product_name |titlecase)
+            :'---'}}</p>
+          <span>Product Name</span>
+        </div>
+        <div class="slab-day">
+          <p>{{complaint_detail.product_code ? complaint_detail.product_code : '---'}}</p>
+          <span>Product Code</span>
+        </div>
+      </div>
+
+      <div class="other-block pb0">
+        <p><strong>Inspection Remark</strong> {{complaint_detail.inspection_remark ? (complaint_detail.inspection_remark
+          | titlecase) : '---'}} </p>
+      </div>
+
+
+      <div class="upload-doc mt16">
+        <ul class="no-padding">
+
+          <li *ngIf="complaint_detail.bill_copy_img != ''" class="image-upload"
+            (click)="imageModal(complaint_detail.bill_copy_img)">
+            <img src="{{complaint_detail.bill_copy_img}}">
+
+          </li>
+          <li *ngIf="complaint_detail.warranty_card_copy_img != ''" class="image-upload"
+            (click)="imageModal(complaint_detail.warranty_card_copy_img)">
+            <img src="{{complaint_detail.warranty_card_copy_img}}">
+
+          </li>
+        </ul>
+
+      </div>
+
+
+
+
+    </div>
+
+    <div class="border-container mt16" *ngIf="complaint_type == 'Details' && spare_details.length > 0">
+      <div class="summary-heading">Spare Details</div>
+      <div class="payment-box">
+        <div class="credit-table">
+          <table>
+            <tr>
+              <th class="text-left">Spare Details</th>
+              <th class=" w50 text-center">Qty</th>
+              <!-- <td class="text-left">Balance</td> -->
+            </tr>
+            <ng-container *ngFor="let row of spare_details;">
+              <tr>
+                <td>{{ row.part_name |titlecase }}-{{row.part_no |titlecase}}</td>
+                <td class="w50 text-center">{{row.qty}}</td>
+              </tr>
+            </ng-container>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="border-container mt16" *ngIf="complaint_type == 'Close'">
+      <div class="summary-heading">Closing Details</div>
+      <ng-container>
+
+        <div class="">
+
+          <table>
+            <tr>
+              <th class="w100">Complaint Id</th>
+              <td>{{complaint_detail.complain_no}}</td>
+            </tr>
+            <tr>
+              <th>Closing Date</th>
+              <td>
+                {{complaint_detail.closed_date != '0000-00-00 00:00:00' ? (complaint_detail.closed_date | date:'d MMM
+                y') :'--'}}
+              </td>
+            </tr>
+            <tr *ngIf="complaint_detail.closing_type == 'Replacement'">
+              <th>New Serial No.</th>
+              <td>{{complaint_detail.new_serial_no ? complaint_detail.new_serial_no : '---'}}</td>
+            </tr>
+            <tr *ngIf="complaint_detail.closing_type == 'Replacement'">
+              <th>Product Type</th>
+              <td>{{complaint_detail.product_type ? complaint_detail.product_type : '---'}}</td>
+            </tr>
+            <tr *ngIf="complaint_detail.closing_type == 'Replacement'">
+              <th>Replaced By</th>
+              <td>{{complaint_detail.replaced_by_type ? complaint_detail.replaced_by_type : '---'}}</td>
+            </tr>
+            <tr *ngIf="complaint_detail.closing_type == 'Replacement' && complaint_detail.replaced_by_type == 'Dealer'">
+              <th>Company Name</th>
+              <td>{{complaint_detail.replaced_by_company_name?complaint_detail.replaced_by_company_name:"---"}}</td>
+            </tr>
+            <tr *ngIf="complaint_detail.closing_type == 'Replacement' && complaint_detail.replaced_by_type == 'Dealer'">
+              <th>Dealer Name</th>
+              <td>{{complaint_detail.replaced_by_name?complaint_detail.replaced_by_name:"---"}}</td>
+            </tr>
+            <tr *ngIf="complaint_detail.closing_type == 'Replacement'&& complaint_detail.replaced_by_type == 'Dealer'">
+              <th>Dealer Mobile</th>
+              <td>{{complaint_detail.replaced_by_mobile?complaint_detail.replaced_by_mobile:"---"}}</td>
+            </tr>
+            <tr>
+              <th>Closing Remark</th>
+              <td>{{complaint_detail.closing_remark ? complaint_detail.closing_remark : '---'}}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="upload-doc mt16">
+          <ul class="no-padding">
+
+            <li class="image-upload" *ngFor="let row of closing_image" (click)="imageModal(bannerURL + row.image)">
+              <img src="{{bannerURL + row.image}}">
+
+            </li>
+          </ul>
+
+        </div>
+      </ng-container>
+
+
+    </div>
+
+
+    <!--                 ################invoice summary#########################             -->
+
+
+    <!-- <div class="border-container mt16" *ngIf="complaint_type == 'Close'">
+      <div class="summary-heading">Invoice Summary</div>
+      <div class="payment-box">
+        <div class="credit-table">
+          <table>
+            <tr>
+              <th class="w70">Type</th>
+              <th class="w70">Amount</th>
+              <th class="w75">Discount</th>
+              <th class="w50">GST</th>
+              <th class="w80">Net Amount</th>
+            </tr>
+            <ng-container>
+              <tr>
+                <td class="w70">
+                  Spare Part
+                  {{ row.product_name |titlecase }}-{{row.product_code |titlecase}}
+                </td>
+                <td class="w70">
+                  100000
+                  {{row.qty}}
+                </td>
+                <td class="w75">
+                  {{row.qty}}100
+                </td>
+                <td class="w50">
+                  {{row.qty}}18
+                </td>
+                <td class="w80">
+                  {{row.qty}}99900
+                </td>
+              </tr>
+            </ng-container>
+          </table>
+        </div>
+      </div>
+    </div> -->
+    <div class="border-container mt16" *ngIf="complaint_type == 'Cancel'">
+      <div class="summary-heading">Cancel Details</div>
+      <ng-container>
+
+        <div class="">
+
+          <table>
+            <tr>
+              <th class="w100">Complaint Id</th>
+              <td>{{complaint_detail.complain_no}}</td>
+            </tr>
+            <tr>
+              <th>Cancel Date</th>
+              <td>{{complaint_detail.closed_date != '0000-00-00 00:00:00' ? (complaint_detail.closed_date | date:'d MMM
+                y') :'--'}}</td>
+            </tr>
+            <tr>
+              <th>Cancel Reason</th>
+              <td>{{complaint_detail.status_reason ? complaint_detail.status_reason : '---'}}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="upload-doc mt16">
+          <ul class="no-padding">
+            <li class="image-upload" *ngFor="let row of closing_image" (click)="imageModal(bannerURL + row.image)">
+              <img src="{{bannerURL + row.image}}">
+            </li>
+          </ul>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <div class="footer-input-block" *ngIf="complaint_type == 'Remark' && complaint_detail.complaint_status == 'Pending' ">
+    <textarea type="text" placeholder="Add Remark" name="msg" #msg="ngModel" [(ngModel)]="data.msg"></textarea>
+    <button ion-button icon-start color="success" (click)="addRemark()"><ion-icon name="send"></ion-icon></button>
+  </div>
+
+  <ion-fab right bottom
+    *ngIf=" complaint_detail.visit_status != 'AlreadyStart'&& complaint_type != 'Remark' && complaint_detail.complaint_status == 'Pending'&& complaint_type == 'Details'">
+    <button ion-fab color="success"><ion-icon name="add"></ion-icon></button>
+    <ion-fab-list side="top">
+
+      <button ion-fab color="success" (click)="startVisit(complaint_detail.id,complaint_detail.complain_no)"
+        *ngIf=" complaint_detail.visit_status == 'Start' && complaint_detail.complaint_status == 'Pending'&& complaint_type == 'Details'">
+        <ion-icon name="checkbox"></ion-icon>
+        <ion-label>Start Visit</ion-label>
+      </button>
+      <button ion-fab color="success" (click)="end_visit(complaint_detail.visit_details.visit_id)"
+        *ngIf=" complaint_detail.visit_status == 'Stop'">
+        <ion-icon name="exit"></ion-icon>
+        <ion-label>End Visit</ion-label>
+      </button>
+
+      <button ion-fab color="success" (click)="GotoInspectionPage(complaint_detail.id)"
+        *ngIf=" complaint_type == 'Details' && complaint_detail.visit_status == 'Stop' && complaint_detail.inspection_status != 'Done' ">
+        <ion-icon name="information-circle"></ion-icon>
+        <ion-label>Inspection</ion-label>
+      </button>
+
+      <button ion-fab color="success" (click)="goToeditInspection(complaint_detail)"
+        *ngIf=" complaint_detail.inspection_status == 'Done'  && complaint_detail.complaint_status == 'Pending' && complaint_detail.visit_status == 'Stop'">
+        <ion-icon name="create"></ion-icon>
+        <ion-label>Edit Inspection</ion-label>
+      </button>
+
+      <button ion-fab color="success" (click)="goToSpareAdd(complaint_detail.id,complaint_detail.complain_no)"
+        *ngIf=" complaint_detail.inspection_status == 'Done'  && complaint_detail.complaint_status == 'Pending' && complaint_detail.visit_status == 'Stop' ">
+        <ion-icon name="build"></ion-icon>
+        <ion-label>Add Spare Part</ion-label>
+      </button>
+
+      <button ion-fab color="success"
+        (click)="goToClosePage(complaint_detail.id,complaint_detail.customer_mobile,complaint_detail.closing_type)"
+        *ngIf="complaint_detail.inspection_status=='Done'  && complaint_detail.complaint_status=='Pending' && complaint_detail.visit_status == 'Stop'">
+        <ion-icon name="close-circle"></ion-icon>
+        <ion-label>Change Status</ion-label>
+      </button>
+
+      <button ion-fab color="success"
+        (click)="goToInvoicePage(complaint_detail.id,complaint_detail.customer_mobile,complaint_detail.closing_type)"
+        *ngIf="complaint_detail.inspection_status=='Done'  && complaint_detail.complaint_status=='Pending' && complaint_detail.visit_status == 'Stop'">
+        <ion-icon name="create"></ion-icon>
+        <ion-label>Add Invoice</ion-label>
+      </button>
+
+
+
+    </ion-fab-list>
+  </ion-fab>
+
+</ion-footer>

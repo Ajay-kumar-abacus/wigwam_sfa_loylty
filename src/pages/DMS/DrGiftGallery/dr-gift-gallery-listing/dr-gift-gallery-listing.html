@@ -1,0 +1,76 @@
+
+<ion-header>
+	<ion-navbar>
+		<ion-title>Gift Gallery</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content>
+	<ion-refresher (ionRefresh)="doRefresh($event)">
+		<ion-refresher-content pullingIcon="arrow-dropdown" pullingText="{{'Pull to refresh'}}" refreshingSpinner="circles" refreshingText="{{'Refreshing...'}}">
+		</ion-refresher-content>
+	</ion-refresher>
+	<div class="my-points">
+		<p> 
+			<i class="material-icons">account_balance_wallet</i>
+			{{'Total Points Earn'}}
+		</p>
+		<h1>{{total_point?total_point:0}} PT </h1>
+	</div>
+	<ng-container *ngFor="let list of gift_list; let i=index" >
+		<div class="gift-item flat" >
+			<div class="headerBox">
+				<!-- <div class="point-column">
+					<h6>{{list.title | uppercase}}</h6>
+					<p>Category</p>
+				</div> -->
+				<div class="point-column">
+					<h6>{{list.gift_reward | titlecase}}</h6>
+					<p>Gift</p>
+				</div>
+				<div class="point-column">
+					<h6>{{list.date_from | date:'dd MMM yyyy'}} - {{list.date_to | date:'dd MMM yyyy'}}</h6>
+					<p>Time Period</p>
+				</div>
+			</div>
+			
+			<div class="card-box">
+				<div class="card-info">
+					<h5><span>Point Range : </span> {{list.range_start}} {{typeofValue(list.range_end)}}</h5>
+				</div>
+				
+				<div class="card-info">
+					<p><span>Current Points :</span> {{list.current_points}}</p>
+				</div>
+				<div class="card-info">
+					<p><span>Description :</span> {{list.termsNcondition}}</p>
+				</div>
+				
+				
+				<div class="highlight">
+					<div class="required-content">
+						<p>Required Rate Per Day : <b>{{list.required_rate | number : '1.0-0'}}</b></p>
+						<p>Day's Left <b>{{list.days_left}}</b></p>
+					</div>
+					<div class="progressBar">
+						<div class="progressValue {{'wp'+list.achieve_percent}}"><span>{{list.achieve_percent}} %</span></div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	</ng-container>
+	
+	<div class="nothing-here" style="height: 60%;"  *ngIf="gift_list.length == 0">
+		<div class="outer">
+			<div class="innear">
+				<img alt="" src="assets/imgs/no_found.svg">
+				<p>No Data Available</p>
+			</div>
+		</div>
+	</div>
+	<ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)" *ngIf="flag!=1">
+		<ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="{{'Loading more data...'}}">
+		</ion-infinite-scroll-content>
+	</ion-infinite-scroll>
+</ion-content>

@@ -1,0 +1,114 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Complaint</ion-title>
+    <!-- <ion-buttons end >
+      <button ion-button icon-only (click)="presentPopover($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons> -->
+  </ion-navbar>
+  <ion-toolbar>
+    <div class="search add-search">
+      <div class="filter">
+        <ion-searchbar (ngModelChange)="getComplaintList()" [(ngModel)]="filter.master" name="master"></ion-searchbar>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <ng-container *ngIf="showRelatedTab!=false">
+    <div class="capsule-tabs" style="border-bottom: 0px;">
+      <ul>
+        <li [ngClass]="{'active':complaint_type == 'All'}" (click)="complaint_type = 'All';getComplaintList()">
+          <p>All<span>{{total_count.all_count}}</span></p>
+        </li>
+        <li [ngClass]="{'active':complaint_type == 'Pending'}" (click)="complaint_type = 'Pending';getComplaintList()">
+          <p>Pending<span>{{total_count.pending_count}}</span></p>
+        </li>
+        <li [ngClass]="{'active':complaint_type == 'Closed'}" (click)="complaint_type = 'Closed';getComplaintList()">
+          <p>Closed<span>{{total_count.closed_count}}</span></p>
+        </li>
+
+        <li [ngClass]="{'active':complaint_type == 'Cancel'}" (click)="complaint_type = 'Cancel';getComplaintList()">
+          <p>Cancel<span>{{total_count.reject_count}}</span></p>
+        </li>
+      </ul>
+    </div>
+
+
+
+
+    <div class="pl16 pr16 mt15 mb50">
+
+      <div class="attendance-list" *ngFor="let row of complaint_list; let i=index" (click)="goCompalintDetail(row.id)">
+        <div class="slab slab-bg" style="display: flex; justify-content: space-between;">
+          <div class="slab-day">
+            <p>{{row.date_created | date : "d MMM y" }}</p>
+            <span>Date Created</span>
+          </div>
+          <div class="slab-day">
+            <p>{{row.complain_no}}</p>
+            <span>Id</span>
+          </div>
+          <div class="slab-day">
+            <p class="bold">{{row.complaint_status}}</p>
+            <span>Status</span>
+          </div>
+          <div class="slab-day">
+            <p>{{row.pending_at?row.pending_at:'--'}}</p>
+            <span>TAT</span>
+          </div>
+        </div>
+
+        <div class="center-block">
+          <div class="circle">{{row.customer_name?.substring(0,1).toUpperCase()}}</div>
+          <span>{{row.customer_name | titlecase}}</span>
+          <p>{{row.customer_mobile}}</p>
+        </div>
+
+        <div class="slab mt5">
+          <div class="slab-day">
+            <p>{{ row.city | titlecase }} , {{row.district | titlecase }} , {{row.state | titlecase}} , {{row.pincode}}
+            </p>
+            <span>Customer Address</span>
+          </div>
+        </div>
+        <div class="slab mt5">
+          <div class="slab-day">
+            <p>{{row.nature_of_problem | titlecase}}</p>
+            <span>Nature Of Problem</span>
+          </div>
+        </div>
+        <div class="next-forword">
+          <i class="material-icons">chevron_right</i>
+        </div>
+      </div>
+    </div>
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)" *ngIf="flag!=1">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="{{'Loading more data...'}}">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+
+    <div class="nothing-here" style="height: 60%;" *ngIf="!complaint_list.length">
+      <div class="outer">
+        <div class="innear">
+          <img src="assets/imgs/no_found.svg" alt="">
+          <p>No Data Available</p>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ion-content>
+<!--
+  <ion-fab right bottom>
+    <button ion-fab color="primary" (click)="addComplaint()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab> -->

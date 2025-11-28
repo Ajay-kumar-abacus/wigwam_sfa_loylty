@@ -1,0 +1,109 @@
+<ion-header class="catalogue-header">
+    <ion-navbar>
+        <ion-title>Product Detail</ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content>
+    <div class="padding16">
+        <ng-container *ngIf="pageType == 'manual'">
+            <form #f="ngForm" (ngSubmit)="f.form.valid && submit()">
+                <div class="form padding0 pt0">
+                    <ion-list>
+                        <ion-item [ngClass]="{'error':f.submitted && code?.invalid}">
+                            <ion-label floating>Coupon Code</ion-label>
+                            <ion-input type="number" [(ngModel)]="data.code" #code="ngModel" name="code" required></ion-input>
+                        </ion-item>
+                        <div *ngIf="f.submitted && code.invalid" class="eror">
+                            <p *ngIf="code.errors.required">{{'Please Enter Coupon Code'}}</p>
+                        </div>
+                    </ion-list>
+                </div>
+                <button ion-button round block color="secondary"  [disabled]="spinnerLoader">
+                    <ion-spinner *ngIf="spinnerLoader" ></ion-spinner> {{'Submit'}}
+                </button>
+            </form>
+        </ng-container>
+        
+        <div *ngIf="showDetail">
+            <div class="border-container">
+                <div class="summary-heading">Coupon Code : <span>{{product_detail.coupon_code}}</span></div>
+                <div class="payment-box">
+                    <div class="credit-table">
+                        <table>
+                            <tr>
+                                <td class="w100">Product Name</td>
+                                <th>{{product_detail.product_detail ? product_detail.product_detail : '---'}}</th>
+                            </tr>
+                            <tr>
+                                <td>Brand</td>
+                                <th>{{product_detail.brand ? product_detail.brand : '---'}}</th>
+                            </tr>
+                            <tr>
+                                <td>Color</td>
+                                <th>{{product_detail.color ? product_detail.color : '---'}}</th>
+                            </tr>
+                            <tr>
+                                <td>Bill No.</td>
+                                <th>{{product_detail.invoice_number ? product_detail.invoice_number : '---'}}</th>
+                            </tr>
+                            <tr>
+                                <td>Dispatched on</td>
+                                <th>{{product_detail.dispatch_date != "0000-00-00 00:00:00"  ? (product_detail.dispatch_date | date:'dd MMM yyyy') : '---'}}</th>
+                            </tr>
+                            <tr>
+                                <td>Dispatched To</td>
+                                <th>{{product_detail.dr_detail ? product_detail.dr_detail : '---'}}</th>
+                            </tr>
+                            <tr>
+                                <td>Dispatched By</td>
+                                <th>{{product_detail.dispatch_update_name ? product_detail.dispatch_update_name : '---'}}</th>
+                            </tr>
+                            <tr>
+                                <td>Reward Points</td>
+                                <th>{{scaninfo.bonus_point + scaninfo.total_point}}</th>
+                            </tr>
+                            <!-- <tr>
+                                <td>Site Name</td>
+                                <th>{{scaninfo.scanning_site_name ? scaninfo.scanning_site_name : '---' }}</th>
+                            </tr> -->
+                            <tr>
+                                <td>Scanned By</td>
+                                <th>{{scaninfo.scanned_by_name ? scaninfo.scanned_by_name : '---' }}</th>
+                            </tr>
+                            <tr>
+                                <td>Scanned on</td>
+                                <th>{{scaninfo.scanned_date != "0000-00-00 00:00:00" ? (scaninfo.scanned_date | date:'dd MMM yyyy') : '---' }}</th>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="form padding0 pt0" *ngIf="loginDrData.type == 3">
+                <ion-list>
+                    <ion-item>
+                        <ion-label floating>Influencer Mobile Number</ion-label>
+                        <ion-input type="tel" [(ngModel)]="data.mobile" #mobile="ngModel" name="mobile" (keypress)="MobileNumber($event)"  minLength="10" maxLength="10" required></ion-input>
+                    </ion-item>
+                    
+                </ion-list>
+            </div>
+            
+            <div class="edit border-none padding0 mb16" *ngIf="loginDrData.type == 1">
+                <ion-list>
+                    <ion-item class="cs-normal-select retailerSelectionBox mt16">
+                        <ion-label><span>Select Dealer <span>*</span></span></ion-label>
+                        <ionic-selectable name="drData" item-content [(ngModel)]="data.drData" #drData="ngModel" [items]="networkList" itemValueField="id" itemTextField="name" [hasVirtualScroll]="true" [canSearch]="true" #dealerSelectable (onSearch)="searchNetwork($event)" required></ionic-selectable>
+                    </ion-item>
+                </ion-list>
+            </div>
+            
+            <button ion-button round block color="secondary"  [disabled]="spinnerLoader || (loginDrData.type == 3 ? (!data.mobile || data.mobile.length != 10) : !data.drData)" (click)="returnSubmit()">
+                <ion-spinner *ngIf="spinnerLoader" ></ion-spinner> Submit
+            </button>
+        </div>
+    </div>
+    
+    
+</ion-content>

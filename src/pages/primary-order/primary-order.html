@@ -1,0 +1,147 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Primary Order</ion-title>
+        <!-- <ion-buttons end *ngIf="LoginType =='Employee'">
+            <button ion-button icon-only (click)="presentPopover($event)">
+                <ion-icon name="more"></ion-icon>
+            </button>
+        </ion-buttons> -->
+    </ion-navbar>
+    <ion-toolbar>
+
+        <div class="search add-search">
+            <div class="filter">
+                <ion-searchbar type='text' name="search_key" [(ngModel)]="filter.search_key" (keyup)="Order_list()">
+                </ion-searchbar>
+                <a class="date-pick">
+                    <label class="chedate">
+                        <input type="date" name="date" [max]="date" [(ngModel)]="filter.date"
+                            (keydown.enter)="Order_list()" />
+                        <i class="material-icons">date_range</i>
+                    </label>
+                </a>
+            </div>
+        </div>
+    </ion-toolbar>
+</ion-header>
+<div class="text-line" *ngIf="filter.date">
+    <div class="lf-text">
+        <p>Date</p>
+        <p>{{filter.date | date:'d MMM y'}}</p>
+    </div>
+    <div class="rf-text">
+        <i class="material-icons" (click)="filter.date='';Order_list()">cancel</i>
+    </div>
+</div>
+<ng-container>
+    <ion-content>
+
+        <ion-refresher (ionRefresh)="doRefresh($event)">
+            <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh"
+                refreshingSpinner="circles" refreshingText="Refreshing...">
+            </ion-refresher-content>
+        </ion-refresher>
+        <ng-container *ngIf="LoginType =='Employee'">
+            <div class="fix-container">
+                <div class="attendance-list flat-list">
+                    <div class="center-block">
+                        <div class="circle">{{Order_detail.company_name | slice:0:1}}</div>
+                        <h1>{{Order_detail.company_name?.toUpperCase()}}</h1>
+                        <p>{{Order_detail.name | titlecase}} ({{Order_detail.mobile}})</p>
+                        <a class="cell-phone" href="tel:{{Order_detail.mobile}}"><i class="material-icons">phone</i></a>
+                    </div>
+
+                    <div class="OutOver three-column">
+                        <div class="primary-column light-red">
+                            <p>{{Order_detail.total_orders ? Order_detail.total_orders : 0}}</p>
+                            <span>Total Order</span>
+                        </div>
+                        <div class="primary-column light-green">
+                            <p>{{Order_detail.total_weight ? (Order_detail.total_weight | number:'1.2-2') : 0}} Ton</p>
+                            <span>Total Weight</span>
+                        </div>
+                        <div class="primary-column light-purpel">
+                            <p>{{Order_detail.years}}</p>
+                            <span>Order Year</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <div class="summary-heading f13 pl16" *ngIf="LoginType =='Employee'">Order History</div>
+        <ng-container *ngIf="showRelatedTab!=false">
+            <div class="capsule-tabs" style="border-bottom: 0px;">
+                <ul>
+                    <li [ngClass]="{'active':order_status == 'Pending'}"
+                        (click)="order_status = 'Pending';Order_list()">
+                        <p>Pending<span>{{count.Pending}}</span></p>
+                    </li>
+                    <li [ngClass]="{'active':order_status == 'Approved'}"
+                        (click)="order_status = 'Approved';Order_list()">
+                        <p>Approved<span>{{count.Approved}}</span></p>
+                    </li>
+                    <li [ngClass]="{'active':order_status == 'Reject'}" (click)="order_status = 'Reject';Order_list()">
+                        <p>Rejected<span>{{count.Reject}}</span></p>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="pl16 pr16 mt15 mb50" *ngIf="total_order?.length">
+                <div class="attendance-list" *ngFor="let row of total_order" (click)="goOnOrderDetail(row.id)">
+                    <div class="slab slab-bg">
+                        <div class="slab-day">
+                            <p>{{row.date_created| date:'d MMM y hh:mm a'}}</p>
+                            <span>Date</span>
+                        </div>
+                        <div class="slab-day">
+                            <p>{{row.order_no}}</p>
+                            <span>Order Id</span>
+                        </div>
+                    </div>
+
+                    <div class="center-block">
+                        <div class="circle">{{row.created_by_name?.substring(0,1).toUpperCase()}}</div>
+                        <h1>{{row.created_by_name?.toUpperCase()}}</h1>
+                        <p>Created by</p>
+                    </div>
+                    <div class="slab mt5">
+                        <div class="slab-day">
+                            <p>{{row.order_item ? row.order_item : '0'}}</p>
+                            <span>Total Item</span>
+                        </div>
+                        <div class="slab-day">
+                            <p class="bold">{{row.total_qty ? row.total_qty : '0'}}</p>
+                            <span>Total Item Qty</span>
+                        </div>
+                        <div class="slab-day">
+                            <p class="bold">{{row.weight ? (row.weight | number:'1.2-2') : '0'}} Ton</p>
+                            <span>Weight</span>
+                        </div>
+                       
+                    </div>
+                    <div class="next-forword">
+                        <i class="material-icons">chevron_right</i>
+                    </div>
+                </div>
+            </div>
+            <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)" *ngIf="flag!=1">
+                <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+                </ion-infinite-scroll-content>
+            </ion-infinite-scroll>
+            <div class="nothing-here" style="height: 60%;" *ngIf="!total_order.length">
+                <div class="outer">
+                    <div class="innear">
+                        <img src="assets/imgs/no_found.svg" alt="">
+                        <p>No Data Available</p>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </ion-content>
+    <!-- <ion-fab right bottom >
+    <button ion-fab color="primary" (click)="add_order()">
+        <ion-icon name="add"></ion-icon>
+    </button>
+</ion-fab> -->
+</ng-container>

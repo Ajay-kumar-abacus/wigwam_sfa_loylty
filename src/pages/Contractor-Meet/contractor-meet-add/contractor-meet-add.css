@@ -1,0 +1,27 @@
+page-contractor-meet-add .editEventForm textarea, page-contractor-meet-add .editEventForm ion-input, page-contractor-meet-add .editEventForm .item-inner, page-contractor-meet-add .editEventForm ion-datetime {
+  border-radius: 5px;
+}
+
+page-contractor-meet-add a.date-picker label {
+  position: relative;
+  color: #000;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+page-contractor-meet-add a.date-picker label input {
+  font-size: 14px;
+  border: 1px solid #d2d2d2;
+  width: 100% !important;
+  border-radius: 4px;
+  height: 40px;
+  padding: 4px;
+  margin-top: 16px !important;
+}
+
+page-contractor-meet-add a.date-picker label i {
+  color: #242424;
+  font-size: 17px;
+}
+/*# sourceMappingURL=contractor-meet-add.css.map */

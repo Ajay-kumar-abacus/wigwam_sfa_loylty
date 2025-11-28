@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Team Map</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <!-- Map Container -->
+  <div #map id="map" style="position: initial !important; width: 100%; overflow: auto; height: 100%; border: 2px solid #333; border-radius: 5px;">
+   
+  </div>
+  
+  <!-- Bottom Sheet -->
+  <div class="bottom-sheet" [ngClass]="{'open': isBottomSheetOpen}">
+    <div class="bottom-sheet-header">
+      <div class="handle"></div>
+      <ion-icon name="close" class="close-button" (click)="closeBottomSheet()"></ion-icon>
+    </div>
+
+    <div class="bottom-sheet-content" *ngIf="selectedUser">
+      <div class="user-header">
+        <!-- <div class="avatar" [ngStyle]="{'background-color': selectedUser.avatar ? 'transparent' : '#3880ff'}">
+          <img *ngIf="selectedUser.avatar" [src]="selectedUser.avatar" alt="User avatar">
+          <span >{{selectedUser.username.charAt(0)}}</span>
+        </div> -->
+        <div class="avatar">
+         
+          <span >{{selectedUser.name.substring(0,1).toUpperCase()}}</span>
+        </div>
+        <div class="user-info">
+          <h2>{{selectedUser.name}}</h2>
+          <p class="role">{{selectedUser.contact_01 || 'User'}}</p>
+          
+        </div>
+      </div>
+
+      <div class="details-section">
+        <div class="detail-item">
+          <ion-icon name="pin"></ion-icon>
+          <div>
+            <h3>Current Location</h3>
+            <p>{{selectedUser.display_name}}</p>
+          </div>
+        </div>
+        
+        <div class="detail-item" *ngIf="selectedUser.latLngInsertTime">
+          <ion-icon name="time"></ion-icon>
+          <div>
+            <h3>Last Updated</h3>
+            <p>{{getTimeAgo(selectedUser.latLngInsertTime)}}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button class="action-button details" (click)="viewUserDetail(selectedUser)">
+          <ion-icon name="information-circle"></ion-icon>
+          <span>Checkin Details</span>
+        </button>
+        <button class="action-button call">
+          
+          <a class="cell-phone" href="tel:{{selectedUser.contact_01}}"> <ion-icon name="call"></ion-icon></a>
+          <span>Call</span>
+        </button>
+        <!-- <button class="action-button message" (click)="messageUser(selectedUser)">
+          <ion-icon name="chatbubbles"></ion-icon>
+          <span>Message</span>
+        </button> -->
+      </div>
+    </div>
+  </div>
+</ion-content>

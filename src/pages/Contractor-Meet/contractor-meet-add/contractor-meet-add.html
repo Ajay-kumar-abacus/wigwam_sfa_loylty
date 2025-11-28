@@ -1,0 +1,196 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Add BTL Activity Planner</ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content>
+    <form #f="ngForm" (ngSubmit)="f.form.valid && submit()">
+        <div class="form">
+            <ion-list no-lines class="padding10 pt0">
+                <ion-item [ngClass]="{'error':f.submitted && event_type?.invalid}">
+                    <ion-label floating>Select BTL Type <span>*</span></ion-label>
+                    <ion-select interface="action-sheet" name="event_type" #event_type="ngModel"
+                        [(ngModel)]="data.event_type" (ngModelChange)="blankValue()" required>
+                        <ion-option value="In-shop Meet">In-shop Meet</ion-option>
+                        <ion-option value="Nukkad Meet">Nukkad Meet</ion-option>
+                        <ion-option value="Contractors Meet">Contractors Meet</ion-option>
+                        <ion-option value="Architects Meet">Architects Meet</ion-option>
+                    </ion-select>
+                </ion-item>
+                <ng-container *ngIf="data.event_type == 'In-shop Meet'">
+                    <ion-item>
+                        <ion-label floating>Customer Type</ion-label>
+                        <ion-select interface="action-sheet" name="customer_type" #customer_type="ngModel"
+                            [(ngModel)]="data.customer_type" required
+                            (ionChange)="get_network_list(data.customer_type)">
+                            <ion-option value="1">Channel Partner</ion-option>
+                            <ion-option value="3">Sub Dealer</ion-option>
+                        </ion-select>
+                    </ion-item>
+
+                    <ion-item [ngClass]="{'error':f.submitted && dealer_id?.invalid}">
+                        <ion-label floating>Select Customer <span>*</span></ion-label>
+                        <ionic-selectable item-content [(ngModel)]="data.dealer_id" #dealer_id="ngModel"
+                            [items]="drList" name="dealer_id" itemValueField="id" itemTextField="display_name"
+                            [hasVirtualScroll]="true" [canSearch]="true" required>
+                        </ionic-selectable>
+                    </ion-item>
+                    <div *ngIf="f.submitted && dealer_id.invalid" class="eror">
+                        <p *ngIf="dealer_id.errors.required">{{'Field is Required'}}</p>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="data.event_type != 'In-shop Meet'">
+
+                    <ion-item [ngClass]="{'error':f.submitted &&pincode?.invalid}">
+                        <ion-label floating>Pincode <strong>*</strong></ion-label>
+                        <ion-input type="tel" minLength="6" maxLength="6" name="pincode"
+                            (input)="data.pincode.length==6 && getSateteDistrcit()" #pincode="ngModel"
+                            [(ngModel)]="data.pincode" required></ion-input>
+                    </ion-item>
+                    <div *ngIf="f.submitted &&pincode.invalid" class="eror">
+                        <p *ngIf="pincode.errors.required">{{'Field is Required'}}</p>
+                    </div>
+
+                    <ion-item [ngClass]="{'error':f.submitted &&state?.invalid}">
+                        <ion-label floating>State <strong>*</strong></ion-label>
+                        <ion-select interface="action-sheet" name="state" name="state" #state="ngModel"
+                            [(ngModel)]="data.state" required>
+                            <ion-option *ngFor="let row of state_list;let i=index;"
+                                value="{{row.state_name}}">{{row.state_name | titlecase}}</ion-option>
+                        </ion-select>
+                    </ion-item>
+                    <div *ngIf="f.submitted &&state.invalid" class="eror">
+                        <p *ngIf="state.errors.required">{{'Field is Required'}}</p>
+                    </div>
+
+                    <ion-item [ngClass]="{'error':f.submitted && city?.invalid}">
+                        <ion-label floating>City<span>*</span></ion-label>
+                        <ion-input type="text" name="city" #city="ngModel" [(ngModel)]="data.city" required></ion-input>
+                    </ion-item>
+                    <div *ngIf="f.submitted && city.invalid" class="eror">
+                        <p *ngIf="city.errors.required">{{'Field is Required'}}</p>
+                    </div>
+                </ng-container>
+
+
+                <ion-item [ngClass]="{'error':f.submitted && total_member?.invalid}">
+                    <ion-label floating>Total Member<span>*</span></ion-label>
+                    <ion-input type="tel" name="total_member" #total_member="ngModel" [(ngModel)]="data.total_member"
+                        required min="0" maxlength="10000" minlength="1" (input)="number_checker($event);"></ion-input>
+                </ion-item>
+                <div *ngIf="f.submitted && total_member.invalid" class="eror">
+                    <p *ngIf="total_member.errors.required">{{'Field is Required'}}</p>
+                </div>
+                <ng-container *ngIf="data.total_member">
+                    <ion-item [ngClass]="{'error':f.submitted && per_plumber_budget?.invalid}">
+                        <ion-label floating>Budget Per Invite<span>*</span></ion-label>
+                        <ion-input type="tel" name="per_plumber_budget" #per_plumber_budget="ngModel"
+                            [(ngModel)]="data.per_plumber_budget" required (input)="budget_number_checker();" min="0"
+                            maxlength="3" minlength="1"
+                            [disabled]="this.data.event_type == 'In-shop Meet' || this.data.event_type == 'Nukkad Meet'"></ion-input>
+                    </ion-item>
+
+                    <div *ngIf="f.submitted && per_plumber_budget.invalid" class="eror">
+                        <p *ngIf="per_plumber_budget.errors.required">{{'Field is Required'}}</p>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="data.event_type == 'Architects Meet' || data.event_type == 'Contractors Meet'">
+                    <ion-item [ngClass]="{'error':f.submitted &&expense_sharing?.invalid}">
+                        <ion-label floating>Expense Sharing <strong>*</strong></ion-label>
+                        <ion-select interface="action-sheet" name="expense_sharing" name="expense_sharing"
+                            #expense_sharing="ngModel" [(ngModel)]="data.expense_sharing" required >
+                            <ion-option value="Yes">Yes</ion-option>
+                            <ion-option value="No">No</ion-option>
+                        </ion-select>
+                    </ion-item>
+                    <div *ngIf="f.submitted &&expense_sharing.invalid" class="eror">
+                        <p *ngIf="expense_sharing.errors.required">{{'Field is Required'}}</p>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="data.expense_sharing == 'Yes'">
+                    <ion-item>
+                        <ion-label floating>Type</ion-label>
+                        <ion-select interface="action-sheet" name="customer_type" #customer_type="ngModel"
+                            [(ngModel)]="data.customer_type" required
+                            (ionChange)="get_network_list(data.customer_type)">
+                            <ion-option value="1">Channel Partner</ion-option>
+                            <ion-option value="3">Sub Dealer</ion-option>
+                        </ion-select>
+                    </ion-item>
+                    <ion-item [ngClass]="{'error':f.submitted && expense_sharing_cp?.invalid}" *ngIf="data.customer_type">
+                        <ion-label floating>Select Expense Sharing <span>*</span></ion-label>
+                        <ionic-selectable item-content [(ngModel)]="data.expense_sharing_cp"
+                            #expense_sharing_cp="ngModel" [items]="drList" name="expense_sharing_cp" itemValueField="id"
+                            itemTextField="display_name" [hasVirtualScroll]="true" [canSearch]="true" required>
+                        </ionic-selectable>
+                    </ion-item>
+                    <div *ngIf="f.submitted && expense_sharing_cp.invalid" class="eror">
+                        <p *ngIf="expense_sharing_cp.errors.required">{{'Field is Required'}}</p>
+                    </div>
+                    <ion-item [ngClass]="{'error':f.submitted && expense_sharing_amount?.invalid}" *ngIf="data.customer_type">
+                        <ion-label floating>Expense Sharing Amount % <span>*</span></ion-label>
+                        <ion-input type="tel" name="expense_sharing_amount" #expense_sharing_amount="ngModel"
+                            [(ngModel)]="data.expense_sharing_amount" required min="0" maxlength="10000" minlength="1"
+                            (keypress)="number_checker($event)"></ion-input>
+                    </ion-item>
+                    <div *ngIf="f.submitted && expense_sharing_amount.invalid" class="eror">
+                        <p *ngIf="expense_sharing_amount.errors.required">{{'Field is Required'}}</p>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="data.event_type != 'In-shop Meet'">
+                    <ion-item [ngClass]="{'error':f.submitted && venue?.invalid}">
+                        <ion-label floating>Venue<span>*</span></ion-label>
+                        <ion-input type="text" name="venue" #venue="ngModel" [(ngModel)]="data.venue"
+                            required></ion-input>
+                    </ion-item>
+                    <div *ngIf="f.submitted && venue.invalid" class="eror">
+                        <p *ngIf="venue.errors.required">{{'Field is Required'}}</p>
+                    </div>
+                </ng-container>
+                <ion-item [ngClass]="{'error':f.submitted && date_of_meeting?.invalid}">
+                    <ion-label floating>Date of Execution <strong>*</strong></ion-label>
+                    <ion-datetime display-format="MMM DD, YYYY" type="text" min={{today_date}} max={{max_date}}
+                        name="date_of_meeting" #date_of_meeting="ngModel" [(ngModel)]="data.date_of_meeting"
+                        class="calander" required></ion-datetime>
+                </ion-item>
+                <div *ngIf="f.submitted && date_of_meeting.invalid" class="eror">
+                    <p *ngIf="date_of_meeting.errors.required">{{'Field is Required'}}</p>
+                </div>
+
+                <ng-container *ngIf="data.total_member&&data.per_plumber_budget">
+
+                    <ion-item [ngClass]="{'error':f.submitted && total_budget?.invalid}">
+                        <ion-label floating>Total Budget<span>*</span></ion-label>
+                        <ion-input type="tel" name="total_budget" #total_budget="ngModel"
+                            [(ngModel)]="data.total_budget" required min="0" maxlength="10000" minlength="1"
+                            (keypress)="number_checker($event)" readonly></ion-input>
+                    </ion-item>
+                    <div *ngIf="f.submitted && total_budget.invalid" class="eror">
+                        <p *ngIf="total_budget.errors.required">{{'Field is Required'}}</p>
+                    </div>
+                </ng-container>
+                <ion-item>
+                    <ion-label floating>Gift Required</ion-label>
+                    <ion-select interface="action-sheet" name="gift_required" #gift_required="ngModel"
+                        [(ngModel)]="data.gift_required" required
+                        >
+                        <ion-option value="Yes">YES</ion-option>
+                        <ion-option value="No">NO</ion-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item [ngClass]="{'error':f.submitted && description?.invalid}">
+                    <ion-label floating>Description</ion-label>
+                    <ion-textarea name="description" #description="ngModel"
+                        [(ngModel)]="data.description"></ion-textarea>
+                </ion-item>
+                <div *ngIf="f.submitted && description.invalid" class="eror">
+                    <p *ngIf="description.errors.required">{{'Field is Required'}}</p>
+                </div>
+            </ion-list>
+
+            <button ion-button block color="success" [disabled]="spinner == true">
+                <ion-spinner *ngIf="spinner == true"></ion-spinner>&nbsp;Save
+            </button>
+        </div>
+    </form>
+</ion-content>

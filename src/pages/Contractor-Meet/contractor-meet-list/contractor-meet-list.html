@@ -1,0 +1,161 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title *ngIf="meet_Type=='My'">BTL Activity Planner</ion-title>
+        <ion-title *ngIf="meet_Type=='Team'">Team BTL Activity Planner</ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only *ngIf="teamCount > 0" (click)="presentPopover($event)">
+                <ion-icon name="more"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+            refreshingText="Refreshing...">
+        </ion-refresher-content>
+    </ion-refresher>
+
+    <div class="capsule-tabs">
+        <ul>
+            <li [ngClass]="{'active' : tabActiveType == 'Pending'}"
+                (click)="getContractorMeetList(meet_Type, 'Pending');tabActiveType = 'Pending'">
+                <p>Pending<span *ngIf="allcount.Pending">{{allcount.Pending}}</span><span
+                        *ngIf="!allcount.Pending">0</span></p>
+            </li>
+            <li (click)="getContractorMeetList(meet_Type, 'Approved');tabActiveType = 'Approved'"
+                [ngClass]="{'active' : tabActiveType == 'Approved'}">
+                <p>Approved<span *ngIf="allcount.Approved">{{allcount.Approved}}</span><span
+                        *ngIf="!allcount.Approved">0</span></p>
+            </li>
+            <li (click)="getContractorMeetList(meet_Type, 'Completed');tabActiveType = 'Completed'"
+                [ngClass]="{'active' : tabActiveType == 'Completed'}">
+                <p>Completed<span *ngIf="allcount.Completed">{{allcount.Completed}}</span><span
+                        *ngIf="!allcount.Completed">0</span></p>
+            </li>
+            <li (click)="getContractorMeetList(meet_Type, 'Cancel');tabActiveType = 'Cancel'"
+                [ngClass]="{'active' : tabActiveType == 'Cancel'}">
+                <p>Cancel<span *ngIf="allcount.Cancel">{{allcount.Cancel}}</span><span *ngIf="!allcount.Cancel">0</span>
+                </p>
+            </li>
+            <li (click)="getContractorMeetList(meet_Type, 'Reject');tabActiveType = 'Reject'"
+                [ngClass]="{'active' : tabActiveType == 'Reject'}">
+                <p>Rejected<span *ngIf="allcount.Reject">{{allcount.Reject}}</span><span
+                        *ngIf="!allcount.Reject">0</span></p>
+            </li>
+
+
+        </ul>
+    </div>
+
+
+    <!-- <div class="form" *ngIf="meet_Type=='Team'">
+        <ion-list no-lines class="mb0">
+            <ion-item>
+                <ion-label floating>Select User</ion-label>
+                <ion-select icon="account" name="filter" interface="action-sheet" [(ngModel)]="filter.search"
+                    (ngModelChange)="getContractorMeetList(meet_Type, tabActiveType)">
+                    <ion-option value="">All Users</ion-option>
+                    <ion-option *ngFor="let row of user_list" value="{{row.id}}">{{row.name}}</ion-option>
+                </ion-select>
+            </ion-item>
+        </ion-list>
+    </div> -->
+
+
+    <div class="edit flat" *ngIf="meet_Type=='Team'">
+        <ion-list>
+            <ion-item class="cs-normal-select retailerSelectionBox mt0 mb0">
+                <ion-label>Select Team Member</ion-label>
+                <ionic-selectable item-content name="data" [(ngModel)]="selectData.team" [items]="user_list"
+                    itemValueField="id" itemTextField="name" [canSearch]="true" #selectComponent
+                    (ngModelChange)="getContractorMeetList(meet_Type, tabActiveType)"></ionic-selectable>
+            </ion-item>
+        </ion-list>
+    </div>
+
+    <div class="pd-left-right16 mt16 mb100">
+        <div class="attendance-list" *ngFor="let row of expenseData;">
+            <div class="slab slab-bg">
+
+                <div class="slab-day">
+                    <p>{{row.date_created != '0000-00-00 00:00:00'?(row.date_created | date:'dd MMM yyyy'):'N/A'}}</p>
+                    <span>Date Created</span>
+                </div>
+                <div class="slab-day" *ngIf="tabActiveType == 'Completed'">
+                    <p>{{row.date_updated != '0000-00-00 00:00:00' ? (row.date_updated | date:'dd MMM yyyy') : 'N/A'}}</p>
+                    <span>Execution Date</span>
+                </div>
+                <div class="slab-day" *ngIf="tabActiveType != 'Completed'">
+                    <p>{{row.date_of_meeting != '0000-00-00 00:00:00' ? (row.date_of_meeting | date:'dd MMM yyyy') : 'N/A'}}</p>
+                    <span>Execution Date</span>
+                </div>
+                <div class="slab-day">
+                    <p class="text-center">#{{row.event_id||'N/A'}}</p>
+                    <span>BTL Activity Id</span>
+                </div>
+                <div class="left-auto">
+                    <ion-buttons end (click)="listdelete(row.id,i)" *ngIf="meet_Type=='Team'">
+                        <button style="z-index:99;" ion-button icon-only small color="warn">
+                            <ion-icon name="trash"></ion-icon>
+                        </button>
+                    </ion-buttons>
+                </div>
+            </div>
+
+            <div class="slab mt8" *ngIf="meet_Type=='Team'"
+                (click)="meet_Type=='My' || tabActiveType == 'Pending'? contractorMeetDetail($event,row.id) : null">
+                <div class="slab-day">
+                    <span>Created By</span>
+                </div>
+                <div class="slab-day">
+                    <p class="bold">{{row.created_by_name}}</p>
+                </div>
+            </div>
+            <div class="center-block"
+                (click)="meet_Type=='My' || tabActiveType == 'Pending'? contractorMeetDetail($event,row.id) : null">
+                <div class="circle">{{(row.event_type | slice:0:1)||'N/A'}}</div>
+                <h1>{{(row.event_type | titlecase)||'N/A'}}</h1>
+            </div>
+
+
+            <div class="slab mt22"
+                (click)="meet_Type=='My' || tabActiveType == 'Pending'? contractorMeetDetail($event,row.id) : null">
+                <div class="slab-day">
+                    <p>{{row.total_member ? row.total_member :'---'}}</p>
+                    <span>Total Member</span>
+                </div>
+                <div class="slab-day">
+                    <p class="bold">₹ {{row.total_budget||'0'}}</p>
+                    <span>Total Budget</span>
+                </div>
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+    <div class="nothing-here" *ngIf="!expenseData.length">
+        <div class="outer">
+            <div class="innear">
+                <img src="assets/imgs/no_found.svg" alt="">
+                <p>Data Not Available</p>
+            </div>
+        </div>
+    </div>
+
+    <ion-fab right bottom *ngIf="meet_Type=='My'">
+        <button ion-fab color="primary" (click)="contractorMeetAdd()">
+            <ion-icon name="add"></ion-icon>
+        </button>
+    </ion-fab>
+
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)" *ngIf="flag!=1">
+        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="{{'Loading more data...'}}">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+</ion-content>

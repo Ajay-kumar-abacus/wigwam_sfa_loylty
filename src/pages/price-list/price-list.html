@@ -1,0 +1,108 @@
+<!--
+  Generated template for the PriceListPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>Price List</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div class="edit">
+    <ion-list no-lines *ngIf="view_type=='price_list'">
+      <div class="select-type">
+          <ion-list radio-group name="networkType" [(ngModel)]="data.networkType" #networkType="ngModel" required
+              (ngModelChange)="distributors(data.networkType)"
+              [disabled]="(disableSelect == true || disableSelectFromCheckin == true)">
+              <ion-item>
+                  <ion-radio value="1" [disabled]="disableSelectFromCheckin == true"></ion-radio>
+                  <ion-label>Channel Partner</ion-label>
+              </ion-item>
+
+              <ion-item>
+                  <ion-radio value="7" [disabled]="disableSelectFromCheckin == true"></ion-radio>
+                  <ion-label>Primary OEM</ion-label>
+              </ion-item>
+          </ion-list>
+      </div>
+  </ion-list>
+    
+    <ion-list>
+      <ion-item class="cs-normal-select mt16 retailerSelectionBox" *ngIf="view_type=='price_list'">
+        <ion-label *ngIf="data.networkType == '1'"><span>Select Channel Partner <strong
+                    class="red-text">*</strong></span></ion-label>
+        <ion-label *ngIf="data.networkType == '7'"><span>Select OEM <strong
+                    class="red-text">*</strong></span></ion-label>
+        
+        <ionic-selectable item-content [(ngModel)]="data.type_name" [items]="drList" itemValueField="id"
+            itemTextField="display_name" [canSearch]="true" (click)="distributors()" #distributorSelectable
+            (ngModelChange)="getBrands();"
+            (onSearch)="searchDealer(data.networkType,$event);" (onClose)="closeDealer()"
+            [disabled]="(disableSelect == true || disableSelectFromCheckin == true)"></ionic-selectable>
+    </ion-item>
+      
+      <ion-item class="cs-normal-select retailerSelectionBox mt16">
+        <ion-label>Category Type<strong class="red-text">*</strong></ion-label>
+        <ion-select interface="action-sheet" name="product_type" #product_type="ngModel" [(ngModel)]="data.product_type" (ngModelChange)="blankData();"
+           required>
+          <ion-option value="SS">SS</ion-option>
+          <ion-option value="S">S</ion-option>
+        </ion-select>
+      </ion-item>
+
+  <ion-item class="cs-normal-select retailerSelectionBox mt16">
+    <ion-label>Brand <strong class="red-text">*</strong></ion-label>
+    <ionic-selectable item-content name="brand" #brand="ngModel" [(ngModel)]="data.brand"
+        [items]="brandList" itemValueField="brand_code" itemTextField="display_name" [canSearch]="true"
+        #itemselectable modalCssClass="f1" (ngModelChange)="getThickness(data.brand);"></ionic-selectable>
+
+</ion-item>
+
+
+
+<ion-item class="cs-normal-select retailerSelectionBox mt16">
+    <ion-label>Thickness <strong class="red-text">*</strong></ion-label>
+    <ion-select interface="action-sheet" name="thickness" [(ngModel)]="data.thickness" #thickness="ngModel"
+        (ngModelChange)="getProductDiscountData()">
+        <ion-option *ngFor="let row of thicknessList"
+            value="{{row.thickness}}">{{row.thickness}}</ion-option>
+    </ion-select>
+</ion-item>
+</ion-list>
+
+<div class="comparison-list" *ngFor="let row of comparisonList; let i = index">
+  <div class="product-card">
+    <h4 class="product-title">Product #{{i + 1}}</h4>
+    <p class="product-name">{{row.product_name}}</p>
+
+    <div class="price-container">
+      <div class="price-box">
+        <p class="price-label">MRP</p>
+        <p class="price-value">&#x20B9; {{row.mrp | number:'1.2-2'}}</p>
+      </div>
+      <div class="price-box">
+        <p class="price-label">Landing Price</p>
+        <p class="price-value">&#x20B9; {{row.total_price_without_gst | number:'1.2-2'}}</p>
+      </div>
+      <div class="price-box">
+        <p class="price-label">Price With GST</p>
+        <p class="price-value">&#x20B9; {{row.total_price_with_gst | number:'1.2-2'}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+</div>
+
+
+
+  
+
+</ion-content>

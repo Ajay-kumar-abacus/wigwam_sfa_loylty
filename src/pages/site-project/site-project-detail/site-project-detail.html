@@ -1,0 +1,234 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Site Detail</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <div class="attendance-list flat-list">
+        <div class="slab slab-bg">
+            <div class="slab-day">
+                <p>{{siteDetail.date_created | date:'d MMM y'}}</p>
+                <span>Date Created</span>
+            </div>
+            <div class="slab-day">
+                <p>{{siteDetail.created_by_name}}</p>
+                <span>Created by</span>
+            </div>
+
+            <div class="slab-day">
+                <p>{{siteDetail.stage_level}}</p>
+                <span>Status</span>
+            </div>
+            <div class="slab-day" *ngIf="siteDetail.stage_level == 'Open' || siteDetail.stage_level == 'Win-F'">
+                <button class="editButton" ion-button icon-start color="success" (click)="EditSite()"><i
+                        class="material-icons">
+                        edit_note
+                    </i></button>
+            </div>
+        </div>
+        <div class="center-block">
+
+            <div class="circle">{{(siteDetail.ownerName | titlecase) | slice:0:1}} </div>
+            <h1 class="f12">{{siteDetail.ownerName | titlecase}} ({{siteDetail.owner_designation ?
+                siteDetail.owner_designation :'---'}})</h1>
+            <p>{{siteDetail.ownerMobile}}</p>
+            <p>Address- {{siteDetail.address}} {{siteDetail.district}} {{siteDetail.city}} {{siteDetail.pincode}}
+                {{siteDetail.state}} {{siteDetail.country}}</p>
+            <a class="cell-phone" href="tel:{{data.ownerMobile}}"><i class="material-icons">phone</i></a>
+        </div>
+        <div>
+        </div>
+        <div class="profile-card mt10">
+            <ng-container>
+                <div class="text-box d-flex justify-content">
+                    <div>
+                        <p>Site Type</p>
+                        <h6>{{siteDetail.type? siteDetail.type :'---' }}</h6>
+                    </div>
+                    <div class="divider">
+                        <p>Lead Source</p>
+                        <h6>{{siteDetail.lead_source? siteDetail.lead_source :'---' }}</h6>
+                    </div>
+
+
+                </div>
+
+                <div class="text-box d-flex justify-content">
+
+                    <div>
+                        <p>Size</p>
+                        <h6>{{siteDetail.size ? siteDetail.size :'---'}}</h6>
+
+                    </div>
+                    <div class="divider">
+                        <p>Estimate Deliver Date</p>
+                        <h6>{{siteDetail.estimate_delivery_date !='0000-00-00' ? (siteDetail.estimate_delivery_date |
+                            date:'d MMM y') : '---'}}</h6>
+
+                    </div>
+                </div>
+                <div class="text-box d-flex justify-content">
+
+                    <div>
+                        <p>Priority</p>
+                        <h6>{{siteDetail.priority ? siteDetail.priority : '---'}}</h6>
+                    </div>
+                    <div class="divider">
+                        <p>Next Followup Date</p>
+                        <h6>{{siteDetail.next_followup_date != '0000-00-00' ? (siteDetail.next_followup_date | date:'d
+                            MMM y') : '---'}}</h6>
+                    </div>
+                </div>
+
+
+                <div class="text-box d-flex justify-content">
+
+                    <div>
+                        <p>Referal By</p>
+                        <h6> {{siteDetail.referral_by_name ? (siteDetail.referral_by_name | titlecase) :'---'}}
+                            {{siteDetail.referral_by_type ? ( '('+ siteDetail.referral_by_type+')') :''}}</h6>
+                    </div>
+                </div>
+                <div class="text-box justify-content">
+                    <p>Assigned Influencer</p>
+                    <div class="influencer-tabel" *ngIf="influencerArray.length > 0">
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th class="w100">Mobile No.</th>
+                            </tr>
+                            <tr *ngFor="let row of influencerArray; let i = index;">
+                                <td>{{row.assigned_to_influencer_name ? (row.assigned_to_influencer_name | titlecase) :
+                                    '---'}}
+                                    {{row.assigned_to_influencer_type == 8 ? '(Ply
+                                    Expert)' : row.assigned_to_influencer_type == 13 ? '(Ambassador)': '' }}</td>
+                                <td>{{row.assigned_to_influencer_mobile ? row.assigned_to_influencer_mobile : ''}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="text-box d-flex justify-content" *ngIf="siteDetail.description">
+                    <div>
+                        <p>{{siteDetail.stage_level}} Description</p>
+                        <h6> {{siteDetail.description ? siteDetail.description :'---'}}</h6>
+                    </div>
+                </div>
+
+
+
+
+                <!-- </ng-container> -->
+
+
+
+            </ng-container>
+
+        </div>
+
+        <div class="border-container mt16 mb16" *ngIf="siteDetail.contact_info != ''">
+            <div class="summary-heading">Contact Person</div>
+            <div class="payment-box">
+                <div class="credit-table">
+                    <table>
+                        <tr>
+                            <th class="text-left">Name</th>
+                            <th class="w90  text-left">Mobile No. </th>
+                            <th class="text-left">Designation</th>
+                            <th class="w35 text-center">&nbsp;</th>
+                        </tr>
+                        <tr *ngFor="let row of siteDetail.contact_info">
+                            <td class="text-left">{{row.contactName ? (row.contactName | titlecase) : '---'}}</td>
+                            <td class="text-left">{{row.contactMobile ? row.contactMobile : '---'}}<a
+                                    *ngIf="row.contactMobile" class="cell-phone" href="tel:{{row.contactMobile}}"><i
+                                        class="material-icons">phone</i></a></td>
+                            <td class="text-left">{{row.contactType ? (row.contactType | titlecase) : '---'}}</td>
+                            <td class="w35 text-center">
+                                <i class="material-icons red-clr" (click)="deleteConfirmation(row.id)">delete_sweep</i>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="mb16 mt6 dflex gcp10">
+            <ng-container
+                *ngIf="(siteDetail.stage_level == 'Open'|| siteDetail.stage_level == 'Win-F' ||siteDetail.stage_level == 'Win-C') && actionType == 'My'">
+                <button ion-button block color="light-bg" (click)="statusModal('site_status')">&nbsp;
+                    {{siteDetail.stage_level == 'Win-F' ? 'Mark As Win-C' : siteDetail.stage_level == 'Open' ? 'Mark As
+                    Lost' : 'Change Status'}}<i class="material-icons">chevron_right</i>
+                </button>
+                <!-- <button ion-button block color="light-bg" (click)="statusModal('site_status')">&nbsp;
+                    Mark As Lost<i class="material-icons">chevron_right</i>
+                </button> -->
+            </ng-container>
+
+            <button ion-button block color="light-bg" (click)="openModal()">&nbsp; Add New Contact <i
+                    class="material-icons">add</i>
+            </button>
+
+        </div>
+        <!-- <div class="mb16 mt6 gcp10" *ngIf="siteDetail.checkin_id">
+            <button ion-button block style="background-color: #ff6f00;" (click)="go_to('Checkin')">Checkin List &nbsp;<i
+                    class="material-icons">my_location</i>
+            </button>
+
+        </div> -->
+        <div class="slab slab-bg" *ngIf="siteDetail.checkin_id"  (click)="go_to('Checkin')">
+            <div class="slab-day">
+              <p>{{siteDetail.last_checkin != '0000-00-00 00:00:00' ? (siteDetail.last_checkin | date:'d MMM  yyy') : 'N/A'}}</p>
+              <span>Last visit {{siteDetail.last_checkin_day ?siteDetail.last_checkin_day: null}}{{siteDetail.last_checkin_day > 1 ? '' :''}}</span>
+            </div>
+            </div>
+        <div class="visitAlert" *ngIf="!siteDetail.checkin_id || siteDetail.checkin_id == null ">
+            <h2>No Visit started yet</h2>
+        </div>
+        <ion-list class="buttonContainer" *ngIf="siteDetail.stage_level == 'Win-F' && actionType == 'My'">
+            <button ion-button block style="background-color: #303584;" [disabled]="spinnerLoader"
+                (click)="orderSummary()">Order Summery &nbsp;<ion-icon name="clipboard"></ion-icon></button>
+            <!-- <button ion-button block style="background-color: green;" [disabled]="spinnerLoader"
+                (click)="addOrder()">Add Order &nbsp;<ion-icon name="cart"></ion-icon></button> -->
+        </ion-list>
+        <div class="upload-doc" *ngIf="siteDetail.images && siteDetail.images.length > 0">
+            <p class="">Uploaded Documents</p>
+            <ul class="no-padding">
+                <li class="image-upload" *ngFor="let val of siteDetail.images">
+                    <img (click)="imageModal(constant.upload_url1+'site/'+val.image)"
+                        src="{{constant.upload_url1+'site/'+val.image}}">
+                    <!-- <button class="del"><i class="material-icons">delete_sweep</i></button> -->
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="pb100">
+        <div class="remarkSent" *ngFor="let row of activity_list">
+            <p class="remarkMsg">{{row.msg ? row.msg : row.remark}}</p>
+            <div class="dateCreated"><span>({{row.changes_by_name}})</span> <span>{{row.date_created | date:'d MMM
+                    y'}}</span></div>
+        </div>
+
+        <div class="nothing-here" *ngIf="activity_list?.length == 0">
+            <div class="outer">
+                <div class="innear">
+                    <!-- <img src="assets/imgs/no_found.svg" alt=""> -->
+                    <p>No Activity Yet</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</ion-content>
+
+
+<ion-footer *ngIf="siteDetail.stage_level == 'Open' && actionType == 'My'" color="light">
+    <div class="footer-input-block">
+        <textarea type="text" placeholder="Add Remark" name="remark" #remark="ngModel"
+            [(ngModel)]="form.remark"></textarea>
+        <button ion-button icon-start color="success" (click)="addRemark()"><ion-icon name="send"></ion-icon></button>
+    </div>
+</ion-footer>

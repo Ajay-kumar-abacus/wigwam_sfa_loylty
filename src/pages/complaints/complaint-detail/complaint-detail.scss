@@ -1,0 +1,350 @@
+page-complaint-detail {
+	table {
+		width: 100%;
+		box-sizing: border-box;
+		table-layout: fixed;
+		border-collapse: collapse;
+
+		tr {
+			border-bottom: 1px solid #bcbcbc;
+
+			th,
+			td {
+				padding: 10px 5px;
+				font-size: 12px;
+			}
+
+			th {
+				vertical-align: top;
+				text-align: left;
+				background: #f8f8f8;
+				color: #000000;
+			}
+
+			td {
+				padding-left: 10px;
+				line-height: 20px;
+
+				a {
+					text-transform: capitalize;
+					float: right;
+				}
+
+				p {
+					font-size: 13px;
+					line-height: 20px;
+				}
+			}
+
+			&:last-child {
+				border-bottom: 0px;
+			}
+		}
+	}
+
+	.bg-thumbnail {
+		height: 300px;
+		text-align: center;
+		width: 100%;
+		padding: 0px 16px;
+
+
+		img {
+			height: 100%;
+			width: 100%;
+			object-fit: contain;
+		}
+	}
+
+	.mt16 {
+		margin: 10px !important;
+	}
+
+	.remak-detail {
+		white-space: initial;
+		border: solid 1px #ccc;
+		margin-top: 11px;
+		padding: 16px;
+		background: #f7f7f7;
+		border-radius: 6px;
+
+		p {
+			line-height: 19px;
+			font-size: 14px;
+
+			span {
+				font-weight: 600;
+				color: #000;
+			}
+		}
+	}
+
+	.scrollable-div {
+		max-height: 350px;
+		width: 300px;
+		overflow: auto;
+	}
+
+	.remarkSent {
+		width: 100%;
+		font-size: 10px;
+		text-align: right;
+		border-bottom: 1px solid #f0f0f0;
+		padding: 5px 16px;
+
+		.remarkMsg {
+			font-size: 12px;
+			line-height: 20px;
+			color: #000;
+		}
+
+		.dateCreated span {
+			font-size: 11px;
+			color: #0e0e0e;
+			margin: 5px 0px !important;
+			display: inline-block;
+			font-weight: 600;
+		}
+
+		&:last-child {
+			border-bottom: 0px;
+		}
+
+		&:nth-child(odd) {
+			background: #f8f8f8;
+		}
+	}
+
+
+	.slab {
+		justify-content: space-between;
+	}
+
+
+
+
+	.footer-input-block {
+		display: flex;
+		align-items: center;
+		grid-column-gap: 10px;
+		padding: 10px;
+		background: #fafafa;
+
+
+		input,
+		textarea {
+			width: 100%;
+			height: 45px;
+			padding: 5px;
+			line-height: 20px;
+			box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.1);
+			border: 1px solid #ececec;
+			border-radius: 8px;
+		}
+
+		button {
+			min-width: 42px;
+			width: 42px;
+			padding: 0px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 8px;
+			height: 42px;
+
+			ion-icon {
+				padding-right: 0px !important;
+			}
+		}
+	}
+
+	button .my_btn {
+		width: 100px;
+	}
+
+	ion-fab {
+		button {
+			margin-bottom: 16px !important;
+		}
+	}
+
+	button[ion-fab] {
+		overflow: visible;
+		position: relative;
+
+		ion-label {
+			position: absolute;
+			top: -8px;
+			right: 40px;
+
+			color: white;
+			background-color: #007f39;
+			line-height: 24px;
+			padding: 4px 8px;
+			border-radius: 4px;
+		}
+
+		contain: layout;
+	}
+
+	.cs-header {
+		position: sticky;
+		top: 0px;
+		box-shadow: 0px -2px 12px 5px #e5e5e5;
+		// background: $white;
+		@extend.ul-clear;
+		width: 100%;
+
+		h2 {
+			padding: 13px 16px !important;
+			font-size: 14px;
+			color: $primary;
+			letter-spacing: 1px;
+			float: left;
+			@extend.regular;
+		}
+
+		button {
+			float: right;
+			background: inherit;
+			box-shadow: inherit;
+			color: $black-clr;
+			margin: 0px;
+			padding: 20px 7px;
+			height: 18px;
+
+			.activated {
+				background-color: inherit !important;
+				box-shadow: inherit !important;
+			}
+
+			img {
+				height: 18px;
+			}
+		}
+
+		.list-icon,
+		.filter-icon {
+			position: absolute;
+			right: 50px;
+		}
+
+		.list-icon {
+			&.active {
+				transform: rotate(-90deg);
+			}
+		}
+
+		.filter-icon {
+			right: 0;
+
+			.fab {
+				margin: 0;
+				position: absolute;
+				right: 0px;
+				top: 28px;
+			}
+
+			ion-fab-list {
+				right: 0;
+				margin: 0;
+				// background: $white;
+				border: solid 1px #BCBCBC;
+				box-shadow: 0px 3px 26px 0px rgba(0, 0, 0, 0.2);
+				top: 70px;
+
+				.clcsd {
+					.collapsible {
+						width: 200px;
+
+						li {
+							list-style: none;
+
+							.collapsible-header {
+								padding: 10px 15px;
+								text-align: left;
+								font-size: 14px;
+								@extend.regular;
+								letter-spacing: 0.40px;
+								color: #000;
+								background: #ECECEC;
+								position: relative;
+								border-bottom: solid 1px #BCBCBC;
+
+								&:after {
+									position: absolute;
+									content: "";
+									background: url(../assets/imgs/ic_arrow_up.svg) no-repeat center;
+									background-size: 10px;
+									width: 20px;
+									height: 20px;
+									right: 6px;
+									transition: 0.3s linear;
+									top: 8px;
+								}
+							}
+
+							.clear-btn {
+								line-height: 35px;
+								text-align: center;
+								background: $primary;
+								// color: $white;
+								font-size: 14px;
+								letter-spacing: 2px;
+								@extend.semibold;
+							}
+
+							.collapsible-body {
+								display: none;
+								max-height: 45vh;
+								overflow: scroll;
+
+								ion-item {
+									min-height: 40px;
+
+									ion-checkbox {
+										margin: 9px 23px 9px 4px;
+
+										.checkbox-icon {
+											width: 14px;
+											height: 14px;
+											border-width: 1px;
+										}
+									}
+
+									.item-inner {
+										.input-wrapper {
+											ion-label {
+												margin: 3px 8px 3px 0;
+												font-size: 12px;
+												letter-spacing: 0.40px;
+												@extend.regular;
+											}
+										}
+									}
+								}
+							}
+
+							&.active {
+								.collapsible-header {
+									&:after {
+										position: absolute;
+										content: "";
+										transition: 0.3s linear;
+										transform: rotate(-180deg);
+									}
+								}
+
+								.collapsible-body {
+									display: block;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+
+}

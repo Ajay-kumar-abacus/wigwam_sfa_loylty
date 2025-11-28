@@ -1,0 +1,50 @@
+
+<ion-header>
+    <ion-navbar>
+        <ion-title>Point Transfer Ledger</ion-title>
+        <!-- <ion-buttons end>
+            <button ion-button icon-only (click)="presentPopover($event)">
+                <ion-icon name="more"></ion-icon>
+            </button>
+        </ion-buttons> -->
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <div class="transation-tabel">
+        <table>
+            <tr  *ngFor="let row of account_list; let i=index">
+                <td>
+                    <div class="point-date">
+                        <div class="led-date">{{row.date_created|date : 'dd MMM yyyy , hh:mm a'}}</div>
+                        <div class="led-amount" [ngClass]="{'credit' : row.credit, 'debit' : row.debit} ">
+                            
+                            <span *ngIf="row.credit">{{row.credit}} pt</span>
+                            <span *ngIf="row.debit">{{row.debit}} pt</span>
+                            <i class="material-icons">{{row.credit ? 'call_received' : 'call_made'}}</i>
+                        </div>
+                    </div>
+                    
+                    <div class="point-remark mb0">
+                        <p *ngIf="row.credit">Received From {{row.recieved_from_name}}</p>
+                        <p *ngIf="row.debit">Send To {{row.transfer_to_name}}</p>
+                        
+                        <div class="avl-bal">
+                            Balance: {{row.balance}} pt
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    
+    <div class="nothing-here" style="height: 100%;" *ngIf="!account_list.length">
+        <div class="outer">
+            <div class="innear">
+                <img src="assets/imgs/no_found.svg" alt="">
+                <p>No Data Available</p>
+            </div>
+        </div>
+    </div>
+</ion-content>

@@ -1,0 +1,201 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Stock Transaction</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <!-- <div class="mb10">
+        <img src="../assets/imgs/graph.png" alt="">
+    </div> -->
+    <!-- <div id='myChart' class="text-center"></div> -->
+    
+    <div class="pd-left-right16 mt16">
+        <div class="list-box">
+            <div class="mid mt0">
+                <div class="content-info" >
+                    <div class="right-info" >
+                        <p>{{productData.product_detail}}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="upper">
+                <div class="left-date">
+                    <div class="date-section">
+                        <p>{{stockData.current_stock}}</p>
+                        <p>Current Stock</p>
+                    </div>
+                    
+                    <div class="date-section">
+                        <p>{{stockData.dispatch_pending}}</p>
+                        <p>Dispatch Pending</p>
+                    </div>
+                    
+                    <!-- <div class="date-section">
+                        <p>{{stockData.order_placed}}</p>
+                        <p>Order Placed</p>
+                    </div> -->
+                    
+                    <div class="date-section">
+                        <p>{{stockData.average_sale}}</p>
+                        <p>Avg. Sale</p>
+                    </div>
+                </div>
+            </div>
+        </div>  
+    </div>
+    
+    <div class="capsule-tabs">
+        <ul>
+            <li [ngClass]="{'active' : mainTab=='stock'}" (click)="mainTab = 'stock';">
+                <p>Stock</p>
+            </li>
+            
+            <li [ngClass]="{'active' : mainTab=='salesRetrun'}" (click)="mainTab = 'salesRetrun';">
+                <p>Sales Retrun</p>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="capsule-buttons">
+        <ul>
+            <li [ngClass]="{'active' : SubTab=='incoming'}" (click)="SubTab='incoming' ;">
+                <p>Incoming</p>
+            </li>
+            
+            <li [ngClass]="{'active' : SubTab=='outgoing'}" (click)="SubTab='outgoing';">
+                <p>Outgoing</p>
+            </li>
+        </ul>
+    </div>
+    
+    <ng-container *ngIf="mainTab=='stock'">
+        <ng-container *ngIf="SubTab == 'incoming'">
+            <div class="transation-tabel" *ngFor="let row of stockData.dr_in">
+                <table>
+                    <tr>
+                        <td>
+                            <div class="point-date">
+                                <div class="led-date">Date : {{row.date_created | date:'d MMM y hh:mm a'}}</div>
+                                <div class="led-amount credit">
+                                    <span>Qty: {{row.product_qty}}</span>
+                                </div>
+                            </div>
+                            <div class="point-remark mb0">
+                                <div class="date">
+                                    {{row.party_detail}}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="nothing-here" style="height: 60%;" *ngIf="!stockData.dr_in?.length">
+                <div class="outer">
+                    <div class="innear">
+                        <img src="assets/imgs/no_found.svg" alt="">
+                        <p>Data Not Available</p>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        
+        <ng-container *ngIf="SubTab == 'outgoing'">
+            <div class="transation-tabel" *ngFor="let row of stockData.dr_out">
+                <table>
+                    <tr>
+                        <td>
+                            <div class="point-date">
+                                <div class="led-date">Date : {{row.date_created | date:'d MMM y hh:mm a'}}</div>
+                                <div class="led-amount debit">
+                                    <span>Qty: {{row.product_qty}}</span>
+                                </div>
+                            </div>
+                            <div class="point-remark mb0">
+                                <div class="date">
+                                    {{row.party_detail}}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="nothing-here" style="height: 60%;" *ngIf="!stockData.dr_out?.length">
+                <div class="outer">
+                    <div class="innear">
+                        <img src="assets/imgs/no_found.svg" alt="">
+                        <p>Data Not Available</p>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="mainTab=='salesRetrun'">
+        <ng-container *ngIf="SubTab == 'incoming'">
+            <div class="transation-tabel" *ngFor="let row of return_in">
+                <table>
+                    <tr>
+                        <td>
+                            <div class="point-date">
+                                <div class="led-date">Date : {{row.date_created | date:'d MMM y hh:mm a'}}</div>
+                                <div class="led-amount credit">
+                                    <span>Qty: {{row.product_qty}}</span>
+                                </div>
+                            </div>
+                            <div class="point-remark mb0">
+                                <div class="date">
+                                    {{row.party_detail}}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="nothing-here" style="height: 60%;" *ngIf="!return_in?.length">
+                <div class="outer">
+                    <div class="innear">
+                        <img src="assets/imgs/no_found.svg" alt="">
+                        <p>Data Not Available</p>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        
+        <ng-container *ngIf="SubTab == 'outgoing'">
+            <div class="transation-tabel" *ngFor="let row of return_out">
+                <table>
+                    <tr>
+                        <td>
+                            <div class="point-date">
+                                <div class="led-date">Date : {{row.date_created | date:'d MMM y hh:mm a'}}</div>
+                                <div class="led-amount debit">
+                                    <span>Qty: {{row.product_qty}}</span>
+                                </div>
+                            </div>
+                            <div class="point-remark mb0">
+                                <div class="date">
+                                    {{row.party_detail}}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="nothing-here" style="height: 60%;" *ngIf="!return_out?.length">
+                <div class="outer">
+                    <div class="innear">
+                        <img src="assets/imgs/no_found.svg" alt="">
+                        <p>Data Not Available</p>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </ng-container>
+    
+</ion-content>

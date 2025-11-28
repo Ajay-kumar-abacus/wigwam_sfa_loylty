@@ -1,0 +1,67 @@
+page-transfer-request-listing {
+    .list-box
+    {
+        border: 0px;
+        box-shadow: 0px 3px 4px 0px #cccccc !important;
+        padding: 5px;
+        border-radius: 5px;
+        
+        .upper
+        {
+            margin: 0;
+            margin-top: 10px;
+            border: 0px;
+            padding: 5px 0px 5px 0px;
+            
+            .left-date 
+            {
+                .date-section 
+                {
+                    p 
+                    {
+                        display: flex;
+                        white-space: nowrap;
+                        
+                        &:nth-child(1) 
+                        {
+                            font-size: 12px;
+                        }
+                        
+                        &:nth-child(2) 
+                        {
+                            font-size: 11px;
+                            margin-top: 5px !important;
+                            white-space: nowrap;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    .mid
+    {
+        .content-info
+        {
+            .right-info
+            {
+                p
+                {
+                    color: #000000;
+                }
+            }
+        }
+        
+        .tag-info
+        {
+            a
+            {
+                i
+                {
+                    color: #000000;
+                }
+            }
+        }
+        
+    }
+}

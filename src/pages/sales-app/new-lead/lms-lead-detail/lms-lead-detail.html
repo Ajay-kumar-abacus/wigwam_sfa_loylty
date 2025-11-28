@@ -1,0 +1,115 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Digital Enquiry Detail</ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+    <div class="attendance-list flat-list">
+        <div class="slab slab-bg">
+            <div class="slab-day">
+                <p>{{lead_detail.date_created | date:'d MMM y'}}</p>
+                <span>Date Created</span>
+            </div>
+            <div class="slab-day">
+                <p>{{lead_detail.created_by_name}}</p>
+                <span>Created by</span>
+            </div>
+
+            <div class="slab-day">
+                <p>{{lead_detail.stage_level}}</p>
+                <p>Status</p>
+            </div>
+        </div>
+        <div class="center-block">
+            <div class="circle">{{(lead_detail.name | titlecase) | slice:0:1}} </div>
+            <h1 class="f12">{{lead_detail.name | titlecase}}</h1>
+            <p>{{lead_detail.mobile}}</p>
+            <a class="cell-phone" href="tel:{{data.mobile}}"><i class="material-icons">phone</i></a>
+
+        </div>
+        <div class="other-block">
+            <p>Profile Type : <strong>{{lead_detail.influencer_type? lead_detail.influencer_type: '---'}}</strong></p>
+        </div>
+        <div class="other-block">
+            <p>Source : <strong>{{lead_detail.source ? lead_detail.source : '---'}}</strong></p>
+        </div>
+        <div class="other-block">
+            <p>Purpose : <strong>{{lead_detail.purpose ? lead_detail.purpose : '---'}}</strong></p>
+        </div>
+        <div class="other-block">
+            <p>Remarks : <strong>{{lead_detail.description ? lead_detail.description : '---'}}</strong></p>
+        </div>
+        <div class="other-block">
+            <p>Address- <strong>{{lead_detail.address}} {{lead_detail.district}} {{lead_detail.city}}
+                    {{lead_detail.pincode}}
+                    {{lead_detail.state}} {{lead_detail.country}}</strong></p>
+        </div>
+        <div class="no-answer-btn mt16 mb10" *ngIf="lead_detail.stage_level == 'Qualified'"
+            (click)="addRemark('No Answer')">
+            <div>
+                <p>No Answer</p>
+            </div>
+            <i class="material-icons">no_accounts</i>
+        </div>
+        <div class="no-answer-btn mt16 mb10" style="background-color: rgb(124, 243, 124); border: 2px solid #7dff7d;" *ngIf="lead_detail.stage_level == 'Qualified'"
+        (click)="addCustomer('Existing Customer')">
+        <div>
+            <p>Customer Exisit</p>
+        </div>
+        <i class="material-icons">account_circle</i>
+    </div>
+        <!-- <div class="mb6 mt6 dflex gcp10">
+            <ion-item >
+                <ion-label floating>customer Type</ion-label>
+                <ion-select name="type" [(ngModel)]="form.type" #type="ngModel" interface="action-sheet" required>
+                    <ion-option value="Existing Customer">Existing Customer</ion-option>
+                    <ion-option value="Non Existing Customer">Non Existing Customer</ion-option>
+                </ion-select>
+              </ion-item>
+        </div> -->
+        <div class="mb6 mt6 dflex gcp10">
+           
+            <button style="background: -webkit-linear-gradient(#07db66, #007f39);
+            border: 0.5px solid #00bc61;" *ngIf="lead_detail.stage_level == 'Qualified' && actionType == 'My'" ion-button block
+                (click)="addFollowup()">&nbsp;Add Followup<i class="material-icons">chevron_right</i>
+            </button>
+            <button style=" background: -webkit-linear-gradient(#f85858, #e70303);
+            border: 0.5px solid #e70303;"
+                *ngIf="(lead_detail.stage_level == 'Inprocess' || lead_detail.stage_level == 'Qualified' ) && actionType == 'My'"
+                ion-button block color="light-bg" (click)="statusModal()">&nbsp;Mark As Lost<i
+                    class="material-icons">chevron_right</i>
+            </button>
+        </div>
+
+    </div>
+
+    <div class="pb100">
+        <div class="remarkSent" *ngFor="let row of activity_list">
+            <p class="remarkMsg">{{row.msg ? row.msg : row.remark}}</p>
+            <div class="dateCreated"><span>({{row.changes_by_name}})</span> <span>{{row.date_created | date:'d MMM
+                    y'}}</span></div>
+        </div>
+
+        <div class="nothing-here" *ngIf="activity_list == 0">
+            <div class="outer">
+                <div class="innear">
+                    <img src="assets/imgs/no_found.svg" alt="">
+                    <p>Data Not Available</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</ion-content>
+
+
+<ion-footer *ngIf="lead_detail.stage_level != 'Qualified' && actionType == 'My'" color="light">
+    <div class="footer-input-block">
+        <textarea type="text" placeholder="Add Remark" name="remark" #remark="ngModel"
+            [(ngModel)]="form.remark"></textarea>
+        <button ion-button icon-start color="success" (click)="addRemark(form.remark)"><ion-icon
+                name="send"></ion-icon></button>
+    </div>
+</ion-footer>

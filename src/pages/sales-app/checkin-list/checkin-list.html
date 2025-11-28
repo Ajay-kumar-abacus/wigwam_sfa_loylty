@@ -1,0 +1,159 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>{{checkinType}} Activity Summary</ion-title>
+        <!-- <ion-buttons end *ngIf="LoginType == 'Employee'">
+            <button ion-button icon-only (click)="presentPopover($event)">
+                <ion-icon name="more"></ion-icon>
+            </button>
+        </ion-buttons> -->
+    </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+            refreshingText="Refreshing...">
+        </ion-refresher-content>
+    </ion-refresher>
+    <div class="nothing-here" *ngIf="!previous_checkin.length">
+        <div class="outer">
+            <div class="innear">
+                <img src="assets/imgs/no_found.svg" alt="">
+                <p>Data Not Available</p>
+            </div>
+        </div>
+    </div>
+    <div class="padding16 no-dtp" *ngIf="!previous_checkin.length && search.check_in_date">
+        <p>No Previous Activity</p>
+    </div>
+    <div class="pd-left-right16" *ngIf="previous_checkin.length">
+        <div class="travel">
+            <ul>
+                <li class="list-box mt16 p0" *ngFor="let row of previous_checkin"> 
+                    <div>
+
+                        <!-- <h2>{{'Abacusdesk' | titlecase}}</h2> -->
+                        <div class="visit-time">
+                            <div class="visit-hours">
+                                <span>Date</span>
+                                <p class="font10">{{row.visit_start != '0000-00-00 00:00:00' ? (row.visit_start| date:'d
+                                    MMM, y') : '--'}}</p>
+                            </div>
+                            <div class="visit-hours">
+                                <span>Check-in</span>
+                                <p class="font10">{{row.visit_start != '0000-00-00 00:00:00' ? (row.visit_start| date:'d
+                                    MMM, y') : '--'}}</p>
+                            </div>
+                            <div class="visit-hours">
+                                <span>Check-out</span>
+                                <p class="font10">{{row.visit_end != '0000-00-00 00:00:00' ? (row.visit_end| date:'d
+                                    MMM,
+                                    y') : '--'}}</p>
+                            </div>
+                            <div class="visit-hours">
+                                <span>Total time spend</span>
+                                <p class="font10">{{row.TOTAL_TIME_TAKE ? row.TOTAL_TIME_TAKE : '---'}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="type-visit">
+                        <div class="types">
+                          <span *ngIf="row.order_flag=='1'" class="active">&nbsp;</span>
+                          <span *ngIf="row.order_flag=='0'" class="deactive">&nbsp;</span>
+                          Order
+                        </div>
+                        <div class="types">
+                          <span *ngIf="row.followup_flag=='1'" class="active">&nbsp;</span>
+                          <span *ngIf="row.followup_flag=='0'" class="deactive">&nbsp;</span>
+                          Followup
+                        </div>
+                        <!-- <div class="types">
+                          <span *ngIf="row.doc_flag!=0" class="active">&nbsp;</span>
+                          <span *ngIf="row.doc_flag==0" class="deactive">&nbsp;</span>
+                          Photo
+                        </div> -->
+                      </div>
+                      <div class="type-visit">
+                        <div class="types" *ngIf="row.dr_type=='1' || row.dr_type=='3' ">
+                          <span *ngIf="row.brand_audit_id!=''" class="active">&nbsp;</span>
+                          <span *ngIf="row.brand_audit_id==''" class="deactive">&nbsp;</span>
+                          Brand Audit
+                        </div>
+                        <div class="types" *ngIf="row.dr_type=='1' || row.dr_type=='3'|| row.dr_type=='7' || row.dr_type=='8'||row.dr_type=='13'|| row.dr_type=='14' || row.dr_type=='16' ">
+                          <span *ngIf="row.support_id!=''" class="active">&nbsp;</span>
+                          <span *ngIf="row.support_id==''" class="deactive">&nbsp;</span>
+                          Ticket
+                        </div>
+                        <div class="types" *ngIf="row.dr_type=='1' || row.dr_type=='3'|| row.dr_type=='8'||row.dr_type=='13'|| row.dr_type=='14' ">
+                          <span *ngIf="row.site_id > 0" class="active">&nbsp;</span>
+                          <span *ngIf="row.site_id == 0" class="deactive">&nbsp;</span>
+                          Lead
+                        </div>
+                      </div>
+                    <!-- <div class="type-visit">
+                        <div class="types">
+                            <span *ngIf="row.order_flag=='1'" class="active">&nbsp;</span>
+                            <span *ngIf="row.order_flag=='0'" class="deactive">&nbsp;</span>
+
+                            Order
+                        </div>
+                        <div class="types">
+                            <span *ngIf="row.followup_flag=='1'" class="active">&nbsp;</span>
+                            <span *ngIf="row.followup_flag=='0'" class="deactive">&nbsp;</span>
+                            Followup
+                        </div>
+                        <div class="types">
+                           
+                            <span *ngIf="row.doc_flag != ''" class="active">&nbsp;</span>
+                            <span *ngIf="row.doc_flag==''||row.doc_flag==null" class="deactive">&nbsp;</span>
+                            Photo upload
+                        </div>
+                      
+                    </div> -->
+                    <!-- <div class="type-visit">
+                        <div class="types">
+                            <span *ngIf="row.brand_audit_id!=''" class="active">&nbsp;</span>
+                            <span *ngIf="row.brand_audit_id==''" class="deactive">&nbsp;</span>
+                            Brand Audit
+                        </div>
+                        <div class="types">
+                            <span *ngIf="row.support_id!=''" class="active">&nbsp;</span>
+                            <span *ngIf="row.support_id==''" class="deactive">&nbsp;</span>
+                            Ticket
+                        </div>
+                        <div class="types" *ngIf="row.dr_type_name != 'Lead'">
+                            <span *ngIf="row.site_id!=''" class="active">&nbsp;</span>
+                            <span *ngIf="row.site_id==''" class="deactive">&nbsp;</span>
+                            Lead
+                        </div>
+                    </div> -->
+                    <div class="m4">
+                        <p class="f10"><strong>Created BY</strong> : <span>{{row.created_by_name ? row.created_by_name :
+                                '---'}}</span></p>
+                    </div>
+                    <div class="m4">
+                        <p class="f10"><strong>Topic of Discussion</strong> : <span>{{row.checklist ? row.checklist :
+                                '---'}}</span></p>
+                    </div>
+                    <div class="m4">
+                        <p class="f10"><strong>GPS Address</strong> : <span>{{row.start_address}}</span></p>
+                    </div>
+                    <div
+                        style="display: flex;flex-direction:row;background-color: rgb(216, 216, 216);padding:5px 2px 5px 2px;border-radius: 0px 0px 4px 4px;">
+                        <p class="font12">Remark : </p>
+                        <p class="font12"> {{row.description}}</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)" *ngIf="flag!=1">
+        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+
+
+</ion-content>

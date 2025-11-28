@@ -1,0 +1,131 @@
+<!--
+  Generated template for the InspectionPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>Inspection</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <form #f="ngForm" (ngSubmit)="f.form.valid && saveInspection()">
+    <div class="form">
+      <ion-list no-lines class="padding10">
+
+        <ion-item [ngClass]="{'error':f.submitted && category?.invalid}">
+          <ion-label floating>Category<span>*</span></ion-label>
+          <ion-select name="category" #category="ngModel" [(ngModel)]="formData.category"
+            (ngModelChange)="get_sub_segment(formData.category)" required>
+            <ion-option *ngFor="let row of segment_list" value="{{row.id}}">{{row.category}}</ion-option>
+          </ion-select>
+        </ion-item>
+        <div *ngIf="f.submitted && category.invalid" class="eror">
+          <p *ngIf="category.errors.required">{{'Field is Required'}}</p>
+        </div>
+
+        <ion-item [ngClass]="{'error':f.submitted && sub_category?.invalid}" *ngIf="segment_sub_list.length > 0">
+          <ion-label floating>Sub Category<span>*</span></ion-label>
+          <ion-select name="sub_category" #sub_category="ngModel" [(ngModel)]="formData.sub_category"
+            (ngModelChange)="get_sub_segmentDetail(formData.category,formData.sub_category)" required>
+            <ion-option *ngFor="let row of segment_sub_list" value="{{row.id}}">{{row.sub_category_name}}</ion-option>
+          </ion-select>
+        </ion-item>
+        <div *ngIf="f.submitted && sub_category.invalid" class="eror">
+          <p *ngIf="sub_category.errors.required">{{'Field is Required'}}</p>
+        </div>
+
+        <ion-item [ngClass]="{'error':f.submitted && product_id?.invalid}">
+          <ion-label floating>Product<span>*</span></ion-label>
+          <ion-select name="product_id" #product_id="ngModel" [(ngModel)]="formData.product_id"
+            (ngModelChange)="segmentItemsDetail(formData.product_id)" required>
+            <ion-option *ngFor="let row of segment_detail" value={{row.id}}>{{row.product_name}}</ion-option>
+          </ion-select>
+        </ion-item>
+        <div *ngIf="f.submitted && product.invalid" class="eror">
+          <p *ngIf="product.errors.required">{{'Field is Required'}}</p>
+        </div>
+
+        <!-- <ion-item [ngClass]="{'error':f.submitted && serial_no?.invalid}">
+          <ion-label floating>Serial No.<span>*</span></ion-label>
+          <ion-input type="text" name="serial_no" #serial_no="ngModel" [(ngModel)]="formData.serial_no"
+            required></ion-input>
+        </ion-item>
+        <div *ngIf="f.submitted && serial_no.invalid" class="eror">
+          <p *ngIf="serial_no.errors.required">{{'Field is Required'}}</p>
+        </div> -->
+
+        <ion-item [ngClass]="{'cs-error':f.submitted && date_of_purchase?.invalid}">
+          <ion-label floating>Date of Purchase<span>*</span></ion-label>
+          <ion-datetime display-format="MMM DD, YYYY" name="date_of_purchase" [(ngModel)]="formData.date_of_purchase"
+            (ngModelChange)="calculateWarrantyEnd()" [max]="currentDate"></ion-datetime>
+        </ion-item>
+        <div *ngIf="f.submitted && date_of_purchase.invalid" class="eror">
+          <p *ngIf="date_of_purchase.errors.required">{{'Field is Required'}}</p>
+        </div>
+
+        <ion-item [ngClass]="{'cs-error':f.submitted && warranty_end_date?.invalid}">
+          <ion-label floating>Warranty End Date<span>*</span></ion-label>
+          <ion-datetime display-format="MMM DD, YYYY" name="warranty_end_date" [(ngModel)]="formData.warranty_end_date"
+            readonly style="pointer-events: none;"></ion-datetime>
+        </ion-item>
+        <!-- <div *ngIf="f.submitted && warranty_end_date.invalid" class="eror">
+          <p *ngIf="warranty_end_date.errors.required">{{'Field is Required'}}</p>
+        </div>  -->
+
+
+        <ion-item [ngClass]="{'error':f.submitted && warranty_status?.invalid}">
+          <ion-label floating>Warranty Status<span>*</span></ion-label>
+          <ion-select name="warranty_status" #warranty_status="ngModel" [(ngModel)]="formData.warranty_status">
+            <ion-option value="In Warranty">In Warranty</ion-option>
+            <ion-option value="Out Of Warranty">Out Of Warranty</ion-option>
+          </ion-select>
+        </ion-item>
+        <div *ngIf="f.submitted && warranty_status.invalid" class="eror">
+          <p *ngIf="warranty_status.errors.required">{{'Field is Required'}}</p>
+        </div>
+
+        <ion-item [ngClass]="{'error':f.submitted && closing_type?.invalid}">
+          <ion-label floating>Closing Type<span>*</span></ion-label>
+          <ion-select name="closing_type" #closing_type="ngModel" [(ngModel)]="formData.closing_type">
+            <ion-option value="Service">Service</ion-option>
+            <ion-option value="Spare Part Pending">Spare Part Pending</ion-option>
+            <ion-option value="Replacement">Replacement</ion-option>
+          </ion-select>
+        </ion-item>
+        <div *ngIf="f.submitted && closing_type.invalid" class="eror">
+          <p *ngIf="closing_type.errors.required">{{'Field is Required'}}</p>
+        </div>
+
+        <ion-item [ngClass]="{'error':f.submitted && inspection_remark?.invalid}">
+          <ion-label floating>Remark <strong>*</strong></ion-label>
+          <ion-textarea name="inspection_remark" #inspection_remark="ngModel"
+            [(ngModel)]="formData.inspection_remark"></ion-textarea>
+        </ion-item>
+        <div class="eror" *ngIf="f.submitted && inspection_remark?.invalid">
+          <p> {{ 'This field is required'}}</p>
+        </div>
+      </ion-list>
+      <div class="outer-doc">
+        <div class="upload-document" (click)="onUploadChange()">
+          <p *ngIf="!formData.warranty_card_copy_img">
+            <i class="material-icons">add_circle</i><br>{{'Upload Warranty Image Here'}}
+          </p>
+          <img *ngIf="formData.warranty_card_copy_img" src="{{formData.warranty_card_copy_img}}">
+        </div>
+        <div class="upload-document mt15" (click)="onUploadBackChange()">
+          <p *ngIf="!formData.bill_copy_img">
+            <i class="material-icons">add_circle</i><br>{{'Upload Bill Image Here'}}
+          </p>
+          <img *ngIf="formData.bill_copy_img" src="{{formData.bill_copy_img}}">
+        </div>
+      </div>
+      <div class="enquiry-btn add-btns mt20">
+        <button ion-button block class="h40 green-color" style="letter-spacing: 1px;">
+          <p> Submit</p>
+        </button>
+      </div>
+    </div>
+  </form>
+</ion-content>

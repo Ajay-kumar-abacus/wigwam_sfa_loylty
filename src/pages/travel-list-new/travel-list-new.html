@@ -1,0 +1,171 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title *ngIf="travelViewType=='My' && travelType == 'daily'">Plan of Action</ion-title>
+    <ion-title *ngIf="travelViewType=='My' && travelType == 'month'">Monthly Journey Plan</ion-title>
+    <ion-title *ngIf="travelViewType!='My' && travelType == 'daily'">Team Plan of Action</ion-title>
+    <ion-title *ngIf="travelViewType!='My' && travelType == 'month'">Team Monthly Journey Plan</ion-title>
+    <ion-buttons end *ngIf="teamCount!=null">
+      <button ion-button icon-only *ngIf="teamCount > 0" (click)="presentPopover($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-toolbar color="white">
+    <div class=" mb10">
+      <ion-segment [(ngModel)]="travelType">
+        <ion-segment-button value="daily" (click)="getTravelData('daily')">
+          Daily
+        </ion-segment-button>
+        <ion-segment-button value="month" (click)="getTravelData('month')">
+          Monthly
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+
+  </ion-toolbar>
+
+</ion-header>
+<ion-content>
+
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <ng-container>
+    <div class="edit flat" *ngIf="travelViewType=='Team'">
+      <ion-list>
+        <ng-container>
+          <ion-item class="cs-normal-select retailerSelectionBox mt0 mb0">
+            <ion-label>Select Team Member</ion-label>
+            <ionic-selectable item-content name="data" [(ngModel)]="selectData.team" [items]="user_list"
+              itemValueField="id" itemTextField="name" [canSearch]="true" #selectComponent
+              (ngModelChange)="getTravelData(travelType)"></ionic-selectable>
+          </ion-item>
+        </ng-container>
+      </ion-list>
+    </div>
+  </ng-container>
+  <div class="bg-white">
+
+    <div class="capsule-tabs">
+      <ul>
+        <li [ngClass]="{'active':travelPlanStatus == 'Pending'}"
+          (click)="travelPlanStatus = 'Pending';filter.start=0; getTravelData(travelType)">
+          <p>Pending<span>{{travelPlanCount.Pending_count ? travelPlanCount.Pending_count : '0'}}</span></p>
+        </li>
+        <li [ngClass]="{'active':travelPlanStatus == 'Approved'}"
+          (click)="travelPlanStatus = 'Approved';filter.start=0;getTravelData(travelType)">
+          <p>Approved<span>{{travelPlanCount.Approved_count ? travelPlanCount.Approved_count : '0'}}</span></p>
+        </li>
+        <li [ngClass]="{'active':travelPlanStatus == 'Reject'}"
+          (click)="travelPlanStatus = 'Reject'; filter.start=0;getTravelData(travelType)">
+          <p>Rejected<span>{{travelPlanCount.Reject_count ? travelPlanCount.Reject_count : '0'}}</span></p>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- <ng-container *ngIf="userId"> -->
+
+    <ng-container *ngIf="travelType == 'daily'">
+      <div class="padding16">
+        <div class="collapse p3" *ngFor="let item of travel_data">
+          <div class="deleteButton" (click)="deleteTravelPlan($event,i,item.id)"
+            *ngIf="travelViewType=='My'&&travelPlanStatus == 'Pending'&& item.date_from >= today_date && item.visit_actual == 0">
+            <i class="material-icons">delete_sweep</i>
+          </div>
+          <div class="collapse-head" (click)="goOnDetailTravel(item.id, item.date_from,item.assign_to)">
+            <div class="date-head">
+              <p>Date</p>
+              <span>{{item.date_from | date:'d MMM yyyy'}}</span>
+            </div>
+            <div class="date-head">
+              <p>Visit Plan</p>
+              <span>{{item.total_plan}}</span>
+            </div>
+            <div class="date-head">
+              <p>Created By</p>
+              <span>{{item.assigned_to_name}}</span>
+            </div>
+
+          </div>
+
+          <div class="collapse-head" (click)="goOnDetailTravel(item.id, item.date_from,item.assign_to)">
+            <div class="date-head">
+              <p>Visit Actual</p>
+              <span>{{item.visit_actual ? item.visit_actual : '---'}}</span>
+            </div>
+            <div class="date-head pl5">
+              <p>Plan Followed</p>
+              <span>{{item.plan_follow ? (item.plan_follow | number:'1.2-2') + '%' : '---'}}</span>
+            </div>
+            <div class="date-head">
+              <p>Plan Deviation</p>
+              <span>{{item.plan_deviation ? (item.plan_deviation| number:'1.2-2') + '%': '---'}}</span>
+            </div>
+          </div>
+          <div class="info">
+            <i class="material-icons">keyboard_arrow_right</i>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="travelType == 'month'">
+      <div class="padding16">
+        <div class="collapse p3" *ngFor="let item of travel_data">
+          <div class="deleteButton" (click)="deleteTravelPlan($event,i,item.id)"
+            *ngIf="travelViewType=='My'&&travelPlanStatus == 'Pending'">
+            <i class="material-icons">delete_sweep</i>
+          </div>
+          <div class="collapse-head"
+            (click)="goOnDetailTravel(item.id, item.date_from,item.assign_to,item.working_days,item.plan_updated)">
+            <div class="date-head">
+              <p>Date Created</p>
+              <span>{{item.date_created | date:'d MMM yyyy , hh:mm a'}}</span>
+            </div>
+            <div class="date-head">
+              <p>Month - Year</p>
+              <span>{{item.month_name}} - {{item.year}}</span>
+            </div>
+            <div class="date-head">
+              <p>Created By</p>
+              <span>{{item.assigned_to_name}}</span>
+            </div>
+
+          </div>
+
+          <div class="collapse-head"
+            (click)="goOnDetailTravel(item.id, item.date_from,item.assign_to,item.working_days,item.plan_updated)">
+            <div class="date-head">
+              <p>Working Days</p>
+              <span>{{item.working_days ? item.working_days : '---'}}</span>
+            </div>
+            <div class="date-head">
+              <p>Plan Submit</p>
+              <span>{{item.plan_updated ? item.plan_updated : '---'}}</span>
+            </div>
+          </div>
+          <div class="info">
+            <i class="material-icons">keyboard_arrow_right</i>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+  <!-- </ng-container> -->
+  <div class="nothing-here" *ngIf="!travel_data.length">
+    <div class="outer">
+      <div class="innear">
+        <img src="assets/imgs/no_found.svg" alt="" />
+        <p>No Travel Plan Available</p>
+      </div>
+    </div>
+  </div>
+  <ion-fab right bottom *ngIf="travelViewType=='My'|| selectData.team">
+    <button ion-fab color="primary" (click)="goOnAddTravel()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+</ion-content>

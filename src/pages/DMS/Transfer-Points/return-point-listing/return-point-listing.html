@@ -1,0 +1,91 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Return Listing</ion-title>
+  </ion-navbar>
+  <ion-toolbar>
+    <div class="search add-search">
+      <div class="filter">
+        <ion-searchbar type='text' name="master_search" [(ngModel)]="filter.master_search" (keydown.enter)="getReturnList(ActiveTab)"></ion-searchbar>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content  pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+  
+  <div class="capsule-tabs">
+    <ul>
+      <li [ngClass]="{'active' : ActiveTab=='Transfer'}" (click)="ActiveTab='Transfer' ;getReturnList(ActiveTab)">
+        <p>Transfer
+          <!-- <span>{{returnCounts.Transfer}}</span> -->
+        </p>
+      </li>
+      
+      <li [ngClass]="{'active' : ActiveTab=='Scan'}" (click)="ActiveTab='Scan';getReturnList(ActiveTab)">
+        <p>Scan
+          <!-- <span>{{returnCounts.Scan}}</span> -->
+        </p>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="padding16">
+    <div class="list-box" *ngFor="let row of returnList" (click)="goOnReturnPointReqDetail(row.id)">
+      <div class="mid mt0">
+        <div class="content-info">
+          <div class="left-info" *ngIf="row.company_name">
+            <div class="circle">{{row.company_name.substring(0,1).toUpperCase()}}</div>
+          </div>
+          
+          <div class="right-info">
+            <p *ngIf="row.company_name">{{row.company_name | titlecase}}</p>
+            <p>{{row.influencer_detail | titlecase}}</p>
+          </div>
+        </div>
+        
+        <div class="tag-info">
+          <a><i class="material-icons">chevron_right</i></a>
+        </div>
+      </div>
+      
+      <div class="upper">
+        <div class="left-date">
+          <div class="date-section">
+            <p>{{row.date_created | date:'d MMM y hh:mm a'}}</p>
+            <p>Date Created</p>
+          </div>
+          
+          <div class="date-section">
+            <p>{{row.total_items}}</p>
+            <p>Total Item</p>
+          </div>
+          
+          <div class="date-section">
+            <p>{{row.total_items_qty}}</p>
+            <p>Total Item Qty</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="nothing-here" *ngIf="!returnList?.length">
+    <div class="outer">
+      <div class="innear">
+        <img src="assets/imgs/no_found.svg" alt="">
+        <p>Data Not Available</p>
+      </div>
+    </div>
+  </div>
+  
+  <ion-fab right bottom>
+    <button ion-fab color="primary" (click)="goToReturnPointRequestAdd()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+  
+</ion-content>

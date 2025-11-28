@@ -1,0 +1,183 @@
+page-prominent-disclosure-modal {
+    .transprant-bg
+    {
+        background: rgba(0, 0, 0, 0.5);
+    }
+    
+    .work-modal
+    {
+        padding: 16px;
+        // height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+    
+    .work-modal-bg
+    {
+        width: 100%;
+        background: #fff;
+        border-radius: 10px;
+        // padding: 16px;
+        box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.5);
+        
+        .head
+        {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            
+            padding: 10px 16px;
+            border-bottom: 1px solid #cccccc;
+            
+            h2
+            {
+                font-size: 16px;
+            }
+            
+            a
+            {
+                &.close
+                {
+                    line-height: 0px;
+                    background-color: rgb(233, 1, 1);
+                    border-radius: 16px;
+                    
+                    
+                    i
+                    {
+                        font-size: 20px;
+                        color: #ffffff;
+                    }
+                }
+            }
+        }
+        
+        ion-item
+        {
+            padding-left: 0px;
+        }
+    }
+    .working-summary-card {
+        -webkit-box-shadow: none !important;
+        box-shadow:none !important;
+        border-radius: 8px;
+        background: #fff;
+        position: relative;
+        
+        a {
+            &.share {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                
+                i {
+                    font-size: 18px;
+                    color: #cda765;
+                }
+            }
+        }
+        
+        h2 {
+            text-align: center;
+            font-size: 16px;
+            display: inline-block;
+            position: relative;
+            padding: 10px 10px 0px 10px !important;
+        }
+        
+        .text-box {
+            border-bottom: 1px solid #cccc;
+            
+            
+            .doc-box {
+                border: 2px dashed #ccc;
+                height: 200px;
+                text-align: center;
+                
+                img {
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+            
+            .displayflex{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 4px 12px;
+                &:nth-child(odd) {
+                    
+                    h6 {
+                        font-size: 16px;
+                        line-height: 30px;
+                        font-weight: bold;
+                        width: 100px;
+                        color: #ff9d00;
+                        text-align: end;
+                        border-radius: 13px;
+                    }
+                }
+                &:nth-child(even) {
+                    background-color: aliceblue;
+                    h6 {
+                        font-size: 16px;
+                        line-height: 30px;
+                        font-weight: bold;
+                        width: 100px;
+                        color: #0071ce;
+                        text-align: end;
+                        border-radius: 13px;
+                    }
+                }
+                &:last-child{
+                    border-radius: 0px 0px 6px 6px;
+                }
+            }
+            
+            
+            
+            p {
+                font-size: 16px;
+                font-weight: bold;
+                color: #000000;
+                line-height: 30px;
+            }
+            
+            ul {
+                display: flex;
+                grid-column-gap: 5px;
+                align-items: center;
+                
+                li {
+                    
+                    font-size: 13px;
+                    
+                    i {
+                        font-size: 20px;
+                        color: #a1a1a1;
+                    }
+                    
+                    &.active {
+                        i {
+                            color: #FDBC0A;
+                        }
+                    }
+                }
+            }
+            
+            &:last-child {
+                border-bottom: 0px;
+            }
+        }
+    }
+    .paragraphs{
+        margin: 12px;
+        .heading{
+            font-weight: bold;
+            font-size: 14px;
+            padding-bottom: 8px;
+        }
+    }
+}

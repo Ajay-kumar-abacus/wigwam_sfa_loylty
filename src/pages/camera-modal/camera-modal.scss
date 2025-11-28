@@ -1,0 +1,103 @@
+page-camera-modal {
+  .footer-controls {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 25vh;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(30, 30, 30, 0.6));
+    backdrop-filter: blur(20px);
+    box-shadow: 0 -8px 20px rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    // border-top-left-radius: 25px;
+    // border-top-right-radius: 25px;
+  }
+  
+  .control-buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 85%;
+    gap: 15px;
+  }
+  
+  .control-btn {
+    color: white;
+    font-size: 28px;
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(50, 50, 50, 0.2);
+    border: none;
+    padding: 16px;
+    border-radius: 14px;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 6px 12px rgba(255, 255, 255, 0.1);
+  }
+  
+  .control-btn:hover {
+    background: rgba(100, 100, 100, 0.4);
+    transform: scale(1.2);
+    box-shadow: 0 8px 18px rgba(255, 255, 255, 0.2);
+  }
+  
+  .control-btn:active {
+    background: rgba(120, 120, 120, 0.5);
+    transform: scale(1);
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
+  }
+  
+  .capture-btn {
+    font-size: 50px;
+    height: 110px;
+    width: 110px;
+    border-radius: 50%;
+    border: 7px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle, rgba(80, 80, 80, 0.3) 0%, rgba(50, 50, 50, 0.15) 100%);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .capture-btn:hover {
+    background: radial-gradient(circle, rgba(100, 100, 100, 0.4) 0%, rgba(70, 70, 70, 0.2) 100%);
+    transform: scale(1.15);
+  }
+  
+  .capture-btn:active {
+    transform: scale(0.9);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+  }
+  
+  button ion-icon {
+    font-size: 34px;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  button:hover ion-icon {
+    color: rgba(255, 255, 255, 1);
+  }
+  
+  @media (max-width: 768px) {
+    .control-buttons {
+      width: 90%;
+      gap: 10px;
+    }
+    .control-btn {
+      font-size: 24px;
+      padding: 14px;
+    }
+    .capture-btn {
+      font-size: 42px;
+      height: 95px;
+      width: 95px;
+      border: 6px solid white;
+    }
+  }
+  
+  }

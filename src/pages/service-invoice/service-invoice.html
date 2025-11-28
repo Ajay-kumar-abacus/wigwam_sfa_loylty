@@ -1,0 +1,89 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Invoice</ion-title>
+  </ion-navbar>
+  <ion-toolbar>
+    <div class="search add-search">
+      <div class="filter">
+        <ion-searchbar (ngModelChange)="getInvoiceList()" [(ngModel)]="filter.master" name="master"></ion-searchbar>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <ng-container *ngIf="showRelatedTab!=false">
+    <div class="capsule-tabs" style="border-bottom: 0px;">
+      <ul>
+
+        <li [ngClass]="{'active':status == 'Pending'}" (click)="status= 'Pending';getInvoiceList()">
+          <p>Pending<span>{{total_count.pending_count}}</span></p>
+        </li>
+        <li [ngClass]="{'active':status == 'Paid'}" (click)="status = 'Paid';getInvoiceList()">
+          <p>Paid<span>{{total_count.paid_count}}</span></p>
+        </li>
+
+      </ul>
+    </div>
+
+
+    <div class="pl16 pr16 mt15 mb50">
+
+      <div class="attendance-list" *ngFor="let row of invoice_list; let i=index" (click)="goinvoiceDetail(row.id)">
+        <div class="slab slab-bg" style="display: flex; justify-content: space-between;">
+          <div class="slab-day">
+            <p>{{row.date_created | date : "d MMM y" }}</p>
+            <span>Date Created</span>
+          </div>
+          <div class="slab-day">
+            <p>{{row.complaint_no}}</p>
+            <span>Complaint No</span>
+          </div>
+          <div class="slab-day">
+            <p>{{row.invoice_no}}</p>
+            <span>Invoice No</span>
+          </div>
+        </div>
+        <div class="center-block">
+          <div class="circle">{{row.customer_name?.substring(0,1).toUpperCase()}}</div>
+          <span>{{row.customer_name | titlecase}}</span>
+          <p>{{row.customer_mobile}}</p>
+        </div>
+        <div style="display: flex; justify-content: space-between;align-items: flex-end;">
+          <div class="slab mt5">
+            <div class="slab-day">
+              <p>{{row.type | titlecase}}</p>
+              <span>Invoice Type</span>
+            </div>
+          </div>
+          <div class="slab mt5">
+            <div class="slab-day">
+              <p>{{row.invoice_final_amount}}/-</p>
+              <span>Amount</span>
+            </div>
+          </div>
+        </div>
+        <div class="next-forword">
+          <i class="material-icons">chevron_right</i>
+        </div>
+      </div>
+    </div>
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)" *ngIf="flag!=1">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="{{'Loading more data...'}}">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+
+    <div class="nothing-here" style="height: 60%;" *ngIf="!invoice_list.length">
+      <div class="outer">
+        <div class="innear">
+          <img src="assets/imgs/no_found.svg" alt="">
+          <p>No Data Available</p>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ion-content>

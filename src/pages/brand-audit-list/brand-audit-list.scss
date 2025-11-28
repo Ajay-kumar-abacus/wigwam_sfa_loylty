@@ -1,0 +1,39 @@
+page-brand-audit-list {
+    .slab {
+        display: flex;
+        grid-column-gap: 15px;
+    justify-content: space-between;
+        .slab-day {
+            p {
+                font-size: 12px;
+                font-weight: 'bold';
+            }
+    
+            span {
+                font-size: 11px;
+            }
+        }
+   
+
+    
+        &.slab-bg {
+            background: #e2ecff;
+            padding: 5px;
+            border-radius: 6px;
+        }
+    
+        &.slab-three {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-column-gap: 10px;
+            grid-row-gap: 8px;
+        }
+    
+        &.slab-two {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-column-gap: 10px;
+            grid-row-gap: 8px;
+        }
+    }
+}

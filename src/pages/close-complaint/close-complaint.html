@@ -1,0 +1,152 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Change Status</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <form name="f" #f="ngForm" (ngSubmit)="f.valid && send_otp('Confirm');">
+    <div class=" form">
+      <ion-list no-lines class="padding10">
+
+        <ion-item [ngClass]="{'error':f.submitted && complaint_status?.invalid}">
+          <ion-label floating>Status<span>*</span></ion-label>
+          <ion-select interface="action-sheet" name="complaint_status" #complaint_status="ngModel"
+            [(ngModel)]="formData.complaint_status" required>
+            <ion-option value="Closed">Closed</ion-option>
+            <ion-option value="Cancel">Cancel</ion-option>
+          </ion-select>
+        </ion-item>
+        <div *ngIf="f.submitted && complaint_status?.invalid" class="eror">
+          <p *ngIf="complaint_status.errors.required">{{'Field is Required'}}</p>
+        </div>
+
+        <div class="outline-btn scan" (click)="Scaning()"
+          *ngIf="closing_type == 'Replacement' && formData.complaint_status=='Closed'">
+          <div class="icons"><i class="material-icons">qr_code_scanner</i></div>
+          {{'Scan'}}
+        </div>
+
+        <!-- <ion-item *ngIf="closing_type == 'Replacement' && formData.complaint_status=='Closed'"
+          [ngClass]="{'error':f.submitted && new_serial_no?.invalid}">
+          <ion-label floating>Serial No.<span>*</span></ion-label>
+          <ion-input type="text" name="new_serial_no" #new_serial_no="ngModel" [(ngModel)]="formData.new_serial_no"
+            required></ion-input>
+        </ion-item>
+        <div *ngIf="f.submitted && new_serial_no?.invalid" class="eror">
+          <p *ngIf="new_serial_no.errors.required">{{'Field is Required'}}</p>
+        </div> -->
+        <ion-item [ngClass]="{'error':f.submitted && replacement_type?.invalid}"
+          *ngIf="closing_type == 'Replacement' && formData.complaint_status=='Closed' ">
+          <ion-label floating>Replacement Type<span>*</span></ion-label>
+          <ion-select name="replacement_type" #replacement_type="ngModel" [(ngModel)]="formData.replacement_type"
+            required>
+            <ion-option value="Dealer">Dealer</ion-option>
+            <ion-option value="Company">Company</ion-option>
+          </ion-select>
+        </ion-item>
+        <div *ngIf="f.submitted && replacement_type?.invalid" class="eror">
+          <p *ngIf="replacement_type.errors.required">{{'Field is Required'}}</p>
+        </div>
+
+        <ion-item *ngIf="formData.replacement_type == 'Dealer' && formData.complaint_status=='Closed'"
+          [ngClass]="{'error':f.submitted && dealer_id?.invalid}">
+          <ion-label floating>Select Dealer<span>*</span></ion-label>
+          <ion-select name="dealer_id" [(ngModel)]="formData.dealer_id" #dealer_id="ngModel" required
+            (ionChange)="getDealerList(formData.dealer_id)">
+            <ion-option *ngFor="let row of dealer_list" value="{{row.id}}">{{row.name}}/{{row.mobile}}
+            </ion-option>
+          </ion-select>
+        </ion-item>
+
+
+
+        <ion-item [ngClass]="{'error':f.submitted && product_type?.invalid}"
+          *ngIf="closing_type == 'Replacement' && formData.complaint_status=='Closed'">
+          <ion-label floating>Product Type<span>*</span></ion-label>
+          <ion-select name="product_type" #product_type="ngModel" [(ngModel)]="formData.product_type" required>
+            <ion-option value="Reuse">Reuse</ion-option>
+            <ion-option value="New">New</ion-option>
+          </ion-select>
+        </ion-item>
+        <div *ngIf="f.submitted && product_type?.invalid" class="eror">
+          <p *ngIf="product_type.errors.required">{{'Field is Required'}}</p>
+        </div>
+
+        <ion-item [ngClass]="{'error':f.submitted && remarks ?.invalid}" *ngIf="formData.complaint_status=='Closed' ">
+          <ion-label floating>Remark <strong>*</strong></ion-label>
+          <ion-textarea name="remarks" #remarks="ngModel" [(ngModel)]="formData.remarks" required></ion-textarea>
+        </ion-item>
+        <div class="eror" *ngIf="f.submitted && remarks?.invalid">
+          <p> {{ 'This field is required'}}</p>
+        </div>
+
+        <ion-item [ngClass]="{'error':f.submitted && status_reason ?.invalid}"
+          *ngIf="formData.complaint_status=='Cancel' ">
+          <ion-label floating>Cancel Reason <strong>*</strong></ion-label>
+          <ion-textarea name="status_reason" #status_reason="ngModel" [(ngModel)]="formData.status_reason"
+            required></ion-textarea>
+        </ion-item>
+        <div class="eror" *ngIf="f.submitted && status_reason?.invalid">
+          <p> {{ 'This field is required'}}</p>
+        </div>
+
+
+      </ion-list>
+
+      <div class="add-new padding0">
+        <div class="uplode-image">
+          <ul>
+            <li *ngFor="let pic of image_data;let i = index;">
+              <img src="{{pic.image}}">
+              <button><i class="material-icons" (click)="remove_image(i)">clear</i></button>
+            </li>
+            <li (click)="image_data.length < 5 ?  captureImageVideo() : showLimit()">
+              <label>
+                <input type="file" style="display: none;">
+                <div class="other">
+                  <a><i class="material-icons">camera_alt</i></a>
+                </div>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+
+
+      <div class="enquiry-btn add-btns mt20">
+        <button ion-button class="Buttons1" *ngIf="OTP_flag != true">
+          <p>Confirm</p>
+        </button>
+      </div>
+
+
+      <div *ngIf="Otp_verify==true">
+        <ion-list class="mb20">
+          <ion-item class="cs-textarea">
+            <ion-input placeholder="Enter OTP" type="text" (keypress)="MobileNumber($event)" name="otp" #otp="ngModel"
+              [(ngModel)]="data.otp" minLength="6" maxLength="6" (input)="verify_otp(data.otp)" required></ion-input>
+          </ion-item>
+        </ion-list>
+        <div *ngIf="f.submitted && otp?.invalid" class="eror">
+          <p *ngIf="otp.errors.required">{{'OTP is Required'}}</p>
+        </div>
+      </div>
+
+      <div class="resend opacity" *ngIf="resendActiveClass==true && !data.otp">
+        <a>Resend Otp will Be available in {{maxTime}} sec</a>
+      </div>
+      <div class="resend " *ngIf="resendActiveClass==false && OTP_flag == true ">
+        <a (click)="send_otp()">Resend OTP</a>
+      </div>
+
+      <div class="enquiry-btn add-btns mt20" *ngIf=" OTP_flag==true">
+        <button ion-button block class="Buttons1 green-color" style="letter-spacing: 1px;" [disabled]="isDisabled"
+          (click)="closeComplaint()">
+          <p> Submit</p>
+        </button>
+      </div>
+    </div>
+  </form>
+</ion-content>

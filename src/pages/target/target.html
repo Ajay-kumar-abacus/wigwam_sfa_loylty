@@ -1,0 +1,285 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title *ngIf="target_Type=='My' || target_Type=='Dr' ">Projection</ion-title>
+    <ion-title *ngIf="target_Type=='Team'">
+      Team Projection
+    </ion-title>
+    <ion-buttons end *ngIf="teamCount > 0">
+      <button ion-button icon-only (click)="presentPopover($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+  <ion-toolbar color="white" *ngIf="target_Type !='Dr'">
+    <div class="">
+      <ion-segment [(ngModel)]="sale_type">
+        <ion-segment-button value="Primary"
+          (click)="sale_type = 'Primary'; Target('Primary')">Primary</ion-segment-button>
+        <ion-segment-button value="Secondary"
+          (click)="sale_type = 'Secondary'; Target('Secondary')">Secondary</ion-segment-button>
+        <ion-segment-button value="Stock Transfer"
+          (click)="sale_type = 'Stock Transfer'; Target('Stock Transfer')">Stock Transfer</ion-segment-button>
+        <ion-segment-button value="Visit" (click)="sale_type = 'Visit'; Target('Visit')">Other</ion-segment-button>
+      </ion-segment>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <div class="edit m4" *ngIf="target_Type=='Team'">
+    <ion-list>
+      <ion-item class="cs-normal-select retailerSelectionBox mt0 mb0">
+        <ion-label>Select User</ion-label>
+        <ionic-selectable item-content name="data" [(ngModel)]="data" [items]="user_list" itemValueField="id"
+          itemTextField="name" [canSearch]="true" #selectComponent
+          (ngModelChange)="Target(sale_type)"></ionic-selectable>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <ng-container *ngIf="sale_type == 'Primary' || sale_type == 'Stock Transfer' || sale_type == 'Secondary'">
+
+    <div class="capsule-tabsnew">
+      <ul>
+        <li *ngFor="let row of month_array" [ngClass]="{'active' : row.month==current_month}"
+          (click)="current_month=row.month;current_year=row.year;current_month_name=row.month_name; Target(sale_type)">
+          {{row.month_name}}
+          {{row.year}}</li>
+      </ul>
+    </div>
+    <div class="pl16 pr16 ">
+      <div class="workimg_summary mt16" *ngIf="current_month==liveMonth">
+        <ion-list>
+          <ion-item>
+            <h6 *ngIf="sale_type == 'Primary'">Total Projection <span class="left-count">{{target_list.target ?
+                (target_list.target+' Ton') : '0'}}</span></h6>
+            <h6 *ngIf="sale_type != 'Primary'">Total Projection <span class="left-count">{{target_list.target ?
+                (target_list.target+' Sheets') : '0'}}</span></h6>
+          </ion-item>
+          <ion-item>
+            <h6 *ngIf="sale_type == 'Primary'">Projection achieved <span class="left-count">{{target_list.achieved ? (target_list.achieved+'
+                Ton'):'0'}}</span></h6>
+            <h6 *ngIf="sale_type != 'Primary'">Projection achieved <span class="left-count">{{target_list.achieved ? (target_list.achieved+'
+                  Sheets'):'0'}}</span></h6>
+          </ion-item>
+          <ion-item>
+            <h6>Projection achievement <span class="left-count">{{target_list.achieved_percentage
+                ?target_list.achieved_percentage : 0}}%</span> </h6>
+          </ion-item>
+          <ion-item *ngIf="target_list.achieved_percentage < 100 ">
+            <h6>Remaining Day <span class="left-count">{{(target_list.remainingDays + ' Day')||'0'}}</span></h6>
+          </ion-item>
+
+        </ion-list>
+      </div>
+      <ion-list>
+        <div class="summary-heading">Projection Summary</div>
+        <div class="attendance-list" *ngFor="let row of primaryTragetArray">
+          <!-- <div class="deleteButton" (click)="deleteTravelPlan($event,i,row.id)" *ngIf="row.status == 'Pending'">
+            <i class="material-icons">delete_sweep</i>
+          </div>
+
+          <ion-icon name="create" class="cs-action position" *ngIf="row.status =='Pending' && row.created_by != userId" (click)="statusModal(row.id,'edit')" style="position: absolute;bottom: 60px;"></ion-icon> -->
+          <div class="action-container" style="display: flex;" *ngIf="row.status == 'Pending'">
+            <div class="deleteButton" (click)="deleteTravelPlan($event,i,row.id)">
+              <i class="material-icons">delete_sweep</i>
+            </div>
+            <div class="deleteButton" style="margin-top:35px" *ngIf="row.created_by != userId"
+              (click)="statusModal(row.id,'edit')">
+              <ion-icon name="create" style="font-size: 20px;"></ion-icon>
+            </div>
+          </div>
+          <div class="center-block">
+            <div class="circle">{{(row.company_name | slice:0:1)||'N/A'}}</div>
+            <h1>{{row.company_name ? row.company_name :'---'}} ({{row.network_type ? row.network_type : '---'}})</h1>
+            <p>{{row.name ? row.name :'---'}} - ({{row.mobile ? row.mobile : '---'}})</p>
+          </div>
+          <div class="other-block" *ngIf="sale_type != 'Primary'">
+            <p><strong>Supplied By :</strong> {{row.supplier_name ? row.supplier_name : '---'}}</p>
+          </div>
+          <div class="slab">
+            <div class="slab-day">
+              <p>{{row.date_created ? (row.date_created | date:'dd MMM yyyy' ): 'N/A'}}</p>
+              <span>Date Created</span>
+            </div>
+            <ng-container *ngIf="sale_type == 'Primary'">
+              <div class="slab-day">
+                <p>{{row.value ? row.value : '0'}} Ton</p>
+                <span>Projection</span>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="sale_type != 'Primary'">
+              <div class="slab-day">
+                <p>{{row.value ? row.value : '0'}} Sheets</p>
+                <span>Projection</span>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="target_Type!='Team'">
+              <div class="slab-day">
+                <p class="bold yellow-text" *ngIf="row.status == 'Pending'">{{row.status ? row.status : '---'}}</p>
+                <p class="bold green-text" *ngIf="row.status == 'Approved'">{{row.status ? row.status : '---'}}</p>
+                <span>Status</span>
+
+                <!-- <ion-icon name="create" class="cs-action" *ngIf="row.status =='Pending' && row.created_by != userId" (click)="statusModal(row.id)"></ion-icon> -->
+
+              </div>
+            </ng-container>
+            <ng-container *ngIf="target_Type=='Team'">
+              <div class="slab-day">
+                <p class="bold yellow-text" *ngIf="row.status == 'Pending'">{{row.status ? row.status : '---'}}</p>
+                <p class="bold green-text" *ngIf="row.status == 'Approved'">{{row.status ? row.status : '---'}}</p>
+                <span>Status</span>
+
+              </div>
+              <div class="slab-day">
+                <p class="bold yellow-text" *ngIf="row.senior_status == 'Pending'">{{row.senior_status ? row.senior_status : '---'}}</p>
+                <p class="bold green-text" *ngIf="row.senior_status == 'Approved'">{{row.senior_status ? row.senior_status : '---'}}</p>
+                <span>Senior status</span>
+
+                <ion-icon name="create" class="cs-action" *ngIf="row.senior_status =='Pending'"
+                  (click)="statusModal(row.id)"></ion-icon>
+
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </ion-list>
+    </div>
+    <div class="nothing-here" *ngIf="!primaryTragetArray.length">
+      <div class="outer">
+        <div class="innear">
+          <img src="assets/imgs/no_found.svg" alt="">
+          <p>Data Not Available</p>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+
+
+  <ng-container *ngIf="sale_type == 'Visit'">
+    <div class=" capsule-tabsnew">
+      <ul>
+        <li *ngFor="let row of month_array" [ngClass]="{'active' : row.month==current_month}"
+          (click)="current_month=row.month;current_year=row.year;current_month_name=row.month_name; Target(sale_type)">
+          {{row.month_name}}
+          {{row.year}}</li>
+      </ul>
+    </div>
+    <div class="pl16 pr16 ">
+      <div class="secondaryTargetSummery">
+        <div class="summary-heading">Target Summary</div>
+        <ion-icon name="create" class="cs-action"
+          *ngIf="target_list.status =='Pending' && target_list.created_by != target_list.userId"
+          (click)="statusModal(target_list.id)"></ion-icon>
+        <ion-list>
+          <!-- <ion-item>
+            <ion-avatar item-start>
+              <span class="count">{{target_list.target_lead||'0'}}</span>
+            </ion-avatar>
+            <h6>Lead Target</h6>
+          </ion-item>
+          <ion-item>
+            <ion-avatar item-start>
+              <span class="count green-text">{{target_list.total_new_visit_target||'0'}}</span>
+            </ion-avatar>
+            <h6>Lead Achievement</h6>
+          </ion-item>
+          <ion-item>
+            <ion-avatar item-start>
+              <span class="count">{{target_list.target_plyexpert||'0'}}</span>
+            </ion-avatar>
+            <h6>Ply Expert Target</h6>
+          </ion-item>
+          <ion-item>
+            <ion-avatar item-start>
+              <span class="count green-text">{{target_list.achv_ply_expert||'0'}}</span>
+            </ion-avatar>
+            <h6>Ply Expert Achievement</h6>
+          </ion-item>
+          <ion-item>
+            <ion-avatar item-start>
+              <span class="count">{{target_list.target_ambassador||'0'}}</span>
+            </ion-avatar>
+            <h6>Ambassador Target</h6>
+          </ion-item>
+          <ion-item>
+            <ion-avatar item-start>
+              <span class="count green-text">{{target_list.achv_ambassador||'0'}}</span>
+            </ion-avatar>
+            <h6>Ambassador Achievement</h6>
+          </ion-item>
+          <ion-item>
+            <ion-avatar item-start>
+              <span class="count">{{target_list.target_oem||'0'}}</span>
+            </ion-avatar>
+            <h6>OEM Target</h6>
+          </ion-item>
+          <ion-item>
+            <ion-avatar item-start>
+              <span class="count green-text">{{target_list.achv_oem||'0'}}</span>
+            </ion-avatar>
+            <h6>OEM Achievement</h6>
+          </ion-item>
+          <ion-item>
+            <ion-avatar item-start>
+              <span class="count">{{target_list.target_builder||'0'}}</span>
+            </ion-avatar>
+            <h6>Builder Target</h6>
+          </ion-item>
+          <ion-item>
+            <ion-avatar item-start>
+              <span class="count green-text">{{target_list.achv_builder||'0'}}</span>
+            </ion-avatar>
+            <h6>Builder Achievement</h6>
+          </ion-item>-->
+          <ion-item> 
+            <ion-avatar item-start>
+              <span class="count">{{target_list.btl_target||'0'}}</span>
+            </ion-avatar>
+            <h6>BTL Target</h6>
+          </ion-item>
+          <ion-item>
+            <ion-avatar item-start>
+              <span class="count green-text">{{target_list.btl_ach||'0'}}</span>
+            </ion-avatar>
+            <h6>BTL Achievement</h6>
+          </ion-item>
+          <!-- <ion-item >
+          <ion-avatar item-start>
+            <span class="count yellow-text">{{target_list.value||'0'}}</span>
+          </ion-avatar>
+          <h6 class="sky-text">Projected Unit target</h6>
+        </ion-item>
+        <ion-item >
+          <ion-avatar item-start>
+            <span class="count green-text">{{target_list.achieved_target||'0'}}</span>
+          </ion-avatar>
+          <h6>Projected Unit achievement</h6>
+        </ion-item> -->
+        </ion-list>
+      </div>
+
+    </div>
+  </ng-container>
+
+
+
+
+</ion-content>
+<ion-footer class="af-none">
+  <div class="ml16 mb16 mr16" *ngIf="sale_type == 'Visit'">
+    <button ion-button block icon-start round color="primary" (click)="addMJP()">Add MJP Projection</button>
+  </div>
+  <div class="ml16 mb16 mr16">
+    <button ion-button block icon-start round color="primary" (click)="addTarget()">
+      Add {{ sale_type == 'Visit' ? 'BTL' : sale_type }} Projection
+    </button>
+  </div>
+</ion-footer>

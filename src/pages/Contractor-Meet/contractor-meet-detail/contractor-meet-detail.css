@@ -1,0 +1,54 @@
+page-contractor-meet-detail .callbtnBg {
+  background-color: #fff;
+  border-bottom-left-radius: 50%;
+  padding: 5px;
+  border-top-right-radius: 10px;
+  margin-right: -10px;
+  margin-top: -8px;
+}
+
+page-contractor-meet-detail .list-box {
+  border: 1px solid #ddd;
+  -webkit-box-shadow: 8px 8px 4px 0 #f1f1f1 !important;
+          box-shadow: 8px 8px 4px 0 #f1f1f1 !important;
+  padding: 6px;
+}
+
+page-contractor-meet-detail .list-box .seeDetailsBox {
+  content: 'See Details';
+  position: absolute;
+  top: 4px;
+  right: 0px;
+  z-index: 1;
+  color: #a4a4a4;
+  font-size: 9px;
+  background: #f2f7ff;
+  padding: 2px;
+  border-bottom-left-radius: 6px;
+  border-top-left-radius: 6px;
+}
+
+page-contractor-meet-detail .list-box .upper {
+  padding-top: 8px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  background-color: #f2f5f9;
+  border-bottom: 1px dashed #ccc !important;
+  margin: 0;
+}
+
+page-contractor-meet-detail .slab {
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+page-contractor-meet-detail .statusButton {
+  padding: 4px;
+  border: 1px solid grey;
+  border-radius: 4px;
+  background: black;
+  color: white;
+  font-weight: bold;
+}
+/*# sourceMappingURL=contractor-meet-detail.css.map */

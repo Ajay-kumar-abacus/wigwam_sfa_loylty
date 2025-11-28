@@ -1,0 +1,117 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Add Ticket</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <form #f="ngForm" (ngSubmit)="f.form.valid && confirmAlert()">
+    <div class="form">
+      <ion-list no-lines class="padding10">
+        <!-- <ion-item [ngClass]="{'error':f.submitted && customer_type?.invalid}">
+          <ion-label floating>Select Customer Type <span class="red-text">*</span></ion-label>
+          <ion-select name="customer_type" #customer_type="ngModel" [(ngModel)]="data.customer_type" (ngModelChange)="getCustomerData(data.customer_type)" required>
+            <ion-option *ngFor="let row of networkType" value="{{row.type}}">{{row.module_name | titlecase}}</ion-option>
+          </ion-select>
+        </ion-item>
+        <div class="eror" *ngIf="f.submitted && customer_type?.invalid">
+          <p> {{ 'This field is required'}}</p>
+        </div>
+        <ion-item [ngClass]="{'error':f.submitted && type?.invalid}" *ngIf="data.customer_type">
+        <ion-label floating>{{data.module_name}} <span class="red-text">*</span></ion-label>
+        
+        <ionic-selectable item-content name="customer_name" #customer_name="ngModel" [(ngModel)]="data.customer_name" [items]="drList"
+        itemValueField="id" itemTextField="display_name" [canSearch]="true" [hasInfiniteScroll]="true"
+        (onInfiniteScroll)="getMorePorts($event)" #selectComponent>
+      </ionic-selectable>
+    </ion-item>
+    <div class="eror" *ngIf="f.submitted && customer_name?.invalid">
+      <p> {{ 'This field is required'}}</p>
+    </div> -->
+
+    <ion-item [ngClass]="{'error':f.submitted && customer_type?.invalid}">
+      <ion-label floating>Select Customer Type <span class="red-text">*</span></ion-label>
+      <ion-select interface="action-sheet" name="customer_type" #customer_type="ngModel"
+        [(ngModel)]="data.customer_type" (ngModelChange)="getCustomerData(data.customer_type)"
+        [disabled]="checkin_id || this.navParams.get('fromPage') == 'distDetail'" required>
+            
+            <ng-container *ngFor="let row of networkType">
+
+              
+                <ion-option value="{{row.type}}" *ngIf="row.type != '4'">{{row.module_name | titlecase}}</ion-option>
+             
+            </ng-container>
+            <ion-option value="2">Prospect CP</ion-option>
+           
+          </ion-select>
+        </ion-item>
+        <div class="eror" *ngIf="f.submitted && customer_type?.invalid">
+          <p> {{ 'This field is required'}}</p>
+        </div>
+
+
+        <ng-container *ngIf="checkin_id || navParams.get('fromPage') == 'distDetail'">
+          <ion-item [ngClass]="{'error':f.submitted && data.customer_name?.invalid}">
+            <ion-label floating>{{data.module_name}} <span class="red-text">*</span></ion-label>
+            <ion-label floating *ngIf="data.customer_type=='2'">Prospect CP<span class="red-text">*</span></ion-label>
+            <ion-select name="customer_name" #customer_name="ngModel" [(ngModel)]="data.customer_name"
+              [disabled]="checkin_id || navParams.get('fromPage') == 'distDetail'" required>
+              <ion-option *ngFor="let row of drList" value="{{row.id}}">{{row.display_name}}</ion-option>
+            </ion-select>
+          </ion-item>
+        </ng-container>
+        <ng-container *ngIf="!checkin_id && navParams.get('fromPage') != 'distDetail'">
+          <ion-item [ngClass]="{'error':f.submitted && customer_name?.invalid}" *ngIf="data.customer_type">
+            <ion-label floating>{{data.module_name}} <span class="red-text">*</span></ion-label>
+
+            <ionic-selectable item-content name="customer_name" #customer_name="ngModel"
+              [(ngModel)]="data.customer_name" [items]="drList" itemValueField="id" itemTextField="display_name"
+              [canSearch]="true" #selectComponent>
+            </ionic-selectable>
+          </ion-item>
+          <div class="eror" *ngIf="f.submitted && customer_name?.invalid">
+            <p> {{ 'This field is required'}}</p>
+          </div>
+        </ng-container>
+
+        <ion-item [ngClass]="{'error':f.submitted && type?.invalid}">
+          <ion-label floating>Select Ticket Type <span class="red-text">*</span></ion-label>
+          <ion-select name="type" interface="action-sheet" #type="ngModel" [(ngModel)]="data.type" required>
+            <ion-option *ngFor="let row of typeSupport" value="{{row.id}}">{{row.category_name |
+              titlecase}}</ion-option>
+          </ion-select>
+        </ion-item>
+        <div class="eror" *ngIf="f.submitted && type?.invalid">
+          <p> {{ 'This field is required'}}</p>
+        </div>
+
+
+        <ion-item [ngClass]="{'error':f.submitted && remarks?.invalid}">
+          <ion-label floating>Remark <span class="red-text">*</span></ion-label>
+          <ion-textarea name="remarks" #remarks="ngModel" [(ngModel)]="data.remarks"></ion-textarea>
+        </ion-item>
+        <div class="eror" *ngIf="f.submitted && remarks?.invalid">
+          <p> {{ 'This field is required'}}</p>
+        </div>
+      </ion-list>
+
+      <div class="upload-doc upload-doc mt0  pt0 padding10">
+        <div class="">
+          Attach Image
+        </div>
+        <ul class="no-padding">
+          <li class="add-image" (click)="onUploadChange()">
+            <i class="material-icons">add_a_photo</i>
+          </li>
+          <li class="image-upload" *ngFor="let image of selectImage;index as i">
+            <img src="{{image}}">
+            <button class="del" (click)="delete_img(i)"><i class="material-icons">delete_sweep</i></button>
+          </li>
+        </ul>
+      </div>
+      <button ion-button color="primary" block [disabled]="savingFlag == true">
+        <ion-spinner *ngIf="spinnerLoader"></ion-spinner>&nbsp;{{savingFlag == true ? 'Please Wait': 'Save' }}
+      </button>
+    </div>
+  </form>
+</ion-content>

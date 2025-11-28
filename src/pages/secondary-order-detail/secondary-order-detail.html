@@ -1,0 +1,246 @@
+<ion-header class="catalogue-header">
+    <ion-navbar>
+        <ion-title>Order Detail</ion-title>
+        <ion-buttons end>
+           
+            <button ion-button icon-only (click)="exportPdf()" class="exportPdfBtn">
+               
+                <ng-container *ngIf="pdfLoader">
+                    <ion-spinner class="black-spinner" ></ion-spinner>
+                    Exporting
+                </ng-container> 
+                <ng-container *ngIf="!pdfLoader">
+                    <img  src="assets/imgs/pdf.png" alt="#">
+                    Export PDF
+                </ng-container>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+    <div class="fix-container">
+        <div class="attendance-list flat-list">
+            <div class="center-block">
+                <div class="circle" *ngIf="userDetail.company_name">
+                    {{userDetail.company_name?.substring(0,1).toUpperCase()}}</div>
+                <div class="circle" *ngIf="!userDetail.company_name">{{userDetail.name?.substring(0,1).toUpperCase()}}
+                </div>
+                <h1>{{userDetail.company_name ? (userDetail.company_name | titlecase) : (userDetail.name | titlecase)}}
+                </h1>
+                <p *ngIf="userDetail.company_name">{{userDetail.name ? (userDetail.name | titlecase) : ''}} -
+                    {{userDetail.mobile}}</p>
+                <p *ngIf="!userDetail.company_name">{{userDetail.mobile}}</p>
+                <a class="cell-phone" href="tel:{{userDetail?.mobile}}"><i class="material-icons">phone</i></a>
+            </div>
+
+            <div class="center-block pl0 pr0">
+                <p>{{userDetail.dist_type == 1 ? 'Channel Partner' : 'Sub Dealer'}} Detail </p>
+                <h1>{{userDetail.dist_company_name ? (userDetail.dist_company_name | titlecase) : ''}}
+                    {{userDetail.dist_mobile ? ( '- ' + userDetail.dist_mobile) : ''}}</h1>
+            </div>
+        </div>
+        <div class="">
+            <ion-segment [(ngModel)]="summary">
+                <ion-segment-button value="order">
+                    Order Summary
+                </ion-segment-button>
+                <ion-segment-button value="item">
+                    Item Summary
+                </ion-segment-button>
+                <ion-segment-button value="log">
+                    Logs
+                </ion-segment-button>
+            </ion-segment>
+        </div>
+    </div>
+
+    <div [ngSwitch]="summary" class="pl16 pr16 mb50">
+        <ng-container *ngSwitchCase="'order'">
+            <div class="border-container mt16">
+                <div class="summary-heading">Order Details</div>
+                <div class="payment-box">
+                    <div class="credit-table">
+                        <table>
+                            <tr>
+                                <td>Status</td>
+                                <td class="w130">
+                                    <span
+                                        class="badge-padding text-center  {{userDetail.order_status}}">{{userDetail.order_status}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Order ID</td>
+                                <th>#{{userDetail?.id}}</th>
+                            </tr>
+                            <tr>
+                                <td>Order Type</td>
+                                <th>{{userDetail?.order_type}}</th>
+                            </tr>
+                            <tr>
+                                <td>Total Item</td>
+                                <th>{{userDetail?.order_item}}</th>
+                            </tr>
+                            <tr>
+                                <td>Total No. of Sheets</td>
+                                <th>{{userDetail.total_order_qty}}</th>
+                            </tr>
+                            <!-- <tr>
+                                <td>Total Amount</td>
+                                <th>&#x20B9; {{userDetail.totalPrice | number:'1.2-2'}}</th>
+                               
+                            </tr>
+                            <tr>
+                                <td>Total Discount ({{userDetail.extraDiscountPercentage}}%)</td>
+                                <th>&#x20B9; {{userDetail.extra_discount_amount | number:'1.2-2'}}</th>
+                                
+                            </tr> -->
+                            <tr>
+                                <td>Net Price</td>
+                                <th>&#x20B9; {{userDetail.priceAfterextraDiscount | number:'1.2-2'}}</th>
+                                
+                            </tr>
+                            <tr>
+                                
+                                <td>GST(18%)</td>
+                                <th>&#x20B9; {{userDetail.totalGSTApplied | number:'1.2-2'}}</th>
+                            </tr>
+                            <tr>
+                                <td>Grand Total</td>
+                                <th>&#x20B9; {{userDetail.totalPriceAfterGST | number:'1.2-2'}}</th>
+                            </tr>
+
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+            <div class="border-container mt16" *ngIf="userDetail.site_id > 0">
+                <div class="summary-heading">Site Details</div>
+                <div class="payment-box">
+                    <div class="credit-table">
+                        <table>
+                            <tr>
+                                <td>Owner Name</td>
+                                <td class="w130">
+                                    <span
+                                        class="badge-padding text-center  {{siteDetail.ownerName}}">{{siteDetail.ownerName}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Site ID</td>
+                                <th>#{{siteDetail?.siteId}}</th>
+                            </tr>
+                            <tr>
+                                <td>Mobile No.</td>
+                                <th>{{siteDetail?.ownerMobile}}</th>
+                            </tr>
+                            <tr>
+                                <td>Address</td>
+                                <th>{{siteDetail.Address}} {{siteDetail.district}} {{siteDetail.pincode}} {{siteDetail.state}}</th>
+                            </tr>
+
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+            <ng-container
+                *ngIf="userDetail.reason_reject && userDetail.reason_reject != '' || userDetail.order_create_remark && userDetail.order_create_remark != '' || userDetail.pre_close_remark && userDetail.pre_close_remark != ''">
+                <div class="notes">
+                    <p *ngIf="userDetail.reason_reject && userDetail.reason_reject != ''"><span>Reason of Referred
+                            Back</span> {{userDetail.reason_reject}}</p>
+                    <p *ngIf="userDetail.order_create_remark && userDetail.order_create_remark != ''"><span>Order
+                            Remark</span> {{userDetail.order_create_remark}}</p>
+                    <p *ngIf="userDetail.pre_close_remark && userDetail.pre_close_remark != ''"><span>Pre Close
+                            Remark</span> {{userDetail.pre_close_remark}}</p>
+                </div>
+            </ng-container>
+
+
+            <div class="flex-btn mt16" >
+
+                <button class="" color="success" round outline block ion-button icon-start (click)="ADD_Item(order_id)"
+                    *ngIf="showButton">
+                    <ion-icon name="create"></ion-icon>
+                    Edit Order Details
+                </button>
+            </div>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'item'">
+            <div class="summary-heading">Item Details</div>
+
+
+            <div class="attendance-list" *ngFor="let order of orderitem;let i = index;">
+                <div class="center-block flat-block"
+                    [ngClass]="{'pr0': userDetail.order_status!='Pending' && userDetail.order_status!='Draft'}">
+                    <h1>{{order.segment_name}} {{order.product_name}}</h1>
+                </div>
+                <div class="slab slab-three boder-top1 pt10 mt10">
+                    <div class="slab-day">
+                        <p>{{order.brand}}</p>
+                        <span>Brand</span>
+                    </div>
+                    <div class="slab-day">
+                        <p>{{order.qty}}</p>
+                        <span>No. of Sheets</span>
+                    </div>
+                    <div class="slab-day">
+                        <p>{{order.thickness}}</p>
+                        <span>Thickness</span>
+                    </div>
+
+                    <div class="slab-day">
+                        <p>{{order.size}}</p>
+                        <span>Size</span>
+                    </div>
+                    <div class="slab-day">
+                        <p>&#x20B9; {{order.total_price}}</p>
+                        <span>Price</span>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+        </ng-container>
+
+
+        <ng-container *ngSwitchCase="'log'">
+            <div class="summary-heading">Order Remarks</div>
+
+
+            <div class="pb100">
+                <div class="remarkSent" *ngFor="let row of userDetail.order_log">
+                    <p class="remarkMsg">{{row.remark}}</p>
+                    <div class="dateCreated"><span>({{row.created_by_name}})</span> <span>{{row.date_created | date:'d MMM
+                            y'}}</span></div>
+                </div>
+        
+                <div class="nothing-here" *ngIf="userDetail.order_log == 0">
+                    <div class="outer">
+                        <div class="innear">
+                            <img src="assets/imgs/no_found.svg" alt="">
+                            <p>Data Not Available</p>
+                        </div>
+                    </div>
+                </div>
+        
+            </div>
+           
+                <div class="footer-input-block">
+                    <textarea type="text" placeholder="Add Remark" name="remark" #remark="ngModel"
+                        [(ngModel)]="form.remark"></textarea>
+                    <button ion-button icon-start color="success" (click)="addRemark(form.remark)"><ion-icon
+                            name="send"></ion-icon></button>
+                </div>
+          
+        </ng-container>
+    </div>
+
+
+</ion-content>

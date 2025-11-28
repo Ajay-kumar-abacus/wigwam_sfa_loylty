@@ -1,0 +1,35 @@
+<!--
+  Generated template for the PrivacyPolicyPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>privacy-policy</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div class="d-flex">
+    <img src="assets/imgs/privacy_policy.jpg" class="privacyPolicyImg" alt="Privacy Policy">
+    <span class="privacyPolicyHeader">Accept "Wigwam" Privacy Policy</span>  
+  </div>
+ <p>By selecting "I Agree" below, I have reviewed and agree to the <a (click)="openPrivacyPolicy()" href="#">Terms of Use</a> and acknowledge the <a (click)="openPrivacyPolicy()" href="#">Privacy Policy</a>. I am at least 18 years of age.</p>
+
+
+</ion-content>
+<ion-footer style="background: #fff !important; padding: 10px;">
+  <div class="d-flex p10">
+    <div>I Agree</div>
+    <div>
+      <ion-checkbox color="secondary" checked="true" name="check" #check="ngModel" [(ngModel)]="data.check"
+      required></ion-checkbox>
+    </div>
+  </div>
+  <div class="wp100 text-right">
+    <button (click)="goTo()" [disabled]="!data.check" ion-button round icon-end color="primary">
+        Continue <ion-icon name="arrow-forward"></ion-icon><ion-spinner class="Spinner" color="white" *ngIf="spinner == true" ></ion-spinner>
+    </button>
+</div>
+</ion-footer>

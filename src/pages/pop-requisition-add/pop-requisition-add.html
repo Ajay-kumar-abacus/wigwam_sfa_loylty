@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Add POP Requisition</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <form #f="ngForm" (ngSubmit)="f.form.valid && confirmAlert()">
+    <div class="form">
+      <ion-list no-lines class="padding10">
+        <ion-item [ngClass]="{'error':f.submitted && data.gift_type?.invalid}">
+          <ion-label floating>Gift Type <span class="red-text">*</span></ion-label>
+          <ion-select interface="action-sheet" name="gift_type" #gift_type="ngModel" [(ngModel)]="data.gift_type"
+            [disabled]="checkin_id || this.navParams.get('fromPage') == 'distDetail'"(ionChange)="get_item_list();" required>
+            <ion-option value="POP Material">POP Material</ion-option>
+            <ion-option value="BTL">BTL</ion-option>
+          </ion-select>
+        </ion-item>
+        <ion-item [ngClass]="{'error':f.submitted && data.gift_item?.invalid}" *ngIf="data.gift_type== 'POP Material'">
+          <ion-label floating>Gift<span class="red-text">*</span></ion-label>
+          <ion-select interface="action-sheet" name="gift_item" #gift_item="ngModel" [(ngModel)]="data.gift_item"  required>
+            <ion-option *ngFor="let row of item_list" value={{row.id}}>{{row.item_name}}</ion-option>
+          </ion-select>
+        </ion-item>
+        <ion-item [ngClass]="{'error':f.submitted && remarks?.invalid}">
+          <ion-label floating>Qty <span class="red-text">*</span></ion-label>
+          <ion-input type="number" name="qty" [(ngModel)]="data.qty" #size="ngModel"
+            (ngModelChange)="(data.qty == '' || data.qty == null || data.qty<1 )?(savingFlag = true):(savingFlag = false);"
+            onkeypress="return event.charCode>=48 && event.charCode<=57"></ion-input>
+        </ion-item>
+        <div class="eror" *ngIf="f.submitted && qty?.invalid">
+          <p> {{ 'This field is required'}}</p>
+        </div>
+        <ion-item [ngClass]="{'error':f.submitted && remark?.invalid}">
+          <ion-label floating>Remark <span class="red-text">*</span></ion-label>
+          <ion-textarea name="remark" #remark="ngModel" [(ngModel)]="data.remark"></ion-textarea>
+        </ion-item>
+        <div class="eror" *ngIf="f.submitted && remark?.invalid">
+          <p> {{ 'This field is required'}}</p>
+        </div>
+      </ion-list>
+
+      <button ion-button color="primary" block [disabled]="savingFlag == true">
+        <ion-spinner *ngIf="savingFlag"></ion-spinner>&nbsp; <strong>Save</strong>
+      </button>
+    </div>
+  </form>
+</ion-content>

@@ -1,0 +1,229 @@
+page-end-checkin {
+    .forword-page {
+        a {
+            &:after {
+                display: none !important;
+            }
+
+            background-color: #f9f9f9 !important;
+            border: 1px solid #b6b6f5 !important;
+            border-radius: 5px;
+            overflow: hidden;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+
+            p {
+                width: auto !important;
+                border: none !important;
+                background-color: rgba(0, 0, 0, 0.167);
+                height: 35px;
+                min-width: 30px !important;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            span {
+                font-size: 10px;
+                color: black;
+            }
+
+            div {
+                color: black;
+                border-radius: 5px;
+                padding: 3px 3px 1px 3px;
+
+                img {
+                    max-width: 100%;
+                    border: 0;
+                    width: 22px;
+                    height: auto !important;
+                }
+            }
+        }
+    }
+    .red-text {
+        color: red;
+      }
+      
+
+    .callbtnBg {
+        background-color: #fff;
+        border-bottom-left-radius: 50%;
+        padding: 5px;
+
+        border-top-right-radius: 10px;
+        margin-right: -10px;
+        margin-top: -8px;
+
+    }
+
+    .list-box {
+        border: 1px solid #ddd;
+        // box-shadow: 8px 8px 4px 0 #f1f1f1 !important;
+        border-radius: 6px;
+        margin-top: 16px;
+        padding: 10px;
+
+        .seeDetailsBox {
+            content: 'See Details';
+            position: absolute;
+            top: 4px;
+            right: 0px;
+            z-index: 1;
+            color: rgb(164, 164, 164);
+            font-size: 9px;
+            background: #f2f7ff;
+            padding: 2px;
+            border-bottom-left-radius: 6px;
+            border-top-left-radius: 6px;
+        }
+
+        .upper {
+            padding-top: 8px;
+            border-top-right-radius: 10px;
+            border-top-left-radius: 10px;
+            background-color: #f2f5f9;
+            border-bottom: 1px dashed #ccc !important;
+            margin: 0;
+        }
+    }
+
+    .edit {
+        margin-top: -10px;
+        border: 0px !important;
+        padding: 0px !important;
+    }
+
+    .multiselectionSelectionBox {
+        .ionic-selectable-value {
+            span {
+                display: flex !important;
+                justify-content: flex-start !important;
+            }
+        }
+
+        .ionic-selectable-value-item {
+            padding-top: 8px !important;
+            // color: #fff !important;
+            background-color: #eee;
+            border-radius: 4px;
+            padding: 4px;
+            min-width: 50px;
+            font-size: 10px;
+            margin-left: 2px;
+            margin-right: 2px;
+        }
+
+        .ionic-selectable-icon {
+            margin-top: -5px;
+        }
+
+        ionic-selectable {
+            max-width: 100% !important;
+            font-size: 14px !important;
+        }
+    }
+
+    .productAddToList {
+        background-color: white;
+        padding: 9px;
+        border-radius: 6px;
+        margin-top: 16px;
+        box-shadow: 0px 1px 5px 2px #e5e5e5;
+    }
+    .countMainContainer {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-column-gap: 8px;
+        grid-row-gap: 8px;
+        margin: 16px;
+        .counters-box {
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 8px;
+            overflow: hidden;
+
+            .top-layer {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                h6 {
+                    font-size: 16px;
+                    font-weight: bold;
+                }
+
+                i {
+                    opacity: 0.7;
+                }
+            }
+
+            .bottom-layer {
+                p {
+                    font-size: 12px;
+                    font-weight: bold;
+                    margin-top: 8px !important;
+                    line-height: 16px;
+                }
+
+                span {
+                    font-size: 11px;
+                    line-height: 18px;
+                }
+            }
+
+            &.or-gr {
+                background: #F2994A;
+                background: -webkit-linear-gradient(to right, #F2C94C, #F2994A);
+                background: linear-gradient(to right, #F2C94C, #F2994A);
+            }
+
+            &.bl-gr {
+                background: #E8CBC0;
+                background: -webkit-linear-gradient(to left, #636FA4, #E8CBC0);
+                background: linear-gradient(to left, #636FA4, #E8CBC0);
+
+            }
+
+            &.pn-gr {
+                background: #9796f0;
+                background: -webkit-linear-gradient(to right, #fbc7d4, #9796f0);
+                background: linear-gradient(to right, #fbc7d4, #9796f0);
+            }
+
+            &.rd-gr {
+                background-image: linear-gradient(68.3deg, rgba(245, 177, 97, 1) 0.4%, rgba(236, 54, 110, 1) 100.2%);
+            }
+
+            &.grey-gr {
+                background-image: linear-gradient(68.3deg, rgb(218, 217, 217) 0.4%, rgb(145, 145, 145) 100.2%);
+            }
+
+            &.pink-gr {
+                background: #f4c4f3;
+                background: -webkit-linear-gradient(to right, #fc67fa, #f4c4f3);
+                background: linear-gradient(to right, #fc67fa, #f4c4f3);
+            }
+
+            &.pr-gr {
+                background-image: linear-gradient(117deg, rgba(123, 216, 96, 1) 39.2%, rgba(255, 255, 255, 1) 156.2%);
+            }
+        }
+    }
+    .button-round-md {
+        border-radius: 4px !important;
+        padding: 0 2.6rem !important;
+    }
+
+
+    .buttonContainer {
+        flex-direction: row;
+        display: flex;
+        grid-column-gap: 10px;
+
+    }
+}

@@ -1,0 +1,91 @@
+<ion-header class="catalogue-header">
+  <ion-navbar>
+    <ion-title style="font-size: 12px;"><strong>{{DateData | date :'dd MMM yyyy'}}</strong></ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="getuserDetail()">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+  <div class="mt16">
+    <div class="attendance-list flat-list">
+
+      <div class="User-center-block">
+
+        <div>
+
+          <h1 class="ml8">{{userData.name}} - {{userData.employee_id}}</h1>
+          <p class="ml8">{{userData.contact_01}}</p>
+        </div>
+      </div>
+      <div class="other-block pb0">
+        <div class="type-visit">
+
+          <div class="types">
+
+            <p class="labels">Punch-In</p>
+            <p>{{userData.attendance_data?.start_time ? (userData.attendance_data?.start_time != "00:00:00" ?
+              (userData.attendance_data?.start_time_date | date:'hh:mm a') : '---') : '---'}}</p>
+
+          </div>
+          <div class="types">
+
+            <p class="labels">First Check-In</p>
+            <p>{{userData.first_checkin?.visit_start ? (userData.first_checkin?.visit_start | date:'hh:mm a') : '---'}}
+            </p>
+          </div>
+          <div class="types">
+
+            <p class="labels">Last Check-Out</p>
+            <p>{{userData.last_checkin?.visit_end? (userData.last_checkin?.visit_end| date:'hh:mm a') : '---'}}
+            </p>
+
+          </div>
+          <div class="types">
+
+            <p class="labels">Punch-Out</p>
+            <p>{{userData.attendance_data?.stop_time ? (userData.attendance_data?.stop_time != "00:00:00" ?
+              (userData.attendance_data?.stop_time_date | date:'hh:mm a') : '---') : '---'}}</p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class=" mt16 mb10">
+      <ion-segment [(ngModel)]="TabType">
+        <ion-segment-button value="Live" (click)="getuserDetail()">
+          Live
+        </ion-segment-button>
+        <ion-segment-button value="Tracker" (click)="getuserDetail()">
+          Tracker
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+  </div>
+  <div class="mapAddress" *ngIf="TabType == 'Live'">
+    <div class="map-adderes">
+      <a><i class="material-icons">room</i></a>
+      <p>{{latest_location?.gps ? latest_location?.gps : '---'}}</p>
+
+    </div>
+    <!-- <div class="contect" *ngIf="latest_location?.last_location_time && latest_location?.last_location_time != ''">
+      <ul>
+        <li>
+          <a>
+            <i class="material-icons">history</i>
+            <p>Last location time : {{latest_location.time ? (latest_location.time | date:'dd MMM yyyy hh:mm') : '---'}}
+            </p>
+          </a>
+        </li>
+      </ul>
+    </div> -->
+  </div>
+  <div #map id="map" style="position: initial !important; width: 100%;overflow: auto;height: 70%;"></div>
+
+
+
+</ion-content>

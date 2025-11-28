@@ -1,0 +1,146 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Expense Detail</ion-title>
+    <ion-buttons end>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div class="cs-list-item">
+    <div class="cs-top">
+      <div class="list-content">
+        <p>{{expenseDetail.dateCreated | date:'d MMM y'}}</p>
+        <span>Date Created</span>
+      </div>
+      <div class="list-content ">
+        <p>{{expenseDetail.expenseType}}</p>
+        <span>Expense Type</span>
+      </div>
+      <div class="list-content af-none">
+        <p>{{expenseDetail.id}}</p>
+        <span>Expense Id</span>
+      </div>
+      <div class="tag-info callbtnBg">
+        <a href="tel:{{expenseDetail.user_contact}}"><i class="material-icons">phone</i></a>
+      </div>
+    </div>
+    <div class="mid">
+      <div class="content-info">
+        <div class="right-info">
+          <p>{{expenseDetail.createdByName}}</p>
+          <p>{{expenseDetail.user_contact}}</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="middle-content">
+      <div class="col-box">
+        <p>Senior Status</p>
+        <span class="{{expenseDetail.seniorStatus}}">{{expenseDetail.seniorStatus}} <ion-icon class="edit-field"
+            ios="ios-create" md="md-create"
+            *ngIf="expenseDetail.seniorStatus =='Pending' && expenseDetail.userId != userId"
+            (click)="statusModal('seniorStatus')"></ion-icon></span>
+      </div>
+      <div class="col-box">
+        <p>A/C Status</p>
+        <span class="{{expenseDetail.acStatus}}">{{expenseDetail.acStatus}}</span>
+      </div>
+      <div class="col-box" *ngIf="expenseDetail.claimDate!='0000-00-00'">
+        <p>Claimed Date</p>
+        <span>{{expenseDetail.claimDate | date:'dd MMM yyyy'}}</span>
+      </div>
+      <div class="col-box" *ngIf="expenseDetail.travel_status">
+        <p>Travel Status</p>
+        <span>{{expenseDetail.travel_status | titlecase}}</span>
+      </div>
+      <div class="col-box" *ngIf="expenseDetail.reaching_back">
+        <p>Reaching Back</p>
+        <span>{{expenseDetail.reaching_back}}</span>
+      </div>
+    </div>
+    <div class="middle-content" *ngIf="expenseDetail.seniorId != 0">
+      <div class="col-box" *ngIf="expenseDetail.seniorId != 0">
+        <p> Senior Status updated By</p>
+        <span>{{expenseDetail.seniorName}} </span>
+      </div>
+      <div class="col-box" *ngIf="expenseDetail.acId != 0">
+        <p>A/C Status updated By</p>
+        <span>{{expenseDetail.acName}}</span>
+      </div>
+    </div>
+    <div class="middle-content one-column" *ngIf="expenseDetail.seniorRemark !='' || expenseDetail.acRemark !='' ">
+      <div class="col-box">
+        <p>Reject Reason</p>
+        <span>{{expenseDetail.acRemark}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="accordion" class="Expand">
+
+    <!-- list loop start -->
+    <div class="list-box mt10" *ngFor="let row of expenseDetail.localConv">
+      <div class="three_boxes">
+        <div class="lower">
+          <p class="font10">Mode Of Travel</p>
+          <p class="font10">{{row.modeOfTravel}}</p>
+        </div>
+        <div class="lower" *ngIf="row.loactionfrom">
+          <p class="font10">Location From</p>
+          <p class="font10">{{row.loactionfrom}}</p>
+        </div>
+        <div class="lower" *ngIf="row.locationto">
+          <p class="font10">Location To</p>
+          <p class="font10">{{row.locationto}}</p>
+        </div>
+        <div class="lower" *ngIf="row.modeOfTravel == 'Auto'">
+          <p class="font10">City</p>
+          <p class="font10">{{row.city}}</p>
+        </div>
+        <div class="lower ml5" *ngIf="row.modeOfTravel == 'Bike' ||  row.modeOfTravel == 'Car'">
+          <p class="font10">Distance</p>
+          <p class="font10">{{row.distance ? (row.distance + ' Km') : '---'}}</p>
+
+        </div>
+        <div class="lower ml5">
+          <p class="font10">Amount</p>
+          <p class="font10">{{row.amount ? ('Rs. ' + row.amount) : '--'}}</p>
+        </div>
+      </div>
+      <div class="three_boxes">
+        <div class="lower">
+          <p class="font10">Remark</p>
+          <p class="font10">{{row.remark ? row.remark: '--'}}</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <div class="upload-doc" *ngIf="expenseDetail.expBills && expenseDetail.expBills.length > 0">
+    <p class="">Upload Bill</p>
+    <ul class="no-padding">
+      <li class="image-upload" *ngFor="let val of expenseDetail.expBills">
+        <img (click)="imageModal(constant.upload_url1+'expense/'+val.image)"
+          src="{{constant.upload_url1+'expense/'+val.image}}">
+      </li>
+    </ul>
+  </div>
+
+  <div class="summary-table">
+    <table>
+      <tr>
+        <td class="text-right">Claimed Amount</td>
+        <td class="text-right w120"><span>Rs {{expenseDetail.totalAmt||'00'}}</span></td>
+      </tr>
+
+      <tr>
+        <td class="text-right"> Approved Amount</td>
+        <td class="text-right w120"><span>Rs {{expenseDetail.totalApprovedAmount == 0 ? '---' :
+            expenseDetail.totalApprovedAmount}}</span></td>
+      </tr>
+    </table>
+  </div>
+</ion-content>

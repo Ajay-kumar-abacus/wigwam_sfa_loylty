@@ -1,0 +1,107 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Send Stock Request Detail</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <div class="list-box">
+        <div class="mid mt0">
+            <div class="content-info">
+                <!-- <div class="left-info" >
+                    <div class="circle">{{sendPointReqData.company_name.substring(0,1).toUpperCase()}}</div>
+                </div> -->
+                
+                <div class="right-info" >
+                    <p>{{sendPointReqData.company_name}}</p>
+                    <p>{{sendPointReqData.name | titlecase}} ({{sendPointReqData.mobile}})</p>
+                </div>
+            </div>
+            
+            <div class="tag-info">
+                <a href="tel:{{sendPointReqData.mobile}}"><i class="material-icons">phone</i></a>
+            </div>
+        </div>
+        
+        <div class="upper">
+            <div class="left-date">
+                <div class="date-section">
+                    <p>{{sendPointReqData.date_created | date:'d MMM y hh:mm a'}}</p>
+                    <p>Date Created</p>
+                </div>
+                
+                <div class="date-section">
+                    <p>{{sendPointReqData.total_items ? sendPointReqData.total_items : '0'}}</p>
+                    <p>Total Item</p>
+                </div>
+                
+                <div class="date-section">
+                    <p>{{sendPointReqData.total_item_qty ? sendPointReqData.total_item_qty : '0'}}</p>
+                    <p>Total Item Qty</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="slab mt10">
+            <div class="slab-day">
+                <span>Status</span>
+                <p class="bold" [ngClass]="{'pending' : sendPointReqData.status == 'Pending' , 'approved' : sendPointReqData.status == 'Approved' , 'reject' : sendPointReqData.status == 'Reject'}">{{sendPointReqData.status}}</p>
+            </div>
+            <!-- [ngClass]="{'active' : distributor_detail.tabActiv=='Order'} "  -->
+            <div class="slab-day" *ngIf="sendPointReqData.status == 'Reject'">
+                <span>{{sendPointReqData.status}} Remark</span>
+                <p class="bold">{{sendPointReqData.reject_reason}}</p>
+            </div>
+        </div>
+        
+        <div class="upload-doc padding0" *ngIf="sendPointReqData.bill_image">
+            <div class="">
+                Attachment
+            </div>
+            <ul class="padding0" >
+                <li class="image-upload">
+                    <img (click)="imageModal(url+sendPointReqData.bill_image)" src="{{url+sendPointReqData.bill_image}}">
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="pl16 pr16 mb25">
+        <ng-container>
+            <div class="summary-heading font14 mb8" *ngIf="productDetails.length > 0">ITEM INFORMATION</div>
+            
+            
+            <div class="attendance-list" style="padding : 5px 10px;" *ngFor="let item of productDetails; let i = index;">
+                <div class="center-block flat-block">
+                    <h1>{{item.product_detail}}</h1>
+                    
+                    <ng-container *ngIf="sendPointReqData.status == 'Pending'">
+                        <a class="cell-phone" (click)="delete_item(i,item.id,sendPointReqData.id)">
+                            <i class="material-icons">delete_sweep</i>
+                        </a>
+                    </ng-container>
+                </div>
+                
+                <div class="slab slab-three boder-top1 pt5 mt5 dflex jcc align-center">
+                    <div class="slab-day">
+                        <p class="font10" *ngIf="inputFieldFlag[i] == true">
+                            <input class="w60" name="product_qty" [(ngModel)]="item.product_qty" #product_qty="ngModel" type="number">
+                        </p>
+                        <p *ngIf="inputFieldFlag[i] == false">{{item.product_qty}}</p>
+                        <span>Qty</span>
+                    </div>
+                    
+                    <div class="slab-day" *ngIf="sendPointReqData.status == 'Pending'">
+                        <button class="slab-btn edit-bg mr10" [disabled]="inputFieldFlag[i] == true" (click)="getEditfieldEnable(i)">
+                            <i class="material-icons">edit</i>
+                        </button>
+                        
+                        <button class="slab-btn save-bg" [disabled]="inputFieldFlag[i] == false" (click)="item_update_data(item,i)">
+                            <i class="material-icons">save</i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</ion-content>

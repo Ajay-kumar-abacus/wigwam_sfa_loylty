@@ -1,0 +1,621 @@
+<ion-header>
+    <ion-toolbar color="white">
+        <div class="custom-head">
+            <img src="assets/imgs/logo.png" alt="">
+            <div class="buttons">
+            </div>
+            <div style="position: relative;">
+                  <button (click)="initSpeech()" style="position: relative; background: none; border: none; cursor: pointer; padding: 0; display: inline-block;">
+                    <ion-icon name="mic" style="font-size: 24px;"></ion-icon>
+                </button>
+                <button (click)="announcementModal()" style="position: relative; background: none; border: none; cursor: pointer; padding: 0; display: inline-block;">
+                    <ion-icon name="notifications" style="font-size: 24px;"></ion-icon>
+                    <span style="position: absolute; top: -5px; right: -5px; background-color: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px; line-height: 1;">
+                        {{NotificationCount ? NotificationCount : 0}}
+                    </span>
+                </button>
+            </div>
+            
+        </div>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+            refreshingText="Refreshing...">
+        </ion-refresher-content>
+    </ion-refresher>
+    <div *ngIf="skLoading == false">
+        <div class="slide-image" *ngIf="appbanner.length > 0">
+            <ion-slides *ngIf="appbanner.length " [initialSlide]="0" pager autoplay="1000" speed="1000">
+                <ion-slide *ngFor="let row of appbanner">
+                    <img src="{{bannerURL+row.banner}}">
+                </ion-slide>
+            </ion-slides>
+        </div>
+        <div class="my-profile-container">
+            <div class="User_detail fix-arrow" (click)="GoToProfile()">
+                <div>
+                    <h1>Hi, {{!user_data.name ? '---' : user_data.name | titlecase}}</h1>
+                    <p *ngIf="user_data.mobile">+91 {{user_data.mobile}}</p>
+                </div>
+                <i class="material-icons">chevron_right </i>
+            </div>
+            <div class="buttonGrp">
+                <button ion-button color="success" block round
+                    (click)="today_count.leave > 0 ? leaveAlert() : startAttendance()" [disabled]="spinner == true"
+                    *ngIf="(last_attendence_data.manual_absent=='0') && (last_attendence_data.start_time == '00:00:00'||last_attendence_data.start_time == '')">
+                    <ion-icon *ngIf="spinner == false" name="time" class="mr10"></ion-icon>
+                    <ion-spinner *ngIf="spinner == true" color="success"></ion-spinner>&nbsp; <strong>Start from Base <br> Station</strong>
+                </button>
+                <button ion-button color="danger" block round (click)="goToAddLeave()"
+                    *ngIf="(last_attendence_data.manual_absent=='0') && (last_attendence_data.start_time == '00:00:00'||last_attendence_data.start_time == '')">
+                    <ion-icon *ngIf="spinner == false" name="exit" class="mr10"></ion-icon>
+                    <ion-spinner *ngIf="spinner == true" color="success"></ion-spinner>&nbsp; <strong>Apply
+                        Leave</strong>
+                </button>
+            </div>
+            <div class="time-tabel" *ngIf="(last_attendence_data.manual_absent=='0')">
+                <div class="time-slot"
+                    *ngIf=" (last_attendence_data.start_time != '') && (last_attendence_data.stop_time != '' )">
+                    Working Start <span>{{start_attend_time}}</span>
+                </div>
+                <div class="time-slot"
+                    *ngIf="(last_attendence_data.stop_time != ''&&last_attendence_data.stop_time != '00:00:00') && last_attendence_data.start_time != ''">
+                    Working Stop <span>{{stop_attend_time}}</span>
+                </div>
+                <div *ngIf="last_attendence_data.Total_Working_Time != ''">
+                    <div class="time-slot" *ngIf="last_attendence_data.Total_Working_Time != '0 hr 0 min' ">
+                        Total Working Time <span>{{last_attendence_data.Total_Working_Time}}</span>
+                    </div>
+                </div>
+                <button class="mt16" ion-button color="danger" (click)="openModal('stop')" block round
+                    [disabled]="spinner == true"
+                    *ngIf="((last_attendence_data.stop_time == '00:00:00'||last_attendence_data.stop_time == '') && (last_attendence_data.start_time != ''||last_attendence_data.start_time == '00:00:00'))">
+                    <ion-icon *ngIf="spinner == false" name="clock" class="mr10"></ion-icon><ion-spinner
+                        *ngIf="spinner == true" color="success"></ion-spinner>&nbsp; Stop working
+                </button>
+            </div>
+
+            <div class="time-tabel" *ngIf="(last_attendence_data.manual_absent=='1')">
+                <div class="time-slot">
+                    For Attendence Information, Contact To Admin
+                </div>
+            </div>
+            <div class="Dashboard-Message" *ngIf="leaveMsg && leaveMsg != ''">
+                <div class="Message">
+                    {{leaveMsg}}
+                </div>
+            </div>
+            <div class="Dashboard-Message" *ngIf="halfDayMsg && halfDayMsg != ''">
+                <div class="Message">
+                    {{halfDayMsg}}
+                </div>
+            </div>
+
+        </div>
+
+        <div class="pl16 pr16 mb40">
+
+            <div class="todayCountShorcuts">
+                <h1>Today’s Activity</h1>
+                <div class="shortcut-btns">
+                    <div class="btns-group" (click)='goToFollowup()'>
+                        <div class="rel">
+                            <i>{{today_count.today_followup}}</i> 
+                            <ng-container *ngIf="followupcount > 0">
+                                <span [ngClass]="{'new-dot': followupcount > 0}">{{followupcount}}</span>
+                            </ng-container>
+                        </div>
+                        <span>Followups</span>
+                    </div>
+                   
+                    <!-- <div class="btns-group">
+                        <i>{{today_count.checkin_avg_last ? today_count.checkin_avg_last : 0}}</i>
+                        <span>Last Month Avg. Visits</span>
+                    </div> -->
+
+                    <div class="btns-group" (click)="goToCheckin2()">
+                        <div class="rel green-icon">
+                            <i>{{today_count.travel_checkin_done ? today_count.travel_checkin_done : 0}}</i>
+                            <ng-container *ngIf="today_count.travel_checkin_pending > 0">
+                                <span
+                                    [ngClass]="{'new-dot': today_count.travel_checkin_pending > 0}">{{today_count.travel_checkin_pending}}</span>
+                            </ng-container>
+                        </div>
+
+                        <span>Planned Checkin</span>
+                    </div>
+                    <div class="btns-group" (click)="goToCheckin3()">
+                        <div class="rel orange-icon">
+                            <i>{{today_count.today_checkin ? today_count.today_checkin : 0}}</i>
+                            <!-- <ng-container *ngIf="today_count.today_checkin > 0">
+                                <span
+                                    [ngClass]="{'new-dot': today_count.today_checkin > 0}">{{today_count.today_checkin}}</span>
+                            </ng-container> -->
+                        </div>
+
+                        <span>Unplanned Checkin</span>
+                    </div>
+
+                    <div class="btns-group" (click)="goToDigitalLead()">
+                        <div class="rel sky-icon">
+                            <i>{{read_enquiry_count ? read_enquiry_count : 0}}</i>
+                            <ng-container *ngIf="enquiry_count > 0">
+                                <span [ngClass]="{'new-dot': enquiry_count > 0}">{{enquiry_count}}</span>
+                            </ng-container>
+                        </div>
+                        <span>Digital Enquiry</span>
+                    </div>
+                    <div class="btns-group">
+                        <div class="rel">
+                            <i>{{today_count.checkin_avg_current}}</i>
+                        </div>
+                        <span>Curr. Month Avg. Visits</span>
+                    </div>
+                    
+                    <div class="btns-group" (click)="goToPrimaryOrders()">
+                        <div class="rel green-icon">
+                            <i>{{today_count.total_primary_order}}</i>
+                        </div>
+                        <span>Primary Order</span>
+                    </div>
+                    <div class="btns-group" (click)="goToSecondaryOrders('order')">
+                        <div class="rel green-icon">
+                            <i>{{today_count.total_secondary_order}}</i>
+                        </div>
+                        <span>Secondary Order</span>
+                    </div>
+                    <div class="btns-group" (click)="goToSecondaryOrders('stock')">
+                        <div class="rel green-icon">
+                            <i>{{today_count.total_secondary_stock}}</i>
+                        </div>
+                        <span>Stock Transfer</span>
+                    </div>
+                </div>
+            </div>
+            <div class="workimg_summary" *ngIf="team_count  > 0 ">
+                <div class="summary-heading" (click)="toggleActionList()">Waiting For Approval
+                    <span class="action-badge1 blink">Need Action!</span>
+                </div>
+                <ion-list *ngIf="showActionList">
+                    <!-- <ion-item (click)="goToLeave('Team')">
+                        <ion-avatar item-start>
+                            <i class="material-icons red-clr">exit_to_app</i>
+                        </ion-avatar>
+                        <h2>Leave</h2>
+                        <p>{{Approval_array.leave ? Approval_array.leave : 0}} leave waiting for your approval</p>
+                    </ion-item> -->
+
+                    <ion-item (click)="goToTravel('Team')">
+                        <ion-avatar item-start>
+                            <i class="material-icons green-clr">directions_transit</i>
+                        </ion-avatar>
+                        <h2>POA</h2>
+                        <p>{{Approval_array.PendingTravelPlan ? Approval_array.PendingTravelPlan : 0}} poa waiting for
+                            your approval</p>
+                    </ion-item>
+                    <ion-item (click)="goToBtl('Team')">
+                        <ion-avatar item-start>
+                            <i class="material-icons orange-clr">groups</i>
+                        </ion-avatar>
+                        <h2>BTL Activity</h2>
+                        <p>{{Approval_array.pending_event ? Approval_array.pending_event : 0}} btl waiting for your
+                            approval</p>
+                    </ion-item>
+                    <ion-item (click)="goToProjection('Team')">
+                        <ion-avatar item-start>
+                            <i class="material-icons yellow-clr">show_chart</i>
+                        </ion-avatar>
+                        <h2>Projection</h2>
+                        <p>{{Approval_array.projection ? Approval_array.projection : 0}} projection waiting for your
+                            approval</p>
+                    </ion-item>
+                </ion-list>
+            </div>
+            <div class="workimg_summary" *ngIf="count">
+                <div class="summary-heading">Pending For Action
+                    <span class="action-badge1 blink">Need Action!</span>
+                </div>
+                <ion-list>
+                    <ion-item (click)="goToDigitalLead()">
+                        <ion-avatar item-start>
+                            <i class="material-icons red-clr">notifications_active</i>
+                        </ion-avatar>
+                        <h2>{{count.inprocess_count || 0}}</h2>
+                        <p>In Process Digital Enquiries</p>
+                    </ion-item>
+
+                    <ion-item (click)="goToSite()">
+                        <ion-avatar item-start>
+                            <i class="material-icons green-clr">help</i>
+                        </ion-avatar>
+                        <h2>{{count.openLead_count}}</h2>
+                        <p>In Process Leads</p>
+                    </ion-item>
+                    <ion-item (click)="goToCustomers()">
+                        <ion-avatar item-start>
+                            <i class="material-icons orange-clr">groups</i>
+                        </ion-avatar>
+                        <h2>{{count.prospect_cp_count}}</h2>
+                        <p>Prospect CP</p>
+                    </ion-item>
+                  
+                </ion-list>
+            </div>
+            <ion-card class="dashboard-card" *ngIf="projection_data.current_month_primary_target">
+                <ion-card-content class="dashboard-content">
+                  <!-- Monthly Projection Section -->
+                  <div class="section-container">
+                    <div class="section-header">
+                      <h2 class="section-title">Primary Target</h2>
+                      <div class="status-badge live">Live</div>
+                    </div>
+                    
+                    <div class="legend">
+                      <div class="legend-item">
+                        <span class="legend-color green"></span>
+                        <span class="legend-text">Target</span>
+                      </div>
+                      <div class="legend-item">
+                        <span class="legend-color red"></span>
+                        <span class="legend-text">Achievement</span>
+                      </div>
+                    </div>
+                    
+                    <!-- Chart Container -->
+                    <div class="chart-container">
+                        <div id="ProspectCpPieChart"></div>
+                    </div>
+                    
+                    <!-- Stats Container -->
+                    <div class="stats-container">
+                      <div class="stat-box">
+                        <div class="stat-value animate-value">{{(this.projection_data.current_month_primary_target | number:'1.2-2')}}</div>
+                        <div class="stat-label">Target</div>
+                      </div>
+                      
+                      <div class="stat-box">
+                        <div class="stat-value-container">
+                          <div class="stat-value animate-value">{{(this.projection_data.current_month_primary_achv | number:'1.2-2')}}</div>
+                          <div class="action-badge blink" *ngIf="this.projection_data.current_month_primary_achv < this.projection_data.current_month_primary_target">Need Action!</div>
+                        </div>
+                        <div class="stat-label">Achievement</div>
+                      </div>
+                    </div>
+                    <button ion-button block class="view_dashboard blink" color="primary" (click)="viewTarget()" style="margin-top: 16px;">
+                        View Dashboard
+                    </button>
+                  </div>
+                </ion-card-content>
+              </ion-card>
+           
+
+      
+
+
+
+            <div class="main-btn" (click)="goToCustomerNetwork()">
+                <div>
+                    <i class="material-icons ">hub
+                    </i>
+                    <p>Customer Network</p>
+                </div>
+                <i class="material-icons">arrow_right_alt</i>
+            </div>
+
+
+            <div class="shorcuts" id="shortcutsSection">
+                <h1>Shortcuts</h1>
+                <div class="shortcut-btns">
+                    <div class="btns-group" (click)="goToSite()">
+                        <div class="rel">
+                            <i class="material-icons ">groups</i>
+                        </div>
+                        <span>Lead</span>
+                    </div>
+                    <div class="btns-group" (click)="goToTeamMember()" *ngIf="team_count  > 0">
+                        <div class="rel red-icon blink">
+                            <i class="material-icons ">people_alt</i>
+                        </div>
+                        <span>Present Members</span>
+                    </div>
+                      <div class="btns-group" (click)="goToLeave('My')">
+                        <div class="rel red-icon">
+                            <i class="material-icons ">exit_to_app</i>
+                        </div>
+                        <span>Leave</span>
+                    </div>
+                    <div class="btns-group" (click)="goToTravel('My')">
+                        <div class="rel green-icon">
+                            <i class="material-icons green-icon">directions_transit</i>
+                        </div>
+                        <span>Plan of Action</span>
+                    </div>
+
+                    <div class="btns-group" (click)="goToTravel1('My')">
+                        <div class="rel">
+                            <i class="material-icons ">event_available</i>
+                        </div>
+                        <span>Monthly Journey Plan</span>
+                    </div>
+                    <div class="btns-group" (click)="goToevent()">
+                        <div class="rel orange-icon">
+                            <i class="material-icons ">groups</i>
+                        </div>
+                        <span>BTL Activity</span>
+                    </div>
+                    <div class="btns-group" (click)="viewAchievement()">
+                        <div class="rel yellow-icon">
+                            <i class="material-icons ">show_chart</i>
+                        </div>
+                        <span>Projection</span>
+                    </div>
+                    <div class="btns-group" (click)="viewTarget()">
+                        <div class="rel yellow-icon">
+                            <i class="material-icons ">gavel</i>
+                        </div>
+                        <span>Target</span>
+                    </div>
+                    <div class="btns-group" (click)="goToPoP()">
+                        <div class="rel yellow-icon">
+                            <i class="material-icons">redeem</i>
+                        </div>
+                        <span>POP Inventory</span>
+                    </div>
+                    <div class="btns-group" (click)="goTocheckinSummary()" *ngIf="team_count  > 0">
+                        <div class="rel yellow-icon">
+                            <i class="material-icons">cloud_circle</i> 
+                        </div>
+                        <span>Summary</span>
+                    </div>
+                    <div class="btns-group" (click)="goToPopRequisition()">
+                        <div class="rel yellow-icon">
+                            <i class="material-icons">redeem</i>
+                        </div>
+                        <span>POP Requisition</span>
+                    </div>
+                    <div class="btns-group" (click)="goToExpense('My')">
+                        <div class="rel yellow-icon">
+                            <i class="material-icons ">account_balance_wallet</i>
+                        </div>
+                        <span>Expense</span>
+                    </div>
+                  
+                    <div class="btns-group" (click)="goToAttendence()">
+                        <div class="rel">
+                            <i class="material-icons ">insert_invitation</i>
+                        </div>
+                        <span>Attendance</span>
+                    </div>
+                    <div class="btns-group" (click)="goToDashboard()">
+                        <div class="rel">
+                            <i class="material-icons ">dashboard</i>
+                        </div>
+                        <span>Dashboard</span>
+                    </div>
+                    
+
+
+
+                    <div class="btns-group" (click)="goToCheckin()">
+                        <div class="rel yellow-icon">
+                            <i class="material-icons ">my_location</i>
+                            <ng-container *ngIf="today_count.travel_checkin_pending > 0">
+                                <span
+                                    [ngClass]="{'new-dot': today_count.travel_checkin_pending > 0}">{{today_count.travel_checkin_pending}}</span>
+                            </ng-container>
+                        </div>
+                        <span>Planned Checkin</span>
+                    </div>
+
+                    <!-- <div class="btns-group" (click)="goToDigitalLead()">
+                        <div class="rel">
+                            <i class="material-icons ">people_alt</i>
+                            <ng-container *ngIf="enquiry_count > 0">
+                                <span [ngClass]="{'new-dot': enquiry_count > 0}">{{enquiry_count}}</span>
+                            </ng-container>
+                        </div>
+                        <span>Virtual Leads</span>
+                    </div> -->
+
+
+
+
+
+
+                    <div class="btns-group" (click)="goToTask()">
+                        <div class="rel yellow-icon">
+                            <i class="material-icons">task</i>
+                            <ng-container *ngIf="unreadTaskCount > 0">
+                                <span
+                                    [ngClass]="{'new-dot': unreadTaskCount > 0}">{{unreadTaskCount}}</span>
+                            </ng-container>
+                        </div>
+                        
+                        
+
+                        <span>Task</span>
+                    </div>
+                    <div class="btns-group" (click)="goToSurvey()">
+                        <div class="rel yellow-icon">
+                            <i class="material-icons">poll</i>
+                        </div>
+                        <span>Survey</span>
+                    </div>
+
+                    <div class="btns-group" (click)="goToSupport()">
+                        <div class="rel yellow-icon">
+                            <i class="material-icons">support_agent</i>
+                        </div>
+                        <span>Ticket</span>
+                    </div>
+                    <div class="btns-group" (click)="goToBrandAudit()">
+                        <div class="rel">
+                            <i class="material-icons">manage_accounts</i>
+                        </div>
+                        <span>Brand Audit</span>
+                    </div>
+                    <div class="btns-group" (click)="goOnProductPage()">
+                        <div class="rel">
+                            <i class="material-icons ">category</i>
+                        </div>
+                        <span>Products</span>
+                    </div>
+                    <div class="btns-group" (click)="goOnDigitalcatPage();">
+                        <div class="rel">
+                            <i class="material-icons">picture_as_pdf</i>
+                        </div>
+                        <span>E-Catalogue</span>
+                    </div>
+
+                    <div class="btns-group" (click)="announcementList()">
+                        <div class="rel">
+                            <i class="material-icons">campaign</i>
+                            <ng-container *ngIf="announcementCount > 0">
+                                <span [ngClass]="{'new-dot': announcementCount > 0}">{{announcementCount}}</span>
+                            </ng-container>
+                        </div>
+                        <span>Announcement</span>
+                    </div>
+                    <div class="btns-group" (click)="gotoHolidayList();">
+                        <div class="rel yellow-icon">
+                            <i class="material-icons">calendar_month</i>
+                        </div>
+                        <span>Holidays</span>
+                    </div>
+
+                    <div class="btns-group" (click)="gotoPriceList();">
+                        <div class="rel yellow-icon">
+                            <i class="material-icons">monetization_on</i>
+                        </div>
+                        <span>Pricing</span>
+                    </div>
+
+                     <div class="btns-group" (click)="goToTrackDetail()" *ngIf="team_count  > 0">
+                        <div class="rel yellow-icon">
+                            <i class="material-icons">my_location</i>
+                        </div>
+                        <span>Map</span>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+     
+
+    </div>
+       <!-- <section class="tabs-sec">
+            <div class="all-tabs-prnt">
+                <div class="all-tabs active-tabs" (click)="goToHome();">
+                    <div class="tabs-icons">
+                        
+                        <i class="material-icons">home</i>
+                    
+                </div>
+                </div>
+                <div class="all-tabs" (click)="goToTravel('My')">
+                    <div class="tabs-icons">
+                        
+                            <i class="material-icons">directions_transit</i>
+                        
+                    </div>
+                </div>
+                <div class="all-tabs-bg" (click)="goToTrackDetail()" *ngIf="team_count  > 0">
+                    <div class="tabs-icons">
+                        <i class="material-icons">people_alt</i>
+                    </div>
+                </div>
+                <div class="all-tabs" (click)="goToExpense('My')">
+                    <div class="tabs-icons">
+                        <i class="material-icons">currency_rupee</i>
+                    </div>
+                </div>
+                <div class="all-tabs" (click)="goToShortcuts();">
+                    <div class="tabs-icons">
+                        <i class="material-icons">menu</i>
+                    </div>
+                </div>
+            </div>
+        </section> -->
+
+    <!-------------------------------------- Skelton starts here -------------------------------------->
+    <ng-container>
+        <div *ngIf="skLoading">
+            <div class="slide-image sk-loading">
+                <ion-slides>
+                    <ion-slide>
+                    </ion-slide>
+                </ion-slides>
+            </div>
+
+            <div class="my-profile-container ">
+                <div class="User_detail fix-arrow sk-loading"> </div>
+                <button ion-button color="white" block round class="sk-loading"></button>
+            </div>
+
+            <div class="pl16 pr16 mb40">
+                <div class="workimg_summary ">
+                    <div class="summary-heading">Today Working Summary</div>
+                    <ion-list>
+                        <ion-item class="sk-loading" *ngFor="let item of [].constructor(3)">
+                            <ion-avatar item-start>
+                            </ion-avatar>
+                        </ion-item>
+
+                    </ion-list>
+                </div>
+
+                <div class="shorcuts mb16 ">
+                    <h1>Customer Network</h1>
+                    <div class="shortcut-btns sk-loading" style="height:100px">
+                        <ng-container *ngFor="let row of [].constructor(10)">
+                            <div class="btns-group">
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+
+                <div class="shorcuts ">
+                    <h1>Shortcuts</h1>
+                    <div class="shortcut-btns sk-loading" style="height:100px">
+                        <div class="btns-group " *ngFor="let item of [].constructor(12)">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+<div class="smart-suggestions-overlay" *ngIf="suggestionList?.length">
+  <div class="smart-suggestions-box">
+    <div class="smart-suggestions-header">
+      <h3>Smart Suggestions</h3>
+      <button class="close-button" (click)="closeBottomSheet()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </div>
+
+    <div class="smart-suggestions-list">
+      <div class="smart-suggestion-item" *ngFor="let data of suggestionList; let i = index">
+        <div class="smart-suggestion-info">
+          <h4>{{data.display_name}}</h4>
+          <span class="smart-suggestion-type">{{data.type_name}}</span>
+        </div>
+        <button 
+          class="add-button" 
+          [disabled]="spinnerLoader"
+          (click)="commandType =='Order'? createOrder(data) : customerAddToList(data)">
+          <ion-icon *ngIf="!spinnerLoader" name="add"></ion-icon>
+          <ion-spinner *ngIf="spinnerLoader"></ion-spinner>
+          Add
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+   
+</ion-content>

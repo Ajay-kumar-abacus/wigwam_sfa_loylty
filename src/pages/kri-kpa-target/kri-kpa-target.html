@@ -1,0 +1,66 @@
+<!--
+  Generated template for the KriKpaTargetPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>KRA/KPI Target</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only *ngIf="teamCount > 0" (click)="presentPopover($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <div class="edit flat" *ngIf="target_Type=='Team'">
+    <ion-list>
+      <ng-container>
+        <ion-item class="cs-normal-select retailerSelectionBox mt0 mb0">
+          <ion-label>Select Team Member</ion-label>
+          <ionic-selectable item-content name="data" [(ngModel)]="filter.team" [items]="user_list" itemValueField="id"
+            itemTextField="name" [canSearch]="true" #selectComponent
+            (ngModelChange)="getKRIKPAData()"></ionic-selectable>
+        </ion-item>
+      </ng-container>
+    </ion-list>
+  </div>
+
+  <div class="product-item-table">
+    <table class="scroll-150">
+      <tr>
+        <th class="w70 text-center">KRA</th>
+        <th class="w70 text-center">Weightage (%)</th>
+        <th class="w60 text-right">Achievement (%)</th>
+        <th class="w60 text-right">Score (%)</th>
+        <!-- <th class="w60 text-right">Amount</th> -->
+      </tr>
+      <tr *ngFor="let ro of targetData.kra; let i=index">
+        <td class="w70 text-center">{{ro.kra_name}}</td>
+        <td class="w70 text-center">{{ro.weightage}}</td>
+        <td class="w60 text-right">{{ro.achieve}}</td>
+        <td class="w60 text-right">{{ro.score}}</td>
+      </tr>
+      <tr>
+        <td class="w70 text-center">Grand Total</td>
+        <td class="w70 text-center">{{totalWeightAge}}</td>
+        <td class="w60 text-right"></td>
+        <td class="w60 text-right">{{totalScore}}</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="nothing-here" style="height: 50%;" *ngIf="targetData == ''">
+    <div class="outer">
+      <div class="innear">
+        <img src="assets/imgs/no_found.svg" alt="">
+        <p>Data Not Available</p>
+      </div>
+    </div>
+  </div>
+
+</ion-content>

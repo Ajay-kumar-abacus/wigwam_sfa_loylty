@@ -1,0 +1,37 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>{{user_data.type != 1 ? 'Channel Partner' : 'Dealer'}} Detail</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <div class="attendance-list flat-list">  
+        <div class="slab slab-bg">
+            <div class="slab-day">
+                <p>{{drData.date_created | date:'d MMM y hh:mm a'}}</p>
+                <span>Date created</span>
+            </div>
+        </div>
+        
+        <div class="center-block">
+            <div class="circle">{{drData.company_name?.substring(0,1).toUpperCase()}}</div>
+            <h1>{{drData.company_name}}</h1>
+            <p>{{drData.name}} - {{drData.mobile}}</p>
+            <a class="cell-phone" href="tel:{{drData.mobile}}"><i class="material-icons">phone</i></a>
+        </div>
+        
+        <div class="slab mt10">
+            <div class="slab-day">
+                <span>Address</span>
+                <p class="bold">{{drData.address}} {{drData.city}} {{drData.district}} {{drData.state}} {{drData.pincode}}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="padding16" *ngIf="user_data.type == '1'">
+        <button class="" color="success" round outline block ion-button icon-start  (click)="getStock()">
+            <ion-icon name="cube"></ion-icon>
+            Stock
+        </button>
+    </div>
+</ion-content>
