@@ -1,0 +1,149 @@
+<ion-header  style="display:none">
+  <ion-navbar  >
+    <ion-title class="f14">
+      {{'Draft'}}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <form  #f="ngForm" (ngSubmit)="f.valid && submit()">
+    <div class="form">
+      <ion-list no-lines>
+
+        <div class="cs-heading1 pl0" >
+          <p>REVIEW YOUR INVOICE</p>
+        </div>
+
+      <div class="dflex1">
+
+         <ion-item class="wp50" [ngClass]="{'error':f.submitted && invoice_no?.invalid}">
+            <ion-label floating>{{'Invoice No.' | translate}}<strong class="red-text">*</strong></ion-label>
+            <ion-input type="tel"  name="invoice_no" #invoice_no="ngModel" min="0"    maxlength="12"  [(ngModel)]="data.invoice_no"  required></ion-input>
+          </ion-item>
+        
+        <ion-item  class="wp50 ml8" [ngClass]="{'cs-error':f.submitted && invoice_date?.invalid}">
+          <ion-label floating floating>{{'Invoice Date' | translate}} <strong class="red-text">*</strong></ion-label>
+          <ion-datetime display-format="MMM DD, YYYY" type="text"  [max]="today_date" name="invoice_date" #invoice_date="ngModel" [(ngModel)]="data.invoice_date" required></ion-datetime>
+      </ion-item>
+        
+    
+        
+    </div>
+
+    <div class="dflex1">
+
+      <ion-item class="wp50"  [ngClass]="{'error':f.submitted && customer_name?.invalid}">
+         <ion-label floating>{{'Customer Name' | translate}}<strong class="red-text">*</strong></ion-label>
+         <ion-input type="text"  name="customer_name" #customer_name="ngModel"   [(ngModel)]="data.customer_name"  required></ion-input>
+       </ion-item>
+
+       <ion-item class="wp50 ml8" [ngClass]="{'error':f.submitted && customer_mobile_no?.invalid}">
+        <ion-label floating>{{'Customer Mobile' | translate}}<strong class="red-text">*</strong></ion-label>
+        <ion-input type="tel"  name="customer_mobile_no" #customer_mobile_no="ngModel" (keypress)="MobileNumber($event)"   maxlength="10"  [(ngModel)]="data.customer_mobile_no"  required></ion-input>
+      </ion-item>
+     
+    
+ 
+     
+ </div>
+
+
+   
+
+    
+        
+    
+        
+      
+
+
+  
+    
+    
+    <ng-container >
+        <div class="cs-list mt15" style="border-radius:0px">
+          <div class="top-block">
+            <p><strong>SELLER INFO:</strong></p>
+          </div>
+          <div class="middle-block">
+            <div class="three-block">
+
+              <p>{{user_data.dealer_name}} : <strong > beswjit Kumar</strong> </p>
+            
+              
+            </div>
+            <div class="three-block">
+              <p>{{'Mobile' | translate}} : {{user_data.mobile}}  </p>
+
+            </div>
+
+          
+           
+            
+          </div>
+        </div>
+    </ng-container>
+
+    <div class="cs-list mt15" style="border-radius:0px">
+      <div class="top-block">
+        <p><strong>YOUR PRODUCT:</strong></p>
+      </div>
+      <div class="middle-block" *ngFor="let row of cart_data">
+        <div class="three-block">
+
+          <p>{{row.brand }} {{row.thickness}}  {{row.segment_name}} {{row.size}} </p>
+          <button><i class="material-icons red-clr" (click)="listdelete(1)">delete_sweep</i></button>
+        
+          
+        </div>
+        <div class="three-block">
+          <p>{{'Point Yoy May Earn' | translate}} :  100 </p>
+          <p>{{'QTY' | translate}} : {{row.qty}} </p>
+
+
+        </div>
+
+      
+       
+        
+      </div>
+    </div>
+
+
+   
+
+     <div class="upload-doc mt20">
+      <p class="">{{'Support Image'| translate}}<span style="color:red">*</span></p>
+      <ul class="no-padding">
+        <li  class="image-upload" *ngFor="let row of selImages; let i=index" [ngClass]="{'active': data.profile_selected == row.id}">
+          <img src="{{row.id ? uploadurl+row.image : row.image}}">
+          <button class="del"><i class="material-icons"
+            (click)="remove_image(i)">delete_sweep</i></button>
+          </li>
+          
+          <li class="add_image" (click)="selImages.length <= 5 ?  captureMedia() : showLimit()">
+            <img src="assets/imgs/upload_imae_icon.png" alt="">
+            {{'Upload' | translate}} <span>{{'Here'}}</span>
+          </li>
+        </ul>
+      </div> 
+      
+      
+      
+      <div class="mt16" >
+        <button ion-button block class="capitalize" [disabled]="saveFlag" ><ion-spinner *ngIf="spinner == true"></ion-spinner>{{('Submit Purchase' | translate)}}</button>
+      </div>
+      
+    </ion-list>
+  </div>
+  
+  
+</form>
+
+
+
+
+
+
+</ion-content>

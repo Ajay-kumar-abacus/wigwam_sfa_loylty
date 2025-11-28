@@ -20,6 +20,8 @@ import { CheckinListPage } from '../sales-app/checkin-list/checkin-list';
 import { AddRetailerPage } from '../add-retailer/add-retailer';
 import { ExpenseStatusModalPage } from '../expense-status-modal/expense-status-modal';
 import { PriceListPage } from '../price-list/price-list';
+import { InventaoryInventaoryPage } from '../inventaory-inventaory/inventaory-inventaory';
+import { WalletInfluencerWalletPage } from '../wallet-influencer-wallet/wallet-influencer-wallet';
 @IonicPage()
 @Component({
   selector: 'page-leads-detail',
@@ -167,6 +169,14 @@ export class LeadsDetailPage implements AfterViewInit {
   priceList(){
     this.navCtrl.push(PriceListPage, {'dr_id': this.distributor_detail.id })
   }
+
+  getInventory(){
+    this.navCtrl.push(InventaoryInventaoryPage, {'dr_id': this.distributor_detail.id,'name':this.distributor_detail.name,'company_name':this.distributor_detail.company_name,'mobile':this.distributor_detail.mobile })
+  }
+  gotoWallet(){
+    this.navCtrl.push(WalletInfluencerWalletPage, {'dr_id': this.distributor_detail.id})
+}
+
 
   go_to(type) {
 

@@ -1,0 +1,33 @@
+
+<ion-header class="header-border header-back-black">
+    <ion-navbar color="white">
+        <div class="logo center-logo">
+            <img src="assets/imgs/logo.png" alt="">
+        </div>
+    </ion-navbar>
+</ion-header>
+<ion-content>
+	<div class="user-types">
+		<ion-list radio-group [(ngModel)]="lang">
+			<div class="list-header">
+				भाषा चुनिए / Choose Your Language
+			</div>
+		
+			<ion-item >
+				<ion-label>अंग्रेज़ी  (English)</ion-label>
+				<ion-radio color="secondary" (click)="set_lang()" checked="{{'en' == lang}}" value="en"></ion-radio>
+			</ion-item>
+      <ion-item >
+				<ion-label>हिंदी (Hindi) </ion-label>
+				<ion-radio color="secondary" (click)="set_lang()" checked="{{'hin' == lang}}"  value="hin"></ion-radio>
+			</ion-item>
+		</ion-list>
+	</div>
+	<div class="text-right mr16">
+	<button ion-button round outline color="secondary" class="Buttons" [disabled]="!lang" (click)="mode?update_lang():continue()">{{'Continue'|translate}}</button>
+	</div>
+
+</ion-content>
+
+
+

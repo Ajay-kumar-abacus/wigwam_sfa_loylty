@@ -321,6 +321,19 @@ import { Market } from '@ionic-native/market'
 import { TargetVsAchievementPageModule } from '../pages/target-vs-achievement/target-vs-achievement.module';
 import { CheckinSummaryPageModule } from '../pages/checkin-summary/checkin-summary.module';
 import { PriceListPageModule } from '../pages/price-list/price-list.module';
+import { LoyaltyAddPurchasePageModule } from '../pages/loyalty-add-purchase/loyalty-add-purchase.module';
+import { LoyaltyPurchaseListPageModule } from '../pages/loyalty-purchase-list/loyalty-purchase-list.module';
+import { LoyaltyPurchaseDetailPageModule } from '../pages/loyalty-purchase-detail/loyalty-purchase-detail.module';
+import { LoyaltyMenuPageModule } from '../pages/loyalty-menu/loyalty-menu.module';
+import { LoyaltyFaqPageModule } from '../pages/loyalty-faq/loyalty-faq.module';
+import { SpinWheelPageModule } from '../pages/spin-wheel/spin-wheel.module';
+import { LoyaltyLanguagePageModule } from '../pages/loyalty-language/loyalty-language.module';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { LoyaltyDraftPurchasePageModule } from '../pages/loyalty-draft-purchase/loyalty-draft-purchase.module';
+import { PurchaseUpdateStatusModalPageModule } from '../pages/purchase-update-status-modal/purchase-update-status-modal.module';
+import { InventaoryInventaoryPageModule } from '../pages/inventaory-inventaory/inventaory-inventaory.module';
+import { WalletInfluencerWalletPageModule } from '../pages/wallet-influencer-wallet/wallet-influencer-wallet.module';
 import { CameraModalPageModule } from '../pages/camera-modal/camera-modal.module';
 import { CameraPreview } from '@ionic-native/camera-preview';
 import { TeamTrackDetailPageModule } from '../pages/team-track-detail/team-track-detail.module';
@@ -353,6 +366,7 @@ import { TeamTrackDetailPageModule } from '../pages/team-track-detail/team-track
         CheckinSummaryPageModule,
         GiftListPageModule,
         OffersPageModule,
+        InventaoryInventaoryPageModule,
         ViewProfilePageModule,
         PointListPageModule,
         PointDetailPageModule,
@@ -513,7 +527,8 @@ import { TeamTrackDetailPageModule } from '../pages/team-track-detail/team-track
         LoyaltyGiftGalleryPageModule,
         LoyaltyVideoPageModule,
         LoyaltyRedeemRequestPageModule,
-        LoyaltyGiftGalleryDetailPageModule,
+        LoyaltyGiftGalleryDetailPageModule, 
+        WalletInfluencerWalletPageModule,
         LoyaltyGiftTrackerPageModule,
         LoyaltyTrackerDetailPageModule,
         LoyaltyEnterCouponCodePageModule,
@@ -589,7 +604,25 @@ import { TeamTrackDetailPageModule } from '../pages/team-track-detail/team-track
         SiteProjectDetailPageModule,
         AddSiteProjectPageModule,
         PopRequisitionPageModule,
-        PopRequisitionAddPageModule,
+        PopRequisitionAddPageModule, 
+        LoyaltyAddPurchasePageModule,
+        LoyaltyPurchaseListPageModule,
+        LoyaltyPurchaseDetailPageModule,
+        LoyaltyMenuPageModule,
+        LoyaltyFaqPageModule,
+        SpinWheelPageModule,
+        LoyaltyLanguagePageModule,
+        Super30PageModule,
+        LoyaltyDraftPurchasePageModule,
+        PurchaseUpdateStatusModalPageModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: createTranslateLoader,
+                deps: [HttpClient]
+            }
+        })
+
 
     ],
     bootstrap: [IonicApp],

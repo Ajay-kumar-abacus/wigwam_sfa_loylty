@@ -4546,6 +4546,11 @@ ul {
             }
         }
     }
+
+    &.inactive {
+        opacity: 0.6;
+        background: #f5f5f5;
+    }
 }
 
 .table-capsule {

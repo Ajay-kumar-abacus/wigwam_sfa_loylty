@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Loyalty Redeem Request</ion-title>
+    <ion-title>{{'Loyalty Redeem Request'| translate}}</ion-title>
   </ion-navbar>
 </ion-header>
 <ion-content padding class="popup-modal">
@@ -8,23 +8,23 @@
     <div class="modal-content in-modal">
       <form #f="ngForm">
         <div class="title">
-          <h1>{{'Confirm your redeem request...!'}}</h1>
+          <h1>{{'Confirm your redeem request...!'|translate}}</h1>
         </div>
         <div class="summary-gift">
-          <h5>{{'Summary'}}</h5>
+          <h5>{{'Summary'|translate}}</h5>
           <table>
             <tr>
-              <td>{{'Your Current Points'}}</td>
+              <td>{{'Your Current Points'|translate}}</td>
               <td>{{karigar_detail.wallet_point}}</td>
             </tr>
             <tr>
-              <td>{{'Gift Point Value'}}</td>
+              <td>{{'Gift Point Value'|translate}}</td>
               <td *ngIf="gift_type=='Gift'">-{{gift_detail.gift_point}}</td>
               <td *ngIf="gift_type=='Cash'">-{{data.cash_point}}</td>
 
             </tr>
             <tr>
-              <td>{{'Your balance Points'}}</td>
+              <td>{{'Your balance Points'|translate}}</td>
               <td><strong>= {{currentPointBalcance_round}}</strong></td>
             </tr>
           </table>
@@ -48,11 +48,10 @@
         <ng-container *ngIf="gift_detail.gift_type == 'Gift'">
           <div class="check-bx mt0">
             <ion-item>
-              <ion-checkbox color="secondary" checked="true" name="check1" #check1="ngModel" [(ngModel)]="data.check1"
-                (click)="address()">
+              <ion-checkbox color="secondary" checked="true" name="check1" #check1="ngModel" [(ngModel)]="data.check1" (click)="address()">
               </ion-checkbox>
             </ion-item>
-            <p>{{'Same as address'}}</p>
+            <p>{{'Same as address'|translate}}</p>
           </div>
           <div class="input-section">
             <div class="input-adjust m0 mt0">
@@ -60,40 +59,90 @@
                 [(ngModel)]="data.shipping_address" required></textarea>
             </div>
           </div>
+
+          <div class="form" *ngIf="data.check1!=true">
+            <ion-list>
+           
+              <ion-item [ngClass]="{'error':f.submitted && pincode?.invalid}">
+                <ion-label floating>{{'Pincode'}}<span>*</span></ion-label>
+                <ion-input type="tel" name="pincode" [(ngModel)]="data.pincode" #pincode="ngModel" (ngModelChange)="getaddress(data.pincode)"
+                    onkeypress="return event.charCode>=48 && event.charCode<=57" maxlength="6"
+                    minlength="6" required></ion-input>
+            </ion-item>
+             <div *ngIf="f.submitted && pincode.invalid" class="eror">
+                <p *ngIf="pincode.errors.required">{{'Field is Required'}}</p>
+            </div>
+    
+            <!-- <ng-container >
+                <ion-item [ngClass]="{'error':f.submitted && state?.invalid}">
+                    <ion-label floating>{{'State' }} <span>*</span></ion-label>
+                    <ion-select name="state" [(ngModel)]="data.state" #state="ngModel"
+                        (ngModelChange)="getDistrictList(data.state)" required>
+                        <ion-option *ngFor="let row of state_list"
+                            value="{{row.state_name}}">{{row.state_name}}</ion-option>
+                    </ion-select>
+                </ion-item>
+                <div *ngIf="f.submitted && state.invalid" class="eror">
+                    <p *ngIf="state.errors.required">{{'Field is Required' }}</p>
+                </div>
+    
+                <ion-item [ngClass]="{'error':f.submitted && district?.invalid}">
+                    <ion-label floating>{{'District' }}<span>*</span></ion-label>
+                    <ion-select name="district" #district="ngModel" [(ngModel)]="data.district"  required>
+                        <ion-option *ngFor="let row of district_list"
+                            value="{{row.district_name}}">{{row.district_name}}</ion-option>
+                    </ion-select>
+                </ion-item>
+                <div *ngIf="f.submitted && district.invalid" class="eror">
+                    <p *ngIf="district.errors.required">{{'Field is Required' }}</p>
+                </div>
+            </ng-container>
+          
+            <ion-item [ngClass]="{'error':f.submitted && city?.invalid}">
+                <ion-label floating>{{'City' }}<span>*</span></ion-label>
+                <ion-input type="text" name="city" [(ngModel)]="data.city" #city="ngModel" required></ion-input>
+            </ion-item> -->
+            </ion-list>
+          </div>
+
+        
+
+      
+
         </ng-container>
 
         <ng-container *ngIf="gift_detail.gift_type == 'Cash' && data.payment_mode=='Bank'">
           <div class="profile-card mt16">
             <div class="text-center">
-              <h2>{{ 'Bank Information' }}</h2>
+              <h2>{{ 'Bank Information'|translate }}</h2>
             </div>
             <div class="text-box">
-              <p>{{'Account Holder Name'}}</p>
+              <p>{{'Account Holder Name'|translate}}</p>
               <h6>{{karigar_detail.account_holder_name ? karigar_detail.account_holder_name:'----'}}</h6>
             </div>
             <div class="text-box">
-              <p>{{'Bank Name'}}</p>
+              <p>{{'Bank Name'|translate}}</p>
               <h6>{{karigar_detail.bank_name ? karigar_detail.bank_name:'----'}}</h6>
             </div>
             <div class="text-box">
-              <p>{{'Bank Account Number'}}</p>
+              <p>{{'Bank Account Number'|translate}}</p>
               <h6>{{karigar_detail.account_no ? karigar_detail.account_no:'----'}}</h6>
             </div>
             <div class="text-box">
-              <p>{{'Bank IFSC Code'}}</p>
+              <p>{{'Bank IFSC Code'|translate}}</p>
               <h6>{{karigar_detail.ifsc_code ? karigar_detail.ifsc_code:'----'}}</h6>
             </div>
           </div>
         </ng-container>
 
-        <ng-container *ngIf="data.payment_mode!='Bank' && karigar_detail.country!='india'">
+        <!-- <ng-container *ngIf="data.payment_mode!='Bank'">
           <div class="profile-card mt16">
             <div class="text-box">
-              <p>{{'Khalti Wallet No.'}}</p>
+              <p>{{karigar_detail.country=='india'? 'Paytm Wallet No.':'Khalti Wallet No.'}}</p>
               <h6>{{data.wallet_no ? data.wallet_no:data.wallet_no}}</h6>
             </div>
           </div>
-        </ng-container>
+        </ng-container> -->
 
 
 
@@ -102,13 +151,14 @@
             <ion-checkbox color="secondary" checked="true" name="check" #check="ngModel" [(ngModel)]="data.check"
               required></ion-checkbox>
           </ion-item>
-          <p>{{'I accept the'}} <a (click)="goTOPage()">{{'Cancellation Policy'}}</a></p>
+          <p>{{'I accept the'|translate}} <a (click)="goTOPage()">{{'Cancellation Policy'|translate}}</a></p>
         </div>
         <div class="footer-btns">
-          <a ion-button outline color="danger" (click)="dismiss()">{{'Cancel'}}</a>
+          <a ion-button outline color="danger" (click)="dismiss()">{{'Cancel'|translate}}</a>
           <!-- !data.check ||!data.otp || !data.shipping_address ||  -->
           <button ion-button color="success" [disabled]="saveFlag == true" (click)="submit()">
-            {{saveFlag == true ? 'Please Wait' : 'Confirm'}}
+            {{saveFlag == true ? ('Please Wait'|translate ):( 'Confirm'|translate)}}
+
           </button>
         </div>
       </form>

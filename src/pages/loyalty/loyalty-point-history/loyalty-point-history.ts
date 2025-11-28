@@ -16,17 +16,22 @@ export class LoyaltyPointHistoryPage {
   ledger_list:any =[];
   SafeResourceUrl;
   tokenInfo:any={};
-  lang:any='';
+  lang:any='en';
   ok:any="";
   history: string = "Ledger";
   influencer_point:any = {};
+  wallet_point: any;
   constructor(public navCtrl: NavController, public navParams: NavParams,public service:MyserviceProvider) {
-    this.service.presentLoading();
-    this.getLedger('');
+ 
   }
   
   ionViewDidLoad() {
   }
+
+  ionViewWillEnter(){
+  this.service.presentLoading();
+  this.getLedger('');
+ }
   
   
   
@@ -47,6 +52,7 @@ export class LoyaltyPointHistoryPage {
         
         if(result['statusCode'] == 200){
           this.ledger_list = result['influencer_ledger'];
+          this.wallet_point = result['wallet_point']['balance'];
           this.service.dismissLoading();
         }
         else{

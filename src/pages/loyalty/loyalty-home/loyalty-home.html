@@ -6,6 +6,20 @@
             </div>
         </ion-title>
         <ion-buttons end>
+            <button ion-button icon-only class="share-text" >
+                
+                <ion-icon name="phone" color="secondary" style="background-color:black">
+                    <a href="tel:{{contact.contact_number_2}}"> 
+                   
+                    </a>
+                </ion-icon>
+                
+                
+            </button>
+          
+        </ion-buttons>
+        <ion-buttons end>
+          
             <button ion-button icon-only class="share-text" (click)="announcementModal()">
                 <ion-icon name="notifications" color="secondary"></ion-icon>
             </button>
@@ -15,12 +29,51 @@
 <ion-content>
 
     <ion-refresher (ionRefresh)="doRefresh($event)">
-        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
-            refreshingText="Refreshing...">
+        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="{{'Pull to refresh' |translate}}" refreshingSpinner="circles"
+            refreshingText="{{'Refreshing...' |translate}}">
         </ion-refresher-content>
     </ion-refresher>
 
+   
+
+ 
+
 <div *ngIf="skLoading == false">
+
+    <section class="prfl-sec">
+        <div class="points-prnt">
+            <div class="prfl-name-prnt">
+                <div class="prfl-img">
+                    <img src="{{uploadurl+influencer_detail.profile}}" (click)="imageModal(uploadurl+influencer_detail.profile)"  alt="" *ngIf="influencer_detail.profile!= ''">
+                    <ion-icon name="person" *ngIf="!influencer_detail.profile" class="prf-icn"></ion-icon>
+                </div>
+
+
+                <div class="pointt-parent">
+                    <div class="prfl-nm">
+                        <h2>{{influencer_detail.name | titlecase}}</h2>
+                        <h6><strong>{{influencer_detail.type=='8'?'Ply Expert':'Ambassador'}}</strong> - <strong>{{influencer_detail.mobile}}</strong></h6>
+                        <p  *ngIf="influencer_detail.kyc_status == 'Pending'">KYC Status <strong class="yellow-clr">{{' - ' + influencer_detail.kyc_status}} </strong></p>
+                        <h6 *ngIf="influencer_detail.kyc_status == 'Verified'">KYC Status 
+                            <strong class="green-clr">{{' - ' + influencer_detail.kyc_status}} <i class="material-icons verified ver-icon">verified_user</i> 
+                                </strong>
+                          </h6>
+                    </div>
+                   
+
+                </div>
+                <div class="fix-arrow">
+                    <div class="arrow">
+                        <i class="material-icons" style="font-weight:800" (click)="goToProfile()">
+                            chevron_right
+                        </i>
+                    </div>
+                </div>
+
+            </div>
+          
+        </div>
+    </section> 
     <div class="slide-image" *ngIf="appbanner.length > 0">
         <ion-slides *ngIf="appbanner.length " [initialSlide]="0" pager autoplay="1000" speed="1000">
             <ion-slide *ngFor="let row of appbanner">
@@ -29,7 +82,286 @@
         </ion-slides>
     </div>
 
-    <div class="pl16 pr16">
+    <!-- <section>
+        <div class="pointsec-prnt">
+            <div class="point-name-prnt">
+                <div class="point-img">
+                    <img src="assets/imgs/cash.png">
+                </div>
+    
+    
+                <div class="point-prnt">
+                    <div class="pt-nm">
+                        <p style="font-size: 15px;font-weight: 500;">{{'Total Point'  |translate}}</p>
+                        <p style="font-weight: 500;font-size: 16px;">{{pointRight.wallet_point?pointRight.wallet_point:'0'}} / <span style="color: #6c6548;">{{ pointRight.total_points_earned +  pointRight.total_reward_point }}</span></p>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+    </section> -->
+    <section>
+        <div class="points-section">
+            <div class="piggy-container">
+                <div class="point-img">
+                    <img src="assets/imgs/cash.png">
+                </div>
+            </div>
+            
+            <div class="points-info">
+              <h1 class="points-value">{{pointRight.wallet_point?pointRight.wallet_point:'0'}} Points</h1>
+              <p class="points-label">Your Point Balance</p>
+            </div>
+            
+            <div class="view-details-container">
+              <button ion-button clear class="view-details-btn" (click)="viewDetails()">
+                View details <ion-icon name="arrow-forward"></ion-icon>
+              </button>
+            </div>
+          </div>
+    </section>
+    <section class="progress-section">
+        <div class="progress-header">
+            <h3>Your Milestone</h3>
+            <p>From {{mileStone.registeredDate | date:'d MMM  yyy'}}</p>
+        </div>
+        <div class="progress-container">
+          
+            <div class="step-wrapper">
+                <div class="step" [ngClass]="{'active': isActive(1), 'current': isCurrent(1)}"> <i class="material-icons">check</i>
+                </div>
+                <div class="step-label">{{mileStone.membershipLevels[0].levelName}}</div>
+                <div class="step-label2">{{mileStone.membershipLevels[0].sheetRequired}} Sheets</div>
+            </div>
+            <div class="connector" [ngClass]="{'active': isActive(2)}"></div>
+            <div class="step-wrapper">
+                <div class="step" [ngClass]="{'active': isActive(2), 'current': isCurrent(2)}"><i class="material-icons">check</i></div>
+                <div class="step-label">{{mileStone.membershipLevels[1].levelName}}</div>
+                <div class="step-label2">{{mileStone.membershipLevels[1].sheetRequired}} Sheets</div>
+            </div>
+            <div class="connector" [ngClass]="{'active': isActive(3)}"></div>
+            <div class="step-wrapper">
+                <div class="step" [ngClass]="{'active': isActive(3), 'current': isCurrent(3)}"><i class="material-icons">check</i></div>
+                <div class="step-label">{{mileStone.membershipLevels[2].levelName}}</div>
+                <div class="step-label2">{{mileStone.membershipLevels[2].sheetRequired}} Sheets</div>
+            </div>
+        </div>
+    </section>
+    
+
+   
+
+    <section class="menu-sec">
+        <div class="menu-prnt">
+            <div class="menu-tabs" (click)="goTopurchaselist()" >
+                <div class="menu-icons">
+                    <i class="material-icons">currency_rupee</i>
+                </div>
+                <div class="menu-cont">
+                    <h6>{{'Purchase' |translate}}</h6>
+                </div>
+            </div>
+            <div class="menu-tabs" (click)="goOnPointeListPage()">
+            <div class="menu-icons">
+                <i class="material-icons">receipt_long</i>
+            </div>
+            <div class="menu-cont">
+                <h6>{{'Wallet' |translate}}</h6>
+            </div>
+        </div>
+        <div class="menu-tabs" (click)="goToDetail()">
+            <div class="menu-icons">
+                <i class="material-icons">card_giftcard</i>
+            </div>
+            <div class="menu-cont">
+                <h6>{{'Rewards' |translate}}</h6>
+            </div>
+        </div>
+
+        <div class="menu-tabs" (click)="goToTracker();">
+        <div class="menu-icons">
+            <i class="material-icons">fmd_good</i>
+        </div>
+        <div class="menu-cont">
+            <h6>{{'Track Redemption' |translate}}</h6>
+        </div>
+    </div>
+            <div class="menu-tabs" (click)="goTospin()">
+                <div class="menu-icons">
+                    <i class="material-icons">sports_soccer</i>
+                </div>
+                <div class="menu-cont">
+                    <h6>{{'Spin & Win' |translate}}</h6>
+                </div>
+            </div>
+
+            <div class="menu-tabs" (click)="goOnDigitalcatPage();">
+                <div class="menu-icons">
+                    <i class="material-icons">picture_as_pdf</i>
+                </div>
+                <div class="menu-cont">
+                    <h6>{{'E-Catalogue' |translate}}</h6>
+                </div>
+            </div>
+           
+          
+           
+           
+           
+            
+            <div class="menu-tabs" (click)="goToVideo();">
+                <div class="menu-icons">
+                    <i class="material-icons">play_circle</i>
+                </div>
+                <div class="menu-cont">
+                    <h6>{{'Videos' |translate}}</h6>
+                </div>
+            </div>
+            <div class="menu-tabs" (click)="goToAbout();">
+                <div class="menu-icons">
+                    <i class="material-icons">info</i>
+                </div>
+                <div class="menu-cont">
+                    <h6>{{'About Us'  |translate}}</h6>
+                </div>
+            </div>
+           
+        </div>
+    </section>
+
+    <section class="grph-sec">
+        <div class="prg-head">
+            <h5>{{'POINTS EARNING INSIGHTS'  |translate}}</h5>
+        </div>
+        <ion-card>
+         
+      
+            <ion-card-content class="p0" style="height: 210px;">
+              <!-- Render the ZingChart here -->
+            
+              <div id="DigitalPieChart" style="width: 40%; margin-top: -40px;">
+             
+              </div>
+              <div class="enquiryDetailsBox" style="    justify-content: flex-end;
+              padding: 0px;
+              position: relative;
+              top: -175px;
+              flex-wrap: wrap;
+              gap: 10px;
+              margin-left: 45%;
+              width: 50%;">
+                <div class="detailBox" style="flex: 1 1 calc(50% - 10px);">
+                    <div class="winIndicator">{{'Total' |translate}} </div>
+                  <div class="valueBox">{{ pointRight.wallet_point ? pointRight.wallet_point : '0' }}</div>
+                </div>
+      
+                <div class="detailBox" style="flex: 1 1 calc(50% - 10px);">
+                    <div class="lostIndicator"> {{'Earned' |translate}}</div>
+                  <div class="valueBox">{{ pointRight.total_points_earned ? pointRight.total_points_earned : '0' }}</div>
+                </div>
+      
+                <div class="detailBox">
+                    <div class="lostIndicator"> {{'Reward' |translate}}</div>
+                  <div class="valueBox" style="color:#008000">{{ pointRight.total_reward_point ? pointRight.total_reward_point : '0' }}</div>
+                </div>
+      
+                <div class="detailBox">
+                    <div class="lostIndicator"> {{'Redeemed' |translate}}</div>
+                  <div class="valueBox" style="color:#FF00FF">{{ pointRight.total_redeemed_points ? pointRight.total_redeemed_points : '0' }}</div>
+                </div>
+      
+               
+              </div>
+      
+            
+            </ion-card-content>
+          </ion-card>
+    </section>
+
+    <section>
+        <div class="leader-prnt">
+            <div class="prg-head">
+                <h5>{{'LEADER BOARD' |translate}}</h5>
+            </div>
+            <div class="leader-icn" (click)="Super30Page()">
+                <h4>{{'See all' |translate}}<i class="material-icons">chevron_right </i></h4>
+            </div>
+        </div>
+        <div class="rank-part" style="background-image: url('assets/home-icon/faucet.png');">
+            <div class="rnk-head">
+                <h5>{{'Top Rank' |translate}}</h5>
+            </div>
+            <div class="rnk-profile-prt">
+                <div class="prfl-img">
+                    <!-- <img src="{{uploadurl+pointRight.Profile}}" (click)="imageModal(uploadurl+pointRight.Profile)"
+                        *ngIf="pointRight.Profile != ''"> -->
+                    <ion-icon name="person" *ngIf="!pointRight.Profile" class="prf-icn"></ion-icon>
+                </div>
+                <div class="rnk-cnt">
+                    <h2>{{influencer_top_rank.name | titlecase}}</h2>
+                    <h6>{{influencer_top_rank.state | titlecase}}</h6>
+                    <h2>{{influencer_top_rank.mobile_no}}</h2>
+                </div>
+                <div class="rnk-num">
+                    <h4> <img src="assets/home-icon/coin.svg" alt="">{{influencer_top_rank.total_point}}</h4>
+                </div>
+            </div>
+        </div>
+    </section> 
+
+   
+
+
+    <section>
+        <div class="prf-prnt">
+            <p style="text-align: center;" >{{'Your profile' | translate}} <span>{{pointRight.profile_completed}}%</span> {{'complete' |translate}}</p>
+            <div class="out">
+                <div class="in  {{'wp' + pointRight.profile_completed}}">&nbsp;</div>
+            </div>
+            <!-- <div class="prf-cnt" *ngIf="pointRight.profile_completed !== 100">
+                <p>complete your profile </p>
+            </div> -->
+            <div class="kyc-btn" *ngIf="pointRight.profile_completed !== 100" (click)="goToProfile();">
+                <p >{{'Complete your Profile' |translate}}</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="tabs-sec">
+        <div class="all-tabs-prnt">
+            <div class="all-tabs active-tabs" (click)="goToHome();">
+                <div class="tabs-icons">
+                    
+                    <i class="material-icons">home</i>
+                
+            </div>
+            </div>
+            <div class="all-tabs" (click)="goToDetail();">
+                <div class="tabs-icons">
+                    
+                        <i class="material-icons">card_giftcard</i>
+                    
+                </div>
+            </div>
+            <div class="all-tabs-bg" (click)="goTopurchaselist()">
+                <div class="tabs-icons">
+                    <i class="material-icons">currency_rupee</i>
+                </div>
+            </div>
+            <div class="all-tabs" (click)="viewDetails();">
+                <div class="tabs-icons">
+                    <i class="material-icons">account_balance_wallet</i>
+                </div>
+            </div>
+            <div class="all-tabs" (click)="goToMenu();">
+                <div class="tabs-icons">
+                    <i class="material-icons">menu</i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- <div class="pl16 pr16">
         <div class="center-card">
             <div class="cs-profile">
                 <img src="{{uploadurl+pointRight.profile}}" (click)="imageModal(uploadurl+pointRight.profile)"  *ngIf="pointRight.profile != ''">
@@ -37,126 +369,152 @@
             </div>
 
             <div class="profile-progress">
-                <h1>{{'Welcome'}}</h1>
+                <h1>{{'Welcome' |translate}}</h1>
                 <h2>{{influencer_detail.name | titlecase}}</h2>
             </div>
 
 
 
-            <div class="my-wallet flat"
-                *ngIf="pointRight.scanning_rights == 'Yes' || pointRight.point_transfer_rights == 'Yes' ">
+            <div class="my-wallet flat">
                 <div class="pts-icon">
                     <i class="material-icons">account_balance_wallet </i>
-                    Total Points
+                    {{'Total Points' |translate }}
                 </div>
                 <div class="pts">
                     {{pointRight.wallet_point ? pointRight.wallet_point :'0'}}
                 </div>
             </div>
+            <div class="my-wallet flat">
+                    <div class="pts-icon">
+                        <i class="material-icons">account_balance_wallet </i>
+                        Total Point Earn
+                    </div>
+                    <div class="pts">
+                        {{pointRight.total_points_earned ? pointRight.total_points_earned :'0'}}
+
+                    </div>
+                </div>
+              
+                <div class="my-wallet flat">
+                    <div class="pts-icon">
+                        <i class="material-icons">account_balance_wallet </i>
+                        Total Reward Point
+                    </div>
+                    <div class="pts">
+                        {{pointRight.total_reward_point ? pointRight.total_reward_point :'0'}}
+
+                    </div>
+                </div>
+                <div class="my-wallet flat">
+                    <div class="pts-icon">
+                        <i class="material-icons">account_balance_wallet </i>
+                        Total Redeemed Point
+                    </div>
+                    <div class="pts">
+                        {{pointRight.total_redeemed_points ? pointRight.total_redeemed_points :'0'}}
+
+                    </div>
+                </div>
 
 
         </div>
 
 
         <div class="home-btn-group">
-            <!-- <ng-container *ngIf="influencer_detail.user_type == 1 && influencer_detail.status =='Verified' ">
-                <div class="outline-btn" (click)="scanCoupon()">
-                    <div class="icons"><ion-icon name="qr-scanner"></ion-icon></div>
-                    {{'Click here for scan'}}
-                </div>
-            </ng-container> -->
-
-
-            <div class="outline-btn" (click)="Scaning()" *ngIf="pointRight.scanning_rights == 'Yes'">
-                <div class="icons"><i class="material-icons">qr_code_scanner</i></div>
-                {{'Scan'}}
+          
+            <div class="outline-btn" (click)="goTopurchaselist()">
+                <i class="material-icons">card_giftcard</i>
+                {{'Purchase' |translate}}
             </div>
-               
-            <!-- <div class="outline-btn" (click)="goToCoupon()" *ngIf="pointRight.scanning_rights == 'Yes'">
-                <div class="icons"><i class="material-icons">qr_code</i></div>
-                {{'Enter Code'}}
-            </div> -->
 
-            <div class="outline-btn" (click)="goOnPointeListPage()"
-                *ngIf="pointRight.scanning_rights == 'Yes' || pointRight.point_transfer_rights == 'Yes' ">
+
+          
+
+
+            <div class="outline-btn" (click)="goOnPointeListPage()">
                 <div class="icons"><i class="material-icons">receipt_long</i></div>
-                {{'Point History'}}
+                {{'Point History' |translate}}
             </div>
          
 
 
             <div class="outline-btn" (click)="goOnDigitalcatPage();">
                 <i class="material-icons">picture_as_pdf</i>
-                {{'Catalogues'}}
+                {{'Catalogues' |translate}}
             </div>
-            <div class="outline-btn" (click)="goOnProductPage()">
-                <i class="material-icons ">category</i>
-               {{'Products'}}
-            </div>
+          
 
-            <div class="outline-btn" (click)="goToComplaint()">
-                <i class="material-icons">support_agent</i>
-                {{'Complaint'}}
-            </div>
+           
 
-            <div class="outline-btn" (click)="goToInstallation()">
-                <i class="material-icons">construction</i>
-                {{'Installation'}}
-            </div>
+         
 
-            <div class="outline-btn" (click)="goToSpare()">
-                <i class="material-icons">build</i>
-                {{'Spare'}}
-            </div>
-
-            <div class="outline-btn" (click)="influencer_detail.status != 'Approved' ?  goToGift() : goToDetail()"
-                *ngIf="pointRight.scanning_rights == 'Yes' || pointRight.point_transfer_rights == 'Yes' ">
+            <div class="outline-btn" (click)="goToDetail()"
+                >
                 <i class="material-icons">card_giftcard</i>
-                {{'Redeem Points'}}
+                {{'Redeem Points' |translate}}
             </div>
 
             <div class="outline-btn" (click)="goToTracker();"
-                *ngIf="pointRight.scanning_rights == 'Yes' || pointRight.point_transfer_rights == 'Yes' ">
+                >
                 <i class="material-icons">fmd_good</i>
-                {{'Track Request'}}
+                {{'Track Request' |translate}}
             </div>
-            <div class="outline-btn" (click)="goToSurvey()">
-                <i class="material-icons ">poll</i>
-                {{'Survey'}}
-            </div>
-            <!-- <div class="outline-btn" (click)="goToBonusPoint();" *ngIf="pointRight.scanning_rights == 'Yes' || pointRight.point_transfer_rights == 'Yes' ">
-            <i class="material-icons">fmd_good</i>
-            {{'Bonus Point'}}
-        </div> -->
+          
 
             <div class="outline-btn" (click)="goToVideo();">
                 <i class="material-icons">play_circle</i>
-                {{'Videos'}}
+                {{'Videos'|translate}}
             </div>
+
+
+            <div class="outline-btn" (click)="goOnfaqPage()"
+            >
+            <div class="icons"><i class="material-icons">fmd_good</i></div>
+            {{'Faq'|translate}}
+        </div>
+
+        <div class="outline-btn" (click)="goTospin();"
+        >
+        <i class="material-icons">sports_soccer</i>
+        {{'Spin & Win'|translate}}
+    </div>
+
+    <div class="outline-btn" (click)="Super30Page();"
+    >
+    <i class="material-icons">leaderboard</i>
+    {{'Leader Board'|translate}}
+      </div>
 
             <div class="outline-btn" (click)="goToAbout();">
                 <i class="material-icons">info</i>
-                {{'About Us'}}
+                {{'Program Booklet'|translate}}
             </div>
 
             <div class="outline-btn" (click)="goToContact();">
                 <i class="material-icons">contact_phone</i>
-                {{'Contact Us'}}
+                {{'Contact Us'|translate}}
             </div>
+
+
 
             <div class="outline-btn" (click)="goToProfile();">
                 <i class="material-icons">person</i>
-                {{'Profile'}}
+                {{'Profile'|translate}}
             </div>
 
 
             <div class="outline-btn" (click)="goToSupport();">
                 <i class="material-icons">help</i>
-                {{'Support'}}
+                {{'Support'|translate}}
+            </div>
+            <div class="outline-btn" (click)="gotoChangeLang();">
+                <i class="material-icons">g_translate</i>
+                {{'Change Language'|translate}}
             </div>
         </div>
+     
 
-    </div>
+    </div> -->
 
 </div>
     <ng-container>

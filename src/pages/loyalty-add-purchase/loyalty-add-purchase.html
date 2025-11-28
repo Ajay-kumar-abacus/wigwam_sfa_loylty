@@ -1,0 +1,364 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title class="f14">
+      {{mode?('Edit Purchase'):('Add Purchase Order')}}
+    </ion-title>
+    <ion-buttons end>
+          
+      <!-- <button ion-button icon-only class="share-text" (click)="gotoDraft()">
+          <ion-icon name="cart" color="secondary"></ion-icon>
+          <span style="position: absolute; top: -5px; right: -5px; background-color: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px; line-height: 1;">
+            {{add_list.length ? add_list.length : 0}}
+        </span>
+      </button> -->
+  </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <form  #f="ngForm" (ngSubmit)="f.valid && submit()">
+    <div class="form">
+      <ion-list no-lines>
+      
+ 
+    
+
+        <ion-item [ngClass]="{'error':f.submitted && dealer_id?.invalid}">
+          <ion-label floating >{{'Select Supplier' | translate}}<strong class="red-text">*</strong></ion-label>
+          <ionic-selectable 
+          item-content 
+          [(ngModel)]="data.dealer_id" 
+          #dealer_id="ngModel"
+          [items]="influcencersList"
+          name="dealer_id"
+          itemValueField="id"
+          itemTextField="company_name"
+          [hasVirtualScroll]="true"
+          [disabled]="add_list.length>0"
+          (onSearch)="onSearch($event)"
+          [canSearch]="true"
+          (ngModelChange)="getBrands(data.dealer_id);cartData.brand=''"
+           required >
+        </ionic-selectable>
+      </ion-item>
+
+
+       <ion-item [ngClass]="{'error':f.submitted && contractor_id?.invalid}"  *ngIf="constant.UserLoggedInData.loggedInUserType!='Other'">
+            <ion-label floating >{{'Select PE/AMB' | translate}}<strong class="red-text">*</strong></ion-label>
+            <ionic-selectable 
+            item-content 
+            [(ngModel)]="data.contractor_id" 
+            #contractor_id="ngModel"
+            [items]="contractorList"
+            name="contractor_id"
+            itemValueField="id"
+            itemTextField="company_name"
+            [hasVirtualScroll]="true"
+            [disabled]="add_list.length>0"
+            (onSearch)="oncontractorSearch($event)"
+            (ngModelChange)="getBrands(data.dealer_id)"
+          
+            [canSearch]="true" required >
+          </ionic-selectable>
+        </ion-item>
+
+
+      <div class="dflex1">
+        
+        <ion-item  class="wp50" [ngClass]="{'error':f.submitted && brand?.invalid}">
+          <ion-label floating>{{'Brand' | translate}} <strong class="red-text">*</strong></ion-label>
+          <ionic-selectable item-content name="brand" #brand="ngModel" [(ngModel)]="cartData.brand"
+              [items]="brandList" itemValueField="brand" itemTextField="brand" [canSearch]="true"
+              #itemselectable modalCssClass="f1" (ngModelChange)="getThickness(cartData.brand);"></ionic-selectable>
+
+      </ion-item>
+        
+      <ion-item class="wp50 ml8"   [ngClass]="{'error':f.submitted && thickness?.invalid}">
+        <ion-label floating>{{'Thickness' | translate}} <strong class="red-text">*</strong></ion-label>
+        <ion-select interface="action-sheet" name="thickness" [(ngModel)]="cartData.thickness" #thickness="ngModel"
+            (ngModelChange)="getSize(cartData.thickness);">
+            <ion-option *ngFor="let row of thicknessList"
+                value="{{row.thickness}}">{{row.thickness}}</ion-option>
+        </ion-select>
+    </ion-item>
+        
+    </div>
+
+
+    <div class="dflex1">
+
+      <ion-item  class="wp50"  [ngClass]="{'error':f.submitted && size?.invalid}">
+        <ion-label floating>{{'Size' | translate}} <strong class="red-text">*</strong></ion-label>
+        <ion-select interface="action-sheet" name="size" [(ngModel)]="cartData.size" #size="ngModel"
+            (ngModelChange)="getProductData();">
+            <ion-option *ngFor="let row of sizeList" value="{{row.size}}">{{row.size}}</ion-option>
+        </ion-select>
+    </ion-item>
+  <ion-item  class="wp50 ml8" *ngIf="cartData.brand && cartData.thickness && cartData.size">
+    <ion-label floating>{{'Qty' | translate}} <strong class="red-text">*</strong></ion-label>
+    <ion-input type="number" name="qty" [(ngModel)]="cartData.qty" #qty="ngModel" [maxlength]="10" (ionChange)="checkMatch()"
+        onkeypress="return event.charCode>=48 && event.charCode<=57"></ion-input>
+  </ion-item>
+
+
+    </div>
+  <p *ngIf="cartData.brand && cartData.thickness && cartData.size" style="font-size:12px;text-align: end;">{{'Max Qty' | translate}} :  {{inventoryMaxqty}}</p>
+
+
+
+    
+        <!-- <ion-item [ngClass]="{'cs-error':f.submitted && invoice_date?.invalid}">
+          <ion-label floating floating>{{'Invoice Date' | translate}} <strong class="red-text">*</strong></ion-label>
+          <ion-datetime display-format="MMM DD, YYYY" type="text"  [max]="today_date" name="invoice_date" #invoice_date="ngModel" [(ngModel)]="data.invoice_date" [disabled]="add_list.length>0" required></ion-datetime>
+      </ion-item> -->
+
+      <!-- <p *ngIf="f.submitted && invoice_date?.invalid" class="error-line relative">Invoice Date is Required!</p> -->
+
+
+          <!-- <ion-item class="cs-input" [ngClass]="{'error':f.submitted && invoice_no?.invalid}">
+            <ion-label floating>{{'Invoice No.' | translate}}<strong class="red-text">*</strong></ion-label>
+            <ion-input type="tel"  name="invoice_no" #invoice_no="ngModel" min="0"    maxlength="12"  [(ngModel)]="data.invoice_no"  [disabled]="add_list.length>0" required></ion-input>
+          </ion-item> -->
+        
+    
+        
+        <ng-container >
+          <!-- <ion-item [ngClass]="{'error':f.submitted && contractor_id?.invalid}"  *ngIf="constant.UserLoggedInData.loggedInUserType!='Other'">
+            <ion-label floating >{{'Select PE/AMB' | translate}}<strong class="red-text">*</strong></ion-label>
+            <ionic-selectable 
+            item-content 
+            [(ngModel)]="data.contractor_id" 
+            #contractor_id="ngModel"
+            [items]="contractorList"
+            name="contractor_id"
+            itemValueField="id"
+            itemTextField="company_name"
+            [hasVirtualScroll]="true"
+            [disabled]="add_list.length>0"
+            (onSearch)="oncontractorSearch($event)"
+          
+            [canSearch]="true" required >
+          </ionic-selectable>
+        </ion-item> -->
+    </ng-container>
+
+
+  
+    <div class="mt16" *ngIf="cartData.qty>0  && this.productData ">
+      <button type="button"  ion-button block class="capitalize"  [disabled]="!addToListButton" (click)="addToList()">{{'Add To List' | translate}}</button>
+  </div>
+
+    
+    <!-- <ng-container  *ngIf="add_list.length>0">
+        <div class="cs-list mt15" style="border-radius:0px; background: #fff;box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.3);" *ngFor="let row of add_list;let i=index">
+          <div class="top-block">
+            <p><strong>{{row.product_name}}</strong></p>
+            
+          </div>
+
+          <div class="middle-block" >
+
+            <div class="three-block">
+              <p>{{'Code' | translate}} : <strong >{{row.product_code}} </strong> </p>
+              <button><i class="material-icons red-clr" (click)="listdelete(i)">delete_sweep</i></button>
+              
+            </div>
+            <div class="three-block">
+              <p>{{'Dealer Inventory' | translate}} : {{row.maxqty}} </p>
+
+              <p>{{'QTY' | translate}} : {{row.qty}} </p>
+
+            </div>
+
+
+          
+         
+    
+          
+           
+            
+          </div>
+         
+        </div>
+
+    
+    </ng-container> -->
+
+   <ng-container *ngIf="add_list.length>0 &&  cartData.brand=='' ">
+    <div class="cs-heading1 pl0" >
+      <p>REVIEW YOUR INVOICE</p>
+    </div>
+
+    <div class="cs-list mt15" style="border-radius:0px">
+      <div class="top-block">
+        <p><strong>YOUR PRODUCT:</strong></p>
+      </div>
+      <div class="middle-block" style="border-bottom: 1px dashed #ccc;" *ngFor="let row of add_list;let i=index">
+        <div class="three-block">
+      
+          <p>{{row.product_name}} {{row.product_code}} </p>
+          <button><i class="material-icons red-clr" (click)="listdelete(i)">delete_sweep</i></button>
+        
+          
+        </div>
+        <div class="three-block">
+          <p>{{'Point You May Earn' | translate}} : {{row.qty * row.influencer_point}} </p>
+          <p>{{'QTY' | translate}} : {{row.qty}} </p>
+      
+      
+        </div>
+      
+      
+       
+        
+      </div>
+      </div>
+
+      <ng-container >
+        <div class="cs-list mt15" style="border-radius:0px">
+          <div class="top-block">
+            <p><strong>SELLER INFO:</strong></p>
+          </div>
+          <div class="middle-block">
+            <p>{{data.dealer_id.company_name}} -{{data.dealer_id.dr_code}}  </p>
+      
+            <div class="three-block">
+      
+              <p>{{data.dealer_id.district}},{{data.dealer_id.state}} -{{data.dealer_id.email}}  </p>
+             
+            </div>
+            <div class="three-block">
+              <p *ngIf="data.dealer_id.gst">{{'GST NO.' | translate}} : {{data.dealer_id.gst}}  </p>
+      
+            </div>
+      
+          
+           
+            
+          </div>
+        </div>
+      </ng-container>
+      
+
+  <div class="dflex1">
+
+     <ion-item class="wp50" [ngClass]="{'error':f.submitted && invoice_no?.invalid}">
+        <ion-label floating>{{'Invoice No.' | translate}}<strong class="red-text">*</strong></ion-label>
+        <ion-input type="text"  name="invoice_no" #invoice_no="ngModel" maxlength="20"  [(ngModel)]="data.invoice_no"  required></ion-input>
+      </ion-item>
+    
+    <ion-item  class="wp50 ml8"  [ngClass]="{'error':f.submitted && invoice_date?.invalid}">
+      <ion-label floating >{{'Invoice Date' | translate}} <strong class="red-text">*</strong></ion-label>
+      <ion-datetime display-format="MMM DD, YYYY" type="text"  [max]="today_date" name="invoice_date" #invoice_date="ngModel" [(ngModel)]="data.invoice_date" required></ion-datetime>
+  </ion-item>
+
+    
+
+    
+</div>
+
+<div class="dflex1">
+
+  <ion-item class="wp50"  [ngClass]="{'error':f.submitted && customer_name?.invalid}">
+     <ion-label floating>{{'Customer Name' | translate}}<strong class="red-text">*</strong></ion-label>
+     <ion-input type="text"  name="customer_name" #customer_name="ngModel"   [(ngModel)]="data.customer_name"  required></ion-input>
+   </ion-item>
+
+   <ion-item class="wp50 ml8" [ngClass]="{'error':f.submitted && customer_mobile_no?.invalid}">
+    <ion-label floating>{{'Customer Mobile' | translate}}<strong class="red-text">*</strong></ion-label>
+    <ion-input type="tel"  name="customer_mobile_no" #customer_mobile_no="ngModel" (keypress)="MobileNumber($event)"   maxlength="10"  [(ngModel)]="data.customer_mobile_no"  required></ion-input>
+  </ion-item>
+ 
+
+
+ 
+</div>
+
+
+
+
+
+<div class="mt10" *ngIf="add_list.length > 0">
+
+ 
+  <div class="time_show amount-listing">
+      <p>Total Sheet</p>
+      <p>{{total_qty}} </p>
+  </div>
+  <div class="time_show amount-listing">
+      <p>Total Point You May Earn</p>
+      <p>{{earn_point}}</p>
+  </div>
+ 
+ 
+</div>
+
+
+</ng-container>
+
+
+
+  
+
+        
+         
+          
+      
+
+ 
+
+
+     
+    <div class="upload-doc mt20"  *ngIf="add_list.length>0">
+      <p class="">{{'Supporting Image'| translate}}<span style="color:red">*</span></p>
+      <ul class="no-padding">
+        <li  class="image-upload" *ngFor="let row of selImages; let i=index" [ngClass]="{'active': data.profile_selected == row.id}">
+          <img src="{{row.id ? uploadurl+row.image : row.image}}">
+          <button class="del"><i class="material-icons"
+            (click)="remove_image(i)">delete_sweep</i></button>
+          </li>
+          
+          <li class="add_image" (click)="selImages.length <= 4 ?  captureMedia() : showLimit('Invoice')">
+            <img src="assets/imgs/upload_imae_icon.png" alt="">
+            {{'Upload' | translate}} <span>{{'Here'}}</span>
+          </li>
+        </ul>
+      </div>
+
+
+      <div class="upload-doc mt20"  *ngIf="add_list.length>0">
+        <p class="">{{'Live Site Image'| translate}}<span style="color:red">*</span></p>
+        <ul class="no-padding">
+          <li  class="image-upload" *ngFor="let row of siteImages; let i=index" [ngClass]="{'active': data.profile_selected == row.id}">
+            <img src="{{row.id ? uploadurl+row.site_image : row.site_image}}">
+            <button class="del"><i class="material-icons"
+              (click)="remove_Siteimage(i)">delete_sweep</i></button>
+            </li>
+            
+            <li class="add_image" (click)="siteImages.length <= 4 ?  captureSiteImage() : showLimit('Site')">
+              <img src="assets/imgs/upload_imae_icon.png" alt="">
+              {{'Upload' | translate}} <span>{{'Here'}}</span>
+            </li>
+          </ul>
+        </div>
+      
+      
+      
+      <div class="mt16" *ngIf="add_list.length>0">
+        <button ion-button block class="capitalize" [disabled]="saveFlag" ><ion-spinner *ngIf="spinner == true"></ion-spinner>{{('Submit Purchase' | translate)}}</button>
+      </div>
+      
+    </ion-list>
+  </div>
+  
+  
+</form>
+
+
+
+
+
+
+</ion-content>
+
+

@@ -1,0 +1,77 @@
+page-purchase-update-status-modal {
+ 
+    .transprant-bg
+    {
+        background: rgba(0, 0, 0, 0.5);
+    }
+    
+    .work-modal
+    {
+        padding: 16px;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+    
+    .work-modal-bg
+    {
+        width: 100%;
+        background: #fff;
+        border-radius: 10px;
+        padding: 16px;
+        box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.5);
+        
+        .head
+        {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: -16px -16px 16px -16px;
+            padding: 10px 16px;
+            border-bottom: 1px solid #cccccc;
+            
+            h2
+            {
+                font-size: 16px;
+            }
+            
+            a
+            {
+                &.close
+                {
+                    line-height: 0px;
+                    
+                    i
+                    {
+                        font-size: 20px;
+                        color: #64104b;
+                    }
+                }
+            }
+        }
+
+        
+    }
+    
+    .resend-otp{
+        display: flex;
+        align-items: center;
+        margin-top: 5px;
+        justify-content: flex-end;
+    
+        button{
+            text-transform: capitalize;
+            padding: 0px 8px;
+            height: 20px;
+            color: #1870f3;
+        }
+    }
+
+
+   
+    
+}
+
+
