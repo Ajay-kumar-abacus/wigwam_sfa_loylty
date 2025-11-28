@@ -1,0 +1,325 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>{{ DrType === 1 ? 'Prospect CP Detail' : 
+            DrType === 3 ? 'Sub Dealer Detail' : 
+            DrType === 7 ? 'Primary OEM Detail' : 
+            DrType === 8 ? 'Ply Expert Detail' : 
+            DrType === 13 ? 'Ambassador Detail' : 
+            DrType === 14 ? 'Builder Detail' : 
+            DrType === 16 ? 'Secondary OEM Detail' : 
+            ' Detail ' }}</ion-title>
+        <ion-buttons end (click)="goToEditPage(distributor_detail)" *ngIf="DrType == 8 || DrType == 13 || DrType == 14">
+            <button ion-button icon-only>
+                <i class="material-icons">edit</i>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <div class="attendance-list flat-list mb10">
+
+        <div class="center-block">
+            <div class="circle" *ngIf="DrType != 8">{{distributor_detail.company_name | slice:0:1}}</div>
+            <h1 class="f12" *ngIf="DrType != 8">{{distributor_detail.company_name?.toUpperCase()}}</h1>
+            <div class="circle" *ngIf="DrType == 8">{{distributor_detail.name | slice:0:1}}</div>
+            <h1 class="f12" *ngIf="DrType == 8">{{distributor_detail.name?.toUpperCase()}}</h1>
+            <p *ngIf="DrType != 8">{{distributor_detail.name | titlecase}} ({{distributor_detail.mobile}})</p>
+            <p *ngIf="DrType == 8">{{distributor_detail.mobile}}</p>
+            <a class="cell-phone" href="tel:{{distributor_detail.mobile}}"><i class="material-icons">phone</i></a>
+        </div>
+        <div class="other-block" *ngIf="DrType != 16 && DrType != 7 ">
+            <p><strong>Leads Referred :</strong> {{distributor_detail.lead_refer ? distributor_detail.lead_refer : '0'}}
+            </p>
+
+            <!-- <p *ngIf="DrType == 1 || DrType == 7 "><strong>Assigned warehouse :</strong>
+                {{distributor_detail.assigned_warehouse_name ? distributor_detail.assigned_warehouse_name : '0'}}</p> -->
+            <p
+                *ngIf=" distributor_detail.address  || distributor_detail.state  || distributor_detail.district  || distributor_detail.city  || distributor_detail.area  || distributor_detail.pincode">
+                <strong>Address :</strong> {{distributor_detail.address}} {{distributor_detail.area_details |
+                titlecase}} {{distributor_detail.district | titlecase}} {{distributor_detail.state | titlecase}}
+            </p>
+
+        </div>
+
+
+    </div>
+
+    <div class="pl16 pr16 mb16">
+
+        <div class="text-heading">Last Checkin & Order</div>
+
+        <div class="countMainContainer">
+            <div class="counters-box or-gr" (click)="go_to('Checkin')">
+                <div class="top-layer">
+                    <i class="material-icons ">my_location</i>
+                    <h6>{{distributor_detail.last_checkin_day != "N/A" ? (distributor_detail.last_checkin_day == 0 ?
+                        'Today' : distributor_detail.last_checkin_day + ' '+" day's ago") : '---'}}</h6>
+                </div>
+                <div class="bottom-layer">
+                    <p>{{distributor_detail.last_checkin != "N/A" ? (distributor_detail.last_checkin | date:'d MMM yyy')
+                        : '---' }}</p>
+                    <span>Last Checkin Day</span>
+                </div>
+            </div>
+            <div class="counters-box bl-gr" (click)="go_to('Primary')"
+                *ngIf="DrType!= 8 && DrType != 13 && DrType != 3 && DrType != 14 && DrType != 16">
+                <div class="top-layer">
+                    <i class="material-icons ">shopping_cart</i>
+                    <h6>{{distributor_detail.primary_ton ?(distributor_detail.primary_ton | number:'1.2-2') + ' Ton' : 0
+                        }}</h6>
+                </div>
+                <div class="bottom-layer">
+                    <p>{{distributor_detail.last_order != "N/A" ? (distributor_detail.last_order | date:'d MMM yyy'):
+                        "---"}}</p>
+                    <span>Last Primary Order</span>
+                </div>
+            </div>
+            <div class="counters-box pn-gr" (click)="go_to('Secondary')" *ngIf="DrType != 7">
+                <div class="top-layer">
+                    <i class="material-icons ">shopping_cart</i>
+                    <h6>
+                        {{DrType == 1 ? distributor_detail.dis_secondary_sheet : distributor_detail.secondary_sheet}}
+                    </h6>
+                </div>
+                <div class="bottom-layer">
+                    <p>
+                        {{DrType == 1 ? (distributor_detail.dis_secondary_sheet_date != '' ?
+                        (distributor_detail.dis_secondary_sheet_date
+                        | date:'d MMM yyy') : '---') : (distributor_detail.secondary_sheet_date != '' ?
+                        (distributor_detail.secondary_sheet_date | date:'d MMM yyy') : '---')}}
+
+                    </p>
+                    <span>Last Secondary Order</span>
+                </div>
+            </div>
+
+            <div class="counters-box pr-gr" (click)="go_to('Stock')" *ngIf="DrType == 3 || DrType == 1">
+                <div class="top-layer">
+                    <i class="material-icons ">inventory_2</i>
+                    <h6>
+                        {{DrType == 3 ? distributor_detail.stock_sheet : distributor_detail.dis_stock_sheet}}
+                    </h6>
+                </div>
+                <div class="bottom-layer">
+                    <p>
+                        {{DrType == 3 ? (distributor_detail.stock_sheet_date != '' ?
+                        (distributor_detail.stock_sheet_date
+                        | date:'d MMM yyy') : '---') : (distributor_detail.dis_stock_sheet_date != '' ?
+                        (distributor_detail.dis_stock_sheet_date | date:'d MMM yyy') : '---')}}
+                    </p>
+                    <span>Last Stock Transfer</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="countMainContainer mt10" *ngIf="Mode == 'My'">
+            <button ion-button round icon-end color="success" class="Buttons wp100" (click)="goToListPage('audit')"
+                *ngIf="DrType == 1">
+                Brand Audit Logs &nbsp;
+                <ion-icon name="arrow-forward"></ion-icon>
+            </button>
+            <button ion-button round icon-end color="success" class="Buttons wp100" (click)="goToListPage('ticket')">
+                Ticket Logs &nbsp;
+                <ion-icon name="arrow-forward"></ion-icon>
+            </button>
+
+
+            <button ion-button round icon-end color="success" class="Buttons wp100" (click)="goToPage('audit')"
+                *ngIf="DrType == 1">
+                Add Brand Audit &nbsp;
+                <ion-icon name="add"></ion-icon>
+            </button>
+            <button ion-button round icon-end color="success" class="Buttons wp100" (click)="goToPage('ticket')">
+                Add Ticket &nbsp;
+                <ion-icon name="add"></ion-icon>
+            </button>
+
+        </div>
+        <div class="main-btn mt16 mb10" *ngIf="Mode == 'My'" (click)="priceList();">
+            <div>
+                <p>price list</p>
+            </div>
+            <i class="material-icons">monetization_on</i>
+            
+        </div>
+
+
+
+         <ng-container *ngIf="distributor_detail.type == 8||distributor_detail.type == 13||distributor_detail.type == 14||distributor_detail.type == 16">
+            <div class="main-btn mt16 mb10" (click)="AssignUser();">
+                <div>
+                    <p>Assign User</p>
+                </div>
+                <i class="material-icons">cached</i>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="distributor_detail.dr_code == '' && distributor_detail.type == 1">
+            <div class="main-btn mt16 mb10" (click)="confirmationAlert('3','Sub Dealer');">
+                <div>
+                    <p>Convert To Sub Dealer</p>
+                </div>
+                <i class="material-icons">cached</i>
+            </div>
+        </ng-container>
+        <!-- <ng-container *ngIf="distributor_detail.type == 16">
+            <div class="main-btn mt16 mb10" (click)="confirmationAlert('7','Primary OEM');">
+                <div>
+                    <p>Convert To Primary OEM</p>
+                </div>
+                <i class="material-icons">cached</i>
+            </div>
+        </ng-container> -->
+
+
+        <div class="border-container mt16" *ngIf="DrType == 1 || DrType == 7">
+            <div class="summary-heading">Payment Details</div>
+            <div class="payment-box">
+                <div class="payment-table">
+                    <table>
+                        <tr>
+                            <td>Credit Limit</td>
+                            <th>{{distributor_detail.credit_limit ? '₹' + distributor_detail.credit_limit : 'N/A'}}</th>
+                        </tr>
+                        <tr>
+                            <td>Credit Days</td>
+                            <th>{{distributor_detail.credit_period ? distributor_detail.credit_period : 'N/A'}}</th>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <ng-container *ngIf="distributor_detail.last_payment_day != 'N/A'">Last Payment on
+                                    <span>{{distributor_detail.last_payment_day == 0 ? 'Today' :
+                                        ( distributor_detail.last_payment_day ? distributor_detail.last_payment_day +
+                                        'day': 0)}}
+                                    </span> Ago
+                                    <span>{{distributor_detail.last_payment ? '₹'+
+                                        distributor_detail.last_payment:'0'}}</span>
+                                </ng-container>
+                                <ng-container *ngIf="distributor_detail.last_payment_day == 'N/A'">Last Payment on
+                                    ---</ng-container>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="OutOver">
+                    <div class="primary-column outstanding">
+                        <p>{{distributor_detail.Outstanding_balance ? '₹' + ''+distributor_detail.Outstanding_balance :
+                            '0'}}</p>
+                        <span>Outstanding</span>
+                    </div>
+                    <div class="primary-column overdue">
+                        <p>{{distributor_detail.overdue ? '₹' + '' + distributor_detail.overdue : '0'}}</p>
+                        <span>Overdue</span>
+                    </div>
+                </div>
+
+                <div class="credit-table">
+                    <table>
+                        <tr *ngFor="let item of inoviceInfo">
+                            <td class="w80">{{item.days}} Days</td>
+                            <th class="w100 f12">{{item.value ? '₹' +''+item.value : '0'}}</th>
+                            <td class="w120 text-center">
+                                <span class="badge-padding"
+                                    [ngClass]="item.payment_slab == 'OUTSTANDING' ?  'outstanding' : 'overDue'">{{item.payment_slab}}</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="border-container mt16" *ngIf="DrType == 1 || DrType == 7">
+            <div class="summary-heading">Target {{currentDate}}</div>
+            <div class="payment-box">
+                <div class="credit-table">
+                    <table>
+                        <tr>
+                            <td class="text-left">Target</td>
+                            <td class="text-left">Achievement </td>
+                            <td class="text-left">Balance</td>
+                        </tr>
+                        <tr>
+                            <th>{{distributor_detail.target}}/-</th>
+                            <th>{{distributor_detail.archived | number:'1.0-0' }}/-</th>
+                            <th [ngClass]="distributor_detail.archived >= distributor_detail.target ?  'approved' : ''">
+                                <ng-container *ngIf="distributor_detail.target > distributor_detail.archived">
+                                    {{distributor_detail.target-distributor_detail.archived | number:'1.0-0'}}/-
+                                </ng-container>
+                                <ng-container *ngIf="distributor_detail.archived >= distributor_detail.target">
+                                    {{distributor_detail.archived-distributor_detail.target | number:'1.0-0'}}/-
+                                </ng-container>
+                            </th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div> -->
+
+
+        <!-- <div class="credit-box">
+            <div class="credit-column single-column mt16">
+                <div class="box">
+                    <div class="Credit">
+                        <div class="credit-column" >
+                            <p>Credit Limit : {{distributor_detail.credit_limit  ? '₹' + distributor_detail.credit_limit : 'N/A'}}</p>
+                        </div>
+                        <div class="credit-column">
+                            <p>Credit Days : {{distributor_detail.credit_period  ?  distributor_detail.credit_period : 'N/A'}}</p>
+                        </div>
+                    </div>
+                    <div class="payment">
+                        <img src="assets/wallet.png" alt="">
+                        <p *ngIf="distributor_detail.last_payment_day != 'N/A'" >Last Payment on <span>
+                        </span> 
+                        <span>{{distributor_detail.last_payment ? '₹'+ distributor_detail.last_payment:'0'}}</span></p>
+                        <p *ngIf="distributor_detail.last_payment_day == 'N/A'" >Last Payment on ---</p>
+                    </div>
+                    
+                    <div style="width: 100%;">
+                        <ul class="followup_slotDetail">
+                            <li class="followupDetail_card" *ngFor="let item of inoviceInfo" >
+                                <div class="followupDetail_cardContent">
+                                    <div class="followup_Time">
+                                        <p>{{item.days}} Days</p>
+                                    </div>
+                                    <div class="followup_Name">
+                                        <p class="outstanding">{{item.value ? '₹' +''+item.value : '0'}}</p>
+                                    </div>
+                                    <div [ngClass]="item.payment_slab == 'OUTSTANDING' ?  'Outstandingbadge' : 'Overduebadge'">
+                                        
+                                        <ion-badge >{{item.payment_slab}}</ion-badge>
+                                    </div>
+                                </div>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="credit-column single-column pt0">
+            <div class="box">
+                <table>
+                    <tr style="background-color:#00648b;">
+                        <td class="text-center">Target {{currentDate}}</td>
+                    </tr>
+                    <tr>
+                        <td>Target</td>
+                        <td>Achievement </td>
+                        <td>Balance</td>
+                    </tr>
+                    <tr>
+                        <td>₹{{distributor_detail.target}}/-</td>
+                        <td>₹{{distributor_detail.archived}}/-</td>
+                        <td *ngIf="distributor_detail.target > distributor_detail.archived">₹{{distributor_detail.target-distributor_detail.archived}}/-</td>
+                        <td *ngIf="distributor_detail.archived >= distributor_detail.target" style="color:green;font-weight:bold"> ₹{{distributor_detail.archived-distributor_detail.target}}/-<i class="material-icons" color="green">add</i></td>
+                    </tr>
+                </table>
+            </div>
+        </div> -->
+    </div>
+
+
+</ion-content>

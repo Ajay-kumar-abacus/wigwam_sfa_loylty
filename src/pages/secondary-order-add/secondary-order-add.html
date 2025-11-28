@@ -1,0 +1,413 @@
+e<ion-header>
+    <ion-navbar>
+        <ion-title>
+            Add {{header}}
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <div>
+        <div class="edit">
+            <ion-list no-lines>
+                <div class="select-type" *ngIf="disableSelect == false">
+                    <ion-list radio-group name="networkType" [(ngModel)]="data.networkType" #networkType="ngModel"
+                        required *ngIf="Type == 'order'" (ionChange)="distributors();"
+                        [disabled]="disableSelectFromCheckin == true">
+                        <ion-item>
+                            <ion-radio value="8" [disabled]="disableSelectFromCheckin == true"></ion-radio>
+                            <ion-label>Ply Expert</ion-label>
+                        </ion-item>
+                        <ion-item>
+                            <ion-radio value="13" [disabled]="disableSelectFromCheckin == true"></ion-radio>
+                            <ion-label>Ambassador</ion-label>
+                        </ion-item>
+                        <ion-item>
+                            <ion-radio value="14" [disabled]="disableSelectFromCheckin == true"></ion-radio>
+                            <ion-label>Builder</ion-label>
+                        </ion-item>
+                        <ion-item>
+                            <ion-radio value="16" [disabled]="disableSelectFromCheckin == true"></ion-radio>
+                            <ion-label>Secondary OEM</ion-label>
+                        </ion-item>
+                        <ion-item>
+                            <ion-radio value="15" [disabled]="disableSelectFromCheckin == true"></ion-radio>
+                            <ion-label>Lead (Site)</ion-label>
+                        </ion-item>
+
+                    </ion-list>
+                </div>
+                <ng-container *ngIf="disableSelectFromCheckin == true && siteName">
+                    <ion-item>
+                        <ion-label floating>Site Name</ion-label>
+                        <ion-input type="text" name="siteName" [(ngModel)]="siteName"
+                            [disabled]="disableSelectFromCheckin == true"></ion-input>
+                    </ion-item>
+                </ng-container>
+                <ng-container *ngIf="!siteName">
+                    <ion-item *ngIf="data.networkType == '8'||data.networkType == '13'">
+                        <ion-label floating>Site Type<strong class="red-text">*</strong></ion-label>
+                        <ion-select interface="action-sheet" name="state" #state="ngModel" [(ngModel)]="data.state"
+                            required (ionChange)="getSite()" [disabled]="disable">
+                            <ion-option value="Assigned">Existing</ion-option>
+                            <ion-option value="No Assigned">New</ion-option>
+                        </ion-select>
+                    </ion-item>
+                    <!-- <ion-item *ngIf="data.state == 'Assigned'">
+                        <ion-label floating>Site<strong class="red-text">*</strong></ion-label>
+                        <ion-select interface="action-sheet" name="site" #site="ngModel" [(ngModel)]="data.site"
+                            required (ionChange)="getSite(data.state)">
+                            <ng-container *ngFor="let row of SiteType">
+                                <ion-option value="{{row.site_id}}">{{row.lead_info}}</ion-option>
+                            </ng-container>
+
+                        </ion-select>
+                    </ion-item> -->
+                    <ion-item class="cs-normal-select retailerSelectionBox mt16" *ngIf="data.state == 'Assigned'">
+                        <ion-label><span>Site<span class="red-text">*</span></span></ion-label>
+                        <ionic-selectable  item-content name="site" [(ngModel)]="data.site" required
+                                          [items]="SiteType" itemValueField="site_id" itemTextField="lead_info" #siteSelectable
+                                          [hasVirtualScroll]="true" [canSearch]="true" (onSearch)="searchSite($event)" (onClose)="closeSite()" >
+                        </ionic-selectable>
+                    </ion-item>
+                    
+
+                    <!-- <ionic-selectable item-content name="distributor_id" [(ngModel)]="data.distributor_id"
+                    [items]="Distributor_list" itemValueField="id" itemTextField="display_name"
+                    [hasVirtualScroll]="true" [canSearch]="true" #dealerSelectable
+                    (onSearch)="searchDealer($event)" (onClose)="closeDealer()" (ngModelChange)="getBrands()">
+                </ionic-selectable> -->
+
+                </ng-container>
+
+                <ng-container *ngIf="data.state == 'No Assigned'">
+                    <div class="heading mb0">
+                        <h1>Add Site</h1>
+                    </div>
+                    <ion-item>
+                        <ion-label floating>Name<strong class="red-text">*</strong></ion-label>
+                        <ion-input type="text" name="name" #name="ngModel" [(ngModel)]="form.name"
+                            (ngModelChange)="(form.name!=null)?form.name[0] = form.name[0].toUpperCase():''"
+                            required></ion-input>
+                    </ion-item>
+
+
+                    <ion-item>
+                        <ion-label floating>Mobile No</ion-label>
+                        <ion-input type="tel" minlength="10" maxlength="10" name="mobile_no" #mobile_no="ngModel"
+                            [(ngModel)]="form.mobile_no" pattern="^[6-9][0-9]{0,9}$" 
+                            (keypress)="MobileNumber($event,form.mobile_no)"></ion-input>
+                    </ion-item>
+
+
+                    <ion-item>
+                        <ion-label floating>Address<strong class="red-text">*</strong></ion-label>
+                        <ion-input type="text" name="address" #address="ngModel" [(ngModel)]="form.address"
+                            required></ion-input>
+                    </ion-item>
+
+                    <ion-item no-lines>
+                        <ion-label floating>Pincode<strong class="red-text">*</strong></ion-label>
+                        <ion-input type="tel" minLength="6" maxLength="6" name="pincode" #pincode="ngModel"
+                            [(ngModel)]="form.pincode" (input)="form.pincode.length==6 && getSateteDistrcit()"
+                            required></ion-input>
+                    </ion-item>
+
+                    <ion-item>
+                        <ion-label floating>State <strong class="red-text">*</strong></ion-label>
+                        <ion-select name="state" interface="action-sheet" #state="ngModel" [(ngModel)]="form.state"
+                            (ionChange)="get_district()" required>
+                            <ion-option *ngFor="let row of state_list;let i=index;"
+                                value="{{row.state_name}}">{{row.state_name |
+                                titlecase}}</ion-option>
+                        </ion-select>
+                    </ion-item>
+
+                    <ion-item>
+                        <ion-label floating>District <strong class="red-text">*</strong></ion-label>
+                        <ion-select name="district" interface="action-sheet" #district="ngModel"
+                            [(ngModel)]="form.district" (ionChange)="getCityList1()" required>
+                            <ion-option *ngFor="let row of district_list"
+                                value="{{row.district_name}}">{{row.district_name}}
+                            </ion-option>
+                        </ion-select>
+                    </ion-item>
+
+                    <ion-item >
+                        <ion-label floating>City <strong class="red-text">*</strong></ion-label>
+                        <ion-select interface="action-sheet"name="city" [(ngModel)]="form.city" #city="ngModel" required>
+                          <ion-option *ngFor="let row of city_list1" value="{{row.city}}">{{row.city}}
+                          </ion-option>
+                        </ion-select>
+                      </ion-item>
+
+                      <div class="upload-doc mt0 pl10 pr10">
+                        <ul class="no-padding">
+                            <li class="add_image mt0" 
+                                (click)="image_data.length <= 6?  captureMedia() : showLimit()">
+                                <img src="assets/imgs/upload_imae_icon.png" alt="">
+                                Upload Site Image <span>here</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="upload-doc mt0 pl10 pr10">
+                        <ul class="no-padding">
+                    <li class="image-upload" *ngFor="let pic of image_data; let i = index;">
+                        <img src="{{ pic.image }}">
+                        <button class="del" (click)="remove_image(i)"><i
+                                class="material-icons">delete_sweep</i></button>
+                    </li>
+                    </ul>
+                    </div>
+
+                    <div class="pl10 pr10 mt8"
+                        *ngIf="form.city && form.district && form.name && form.address && form.pincode && form.state">
+                        <button ion-button block color="primary" [disabled]='savingFlag' style="width: 100px;" (click)="saveSite()">
+                            <ion-spinner *ngIf="savingFlag"></ion-spinner>&nbsp;Save
+                        </button>
+                    </div>
+
+                </ng-container>
+                <div class="heading mb0" *ngIf="data.site || data.networkType=='13' ||data.networkType=='8' ">
+                    <h1>Add Order Details</h1>
+                </div>
+
+                <ng-container *ngIf="data.networkType || Type == 'stock'">
+                    <ion-item class="cs-normal-select retailerSelectionBox mt16">
+                        <ion-label *ngIf="data.networkType == '8'"><span>Ply Expert
+                                <span>*</span></span></ion-label>
+                        <ion-label *ngIf="data.networkType == '13'"><span>Ambassador<span>*</span></span></ion-label>
+                        <ion-label *ngIf="data.networkType == '15'"><span>Lead (Site)<span>*</span></span></ion-label>
+                        <ion-label *ngIf="data.networkType == '16'"><span>Secondary OEM<span>*</span></span></ion-label>
+                        <ion-label *ngIf="data.networkType == '14'"><span>Builder <span>*</span></span></ion-label>
+                        <ion-label *ngIf="data.networkType == '3' && Type == 'stock'"><span>Sub-Dealer
+                                <span>*</span></span></ion-label>
+                        <ionic-selectable item-content [(ngModel)]="data.type_name" [items]="drList" itemValueField="id"
+                            itemTextField="display_name" [hasVirtualScroll]="true" [canSearch]="true" #dealerSelectable
+                            (onSearch)="searchDealer($event)" [canSearch]="true" (onClose)="closeDealer()" (ngModelChange)="get_distributor_list(data.type_name,'')"
+                            [disabled]="(disableSelectFromCheckin == true)">
+                        </ionic-selectable>
+                    </ion-item>
+                </ng-container>
+                <ng-container *ngIf="data.type_name">
+
+                    <ion-item>
+                        <ion-label floating>Supplier Type</ion-label>
+                        <ion-select interface="action-sheet" name="customer_type" #customer_type="ngModel"
+                            [(ngModel)]="data.customer_type" required
+                            (ionChange)="get_distributor_list(data.type_name,'')">
+                            <ion-option value="1">Channel Partner</ion-option>
+                            <ion-option value="3" *ngIf="Type != 'stock'">Sub Dealer</ion-option>
+                        </ion-select>
+                    </ion-item>
+
+
+                    <ion-item class="cs-normal-select retailerSelectionBox mt16" *ngIf="data.customer_type">
+                        <ion-label><span>{{data.customer_type == '1' ? 'Channel Partner' : 'Sub Dealer'}}
+                                <span>*</span></span></ion-label>
+                        <ionic-selectable item-content name="distributor_id" [(ngModel)]="data.distributor_id"
+                            [items]="Distributor_list" itemValueField="id" itemTextField="display_name"
+                            [hasVirtualScroll]="true" [canSearch]="true" #dealerSelectable
+                            (onSearch)="searchDealer1($event)" (onClose)="closeDealer()" (ngModelChange)="getBrands()">
+                        </ionic-selectable>
+                    </ion-item>
+                </ng-container>
+
+                <ion-item class="cs-normal-select retailerSelectionBox mt16" *ngIf="data.distributor_id" >
+                    <ion-label>Category Type<strong class="red-text">*</strong></ion-label>
+                    <ion-select interface="action-sheet" name="product_type" #product_type="ngModel" [disabled]="true" [(ngModel)]="data.product_type" (ngModelChange)="product_type_disable=true"
+                    required>
+                      <ion-option value="SS">SS</ion-option>
+                      <ion-option value="S">S</ion-option>
+                    </ion-select>
+                  </ion-item>
+
+                <ion-item class="cs-normal-select retailerSelectionBox mt16" *ngIf="data.distributor_id">
+                    <ion-label>Brand <strong class="red-text">*</strong></ion-label>
+                    <ionic-selectable item-content name="brand" #brand="ngModel" [(ngModel)]="data.brand"
+                        [items]="brandList" itemValueField="brand_code" itemTextField="display_name" [canSearch]="true"
+                        #itemselectable modalCssClass="f1"
+                        (ngModelChange)="getThickness(data.brand)"></ionic-selectable>
+                </ion-item>
+
+
+                <ion-item class="cs-normal-select retailerSelectionBox mt16" *ngIf="data.distributor_id">
+                    <ion-label>Thickness <strong class="red-text">*</strong></ion-label>
+                    <ion-select interface="action-sheet" name="thickness" [(ngModel)]="data.thickness"
+                        #thickness="ngModel" (ngModelChange)="getSize(data.thickness);">
+                        <ion-option *ngFor="let row of thicknessList"
+                            value="{{row.thickness}}">{{row.thickness}}</ion-option>
+                    </ion-select>
+                </ion-item>
+
+
+
+
+                <ion-item class="cs-normal-select retailerSelectionBox mt16" *ngIf="data.distributor_id">
+                    <ion-label>Size <strong class="red-text">*</strong></ion-label>
+                    <ion-select interface="action-sheet" name="size" [(ngModel)]="data.size" #size="ngModel"
+                        (ngModelChange)="getProductData();">
+                        <ion-option *ngFor="let row of sizeList" value="{{row.size}}">{{row.size}}</ion-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item class="cs-normal-select retailerSelectionBox mt16"
+                    *ngIf="data.size && data.thickness && data.brand">
+                    <ion-label floating>No. of Sheets <strong class="red-text">*</strong></ion-label>
+                    <ion-input type="number" name="qty" [(ngModel)]="data.qty" #size="ngModel"
+                        placeholder="No. of Sheets"
+                        (ngModelChange)="(data.qty == '' || data.qty == null || data.qty<1 )?(addToListButton = true):(addToListButton = false);"
+                        onkeypress="return event.charCode>=48 && event.charCode<=57"></ion-input>
+                </ion-item>
+
+
+
+            </ion-list>
+
+            
+            <div class="mt16" *ngIf="data.qty">
+                <button ion-button class="cs-btn" [disabled]="addToListButton" (click)="addToList()">
+                    <span *ngIf="addToListButton">Please Wait</span>
+                    <ion-spinner *ngIf="addToListButton" name="dots"></ion-spinner>
+                    <span *ngIf="!addToListButton">Add To List</span>
+                </button>
+            </div>
+
+            <div class="cs-heading1 pl0" *ngIf="product_list.length">
+
+                <p>PRODUCT INFORMATION</p>
+
+            </div>
+
+            <div class="list-box mt10" *ngFor="let row of product_list;let i=index">
+                <div class="mid mt0" style="display: flex;justify-content: space-between;">
+                    <div class="content-info">
+                        <div class="right-info">
+                            <p style="color:rgb(0, 119, 255)">{{row.segment_name}}</p>
+                            <div class="mt2 mb2" style="display:flex;flex-direction:row">
+                                <p class="pr2" style="color:rgb(255, 153, 0)">#{{i+1}} </p>
+                                <p> {{row.product_name}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tag-info">
+                        <button><i class="material-icons red-clr" (click)="DeleteItem(i)">delete_sweep</i></button>
+                    </div>
+                </div>
+
+                <div class="three_boxes">
+                    <div class="lower">
+                        <p class="font10">Brand</p>
+                        <p class="font10">{{row.brand}}</p>
+                    </div>
+                    <div class="lower ml5">
+                        <p class="font10">Thickness</p>
+                        <p class="font10">{{row.thickness}}</p>
+                    </div>
+                    <div class="lower ml5">
+                        <p class="font10">Category</p>
+                        <p class="font10">{{row.product_type}}</p>
+                    </div>
+
+                </div>
+
+                <div class="three_boxes">
+                    <div class="lower">
+                        <p class="font10">No. of Sheets</p>
+                        <p class="font10">{{row.qty}}</p>
+                    </div>
+                    <div class="lower ml5">
+                        <p class="font10">Size</p>
+                        <p class="font10">{{row.size}}</p>
+                    </div>
+                    <div class="lower ml5">
+                        <p class="font10">Price</p>
+                        <p class="font10">&#x20B9; {{row.total_price | number:'1.2-2'}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="edit pl0 pr0 pb0" *ngIf="product_list.length">
+                <ion-list no-lines>
+                    <div class="gst-type">
+                        <ion-list radio-group name="gst_type" [(ngModel)]="data.gst_type" #gst_type="ngModel"
+                            [disabled]="add_list.length > 0"
+                            (ionChange)="applyExtraDiscounts(data.discount);" class="gst-type">
+                            <ion-item ><ion-label>APPLY GST</ion-label></ion-item>
+                            <ion-item [ngClass]="{'active': data.gst_type == 'Gst Paid' }">
+                                <ion-radio value="Gst Paid"></ion-radio>
+                                <ion-label>YES</ion-label>
+                            </ion-item>
+                            <ion-item [ngClass]="{'active': data.gst_type == 'Gst Extra'}">
+                                <ion-radio value="Gst Extra"></ion-radio>
+                                <ion-label>NO</ion-label>
+                            </ion-item>
+                        </ion-list>
+                    </div>
+                </ion-list>
+            </div>
+            <div class="cart-bottom" *ngIf="product_list.length">
+                <input type="number" name="discount" [(ngModel)]="data.discount" placeholder="Discount %">
+                <button (click)="applyExtraDiscounts(data.discount);" ion-button round color="primary"><i class="material-icons">add</i></button>
+             </div>
+
+           
+            
+
+            <div class="mt10" *ngIf="product_list.length > 0">
+
+                <div class="time_show amount-listing">
+                    <p>Total Item</p>
+                    <p>{{product_list.length}}</p>
+                </div>
+                <div class="time_show amount-listing">
+                    <p>Total No. of Sheets</p>
+                    <p>{{total_qty}}</p>
+                </div>
+                <div class="time_show amount-listing">
+                    <p>Total Amount</p>
+                    <p>&#x20B9; {{totalPrice | number:'1.2-2'}}</p>
+                </div>
+                <div class="time_show amount-listing">
+                    <p>Total Discount ({{extraDiscountPercentage}}%)</p>
+                    <p>&#x20B9; {{extra_discount_amount | number:'1.2-2'}}</p>
+                </div>
+                <div class="time_show amount-listing">
+                    <p>Net Price</p>
+                    <p>&#x20B9; {{priceAfterextraDiscount | number:'1.2-2'}}</p>
+                </div>
+                <div class="time_show amount-listing">
+                    <p>GST(18%)</p>
+                    <p>&#x20B9; {{totalGSTApplied | number:'1.2-2'}}</p>
+                </div>
+                <div class="time_show amount-listing">
+                    <p>Grand Total</p>
+                    <p>&#x20B9; {{totalPriceAfterGST | number:'1.2-2'}}</p>
+                </div>
+            </div>
+
+
+            <ion-list *ngIf="product_list.length && !disableSelectFromCheckin">
+
+                <ion-item class="cs-textarea1 ">
+                    <ion-label floating><span>Any Remarks <strong class="red-text">*</strong></span></ion-label>
+                    <ion-textarea name="remark" [(ngModel)]="data.remark" onpaste="return false;"></ion-textarea>
+                </ion-item>
+            </ion-list>
+
+
+
+            <div class="mt16 mb16" *ngIf="product_list.length > 0" >
+
+
+                <button ion-button [disabled]="btndisable" class="Buttons wp100"
+                    (click)="user_data.order_status='Pending';save_orderalert('save');">
+                    <ion-spinner *ngIf="btnDisableSave"></ion-spinner>
+                    Save
+                </button>
+
+
+            </div>
+
+        </div>
+    </div>
+    <!-- </div> -->
+</ion-content>

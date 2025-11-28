@@ -1,0 +1,25 @@
+page-brand-audit-add {
+    .radio-section {
+        margin-top: 16px;
+        ion-list {
+            &.choose {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+            }
+
+            ion-item {
+                padding: 6px !important;
+                border: 1px solid #D4D4D4;
+                min-height: 0px !important;
+                    .item-inner {
+                        flex-direction: row-reverse;
+
+                    }
+           
+
+
+            }
+        }
+    }
+}

@@ -1,0 +1,133 @@
+<!--
+  Generated template for the AddInstallationPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header class="main-header remove">
+  <ion-navbar>
+      <ion-title>Add New Installation</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content >
+  <form class="edit" #f="ngForm" (ngSubmit)="f.form.valid && saveComplaint()">
+      <div class="cs-heading1">
+          <p class="mb0">Basic information</p>
+      </div>
+      
+      <div class="edit">
+          <ion-list>
+              <ion-item [ngClass]="{'error':f.submitted && mobile?.invalid}" style="background: transparent !important;">
+                  <ion-label floating><span>Mobile Number</span> </ion-label>
+                  <ion-input type="text" name="mobile" #mobile="ngModel" [(ngModel)]="form.mobile" required></ion-input>
+              </ion-item>
+              <div *ngIf="f.submitted &&mobile.invalid" class="eror">
+                  <p *ngIf="mobile.errors.required">{{'Mobile Number is Required'}}</p>
+              </div>
+              
+              <ion-item [ngClass]="{'error':f.submitted && name?.invalid}" style="background: transparent !important;">
+                  <ion-label floating><span>Name</span></ion-label>
+                  <ion-input type="text" name="name" #name="ngModel" [(ngModel)]="form.name" required></ion-input>
+              </ion-item>
+              <div *ngIf="f.submitted &&name.invalid" class="eror">
+                  <p *ngIf="name.errors.required">{{'Name Number is Required'}}</p>
+              </div>
+              
+              <ion-item [ngClass]="{'error':f.submitted && state?.invalid}">
+                  <ion-label floating>State <strong class="red-text">*</strong></ion-label>
+                  <ion-select name="state" name="state" #state="ngModel" [(ngModel)]="form.state" (ionChange)="get_district(form.state)" required>
+                      <ion-option *ngFor="let row of stateList;let i=index;" value="{{row.state_name}}" >{{row.state_name | titlecase}}</ion-option>
+                  </ion-select>
+              </ion-item>
+              <div *ngIf="f.submitted &&state.invalid" class="eror">
+                  <p *ngIf="state.errors.required">{{'Field is Required'}}</p>
+              </div>
+              <ion-item [ngClass]="{'error':f.submitted && district?.invalid}">
+                  <ion-label floating>District <strong class="red-text">*</strong></ion-label>
+                  <ion-select name="district" #district="ngModel" [(ngModel)]="form.district" (ionChange)="getCityList()" required> 
+                      <ion-option *ngFor="let row of districtList" value="{{row.district_name}}">{{row.district_name}}
+                      </ion-option>
+                  </ion-select>
+              </ion-item>
+              <div *ngIf="f.submitted &&district.invalid" class="eror">
+                  <p *ngIf="district.errors.required">{{'Field is Required'}}</p>
+              </div>
+              
+              <ion-item no-lines [ngClass]="{'error':f.submitted &&pincode?.invalid}">
+                  <ion-label floating>Pincode<strong class="red-text">*</strong></ion-label>
+                  <ion-input type="tel" minLength="6" maxLength="6" name="pincode" (input)="form.pincode.length==6"
+                  #pincode="ngModel" [(ngModel)]="form.pincode" required></ion-input>
+              </ion-item>
+              <div *ngIf="f.submitted &&pincode.invalid" class="eror">
+                  <p *ngIf="pincode.errors.required">{{'Field is Required'}}</p>
+              </div>
+              
+              <ion-item [ngClass]="{'error':f.submitted &&city?.invalid}">
+                  <ion-label floating>City</ion-label>
+                  <ion-input type="text" name="city" #city="ngModel" [(ngModel)]="form.city" ></ion-input>
+              </ion-item>
+
+              <ion-item class="cs-textarea1" [ngClass]="{'error':f.submitted && address?.invalid}" style="background: transparent !important;">
+                  <ion-label floating><span>Address</span></ion-label>
+                  <ion-textarea type="text" name="address" #address="ngModel" [(ngModel)]="form.address" required></ion-textarea>
+              </ion-item>
+              <div *ngIf="f.submitted &&address.invalid" class="eror">
+                  <p *ngIf="address.errors.required">{{'Field is Required'}}</p>
+              </div>
+
+              <ion-item class="cs-textarea1" [ngClass]="{'error':f.submitted && nature_problem?.invalid}" style="background: transparent !important;">
+                  <ion-label floating><span>Nature Of Problem</span></ion-label>
+                  <ion-textarea type="text" name="nature_problem" #nature_problem="ngModel" [(ngModel)]="form.nature_problem" required></ion-textarea>
+              </ion-item>
+              <div *ngIf="f.submitted &&nature_problem.invalid" class="eror">
+                  <p *ngIf="nature_problem.errors.required">{{'Field is Required'}}</p>
+              </div>
+              
+              
+              
+          </ion-list>
+          
+          <div class="cs-heading1 pl0 pb10">
+              <p>Upload Image or Video</p>
+          </div>
+          
+          <div class="add-new padding0">
+              <div class="uplode-image">
+                  <ul>
+                      <li *ngFor="let pic of image_data;let i = index;">
+                          <img src="{{pic}}">
+                          <button><i class="material-icons" (click)="remove_image(i)">clear</i></button>
+                      </li>
+                      
+                      <li *ngIf='videoId'>
+                          <label>
+                              <div class="other">
+                                  <a ><img src="assets/imgs/videos.png"></a>
+                                  <button><i class="material-icons" (click)="remove_video()">clear</i></button>
+                              </div>
+                          </label>
+                      </li>
+                      
+                      <li (click)="captureMedia()">
+                          <label>
+                              <input type="file" style="display: none;">
+                              <div class="other">
+                                  <a ><i class="material-icons" >camera_alt</i></a>
+                              </div>
+                          </label>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+          
+          <div class="enquiry-btn add-btns mt20">
+              <button ion-button block class="h40 green-color" style="letter-spacing: 1px;">
+                  <p> Submit</p>
+              </button>
+          </div>
+      </div>
+      
+  </form>
+</ion-content>
+

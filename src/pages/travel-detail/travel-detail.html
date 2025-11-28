@@ -1,0 +1,172 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Plan of Action Detail</ion-title>
+
+    <ion-buttons *ngIf="travelPlanInfo?.status=='Pending' &&!hideEdit && travelData.visit_actual == 0" end>
+      <div class="tag-info editBtn">
+        <button class="edit" (click)="editTravelPlan()">
+          <i class="material-icons">edit</i>
+        </button>
+      </div>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content *ngIf="travel_type == 'daily'">
+  <div class="saprate">
+
+
+    <div class="status-bar">
+      <p>Date Created <span>{{travelPlanInfo.date_created ? (travelPlanInfo.date_created | date:'d MMM y') :
+          '---'}}</span>
+      </p>
+      <p>Status <span class="{{travelPlanInfo.status}}">{{travelPlanInfo?.status || '---'}}</span></p>
+    </div>
+    <div class="slab bg-box">
+      <div class="slab-day">
+        <p> {{travelPlanInfo.date_from ? (travelPlanInfo.date_from | date:'d MMM yyyy') : ''}}</p>
+        <span>Date</span>
+      </div>
+      <div class="slab-day">
+        <p class="bg-font">{{travelData.total_plan ? travelData.total_plan : '0'}}</p>
+        <span>Visit Plan</span>
+      </div>
+      <div class="slab-day">
+        <p class="bg-font">{{travelData.visit_actual ? travelData.visit_actual : '0'}}</p>
+        <span>Visit Actual</span>
+      </div>
+      <div class="slab-day">
+        <p class="bg-font">{{travelVisitDate.plan_follow ? (travelVisitDate.plan_follow + '%') : '0'}}</p>
+        <span>Plan Follow</span>
+      </div>
+      <div class="slab-day">
+        <p class="bg-font">{{travelVisitDate.plan_deviation ? (travelVisitDate.plan_deviation + '%') : '0'}}</p>
+        <span>Plan Deviation</span>
+      </div>
+      <div class="slab-day">
+        <p  style="font-size: 20;">{{travelPlanInfo.assigned_to_name}}</p>
+        <span>Created By</span>
+      </div>
+    </div>
+    
+  </div>
+
+
+  <div class="mb100" *ngIf="travelPlanDetail?.length">
+    <div class="travel">
+      <ul class="mb10">
+        <li *ngFor="let row of travelPlanDetail; let i = index;">
+          <span class="vistit-count">{{i+1}}</span>
+          <span class="km" *ngIf="i != 0">{{row.km_difference}} KM</span>
+          <div class="counter" [ngClass]="{'visit': row.checkin_id != 0, 'no-visit':row.checkin_id == 0}">
+            <div>
+              <h2 class="f12">{{row.company_name}} - {{row.mobile}} <span>({{row.dr_type_name}})</span><span>({{row.customer_city}})</span> </h2>
+              <div class="visit-time pb10">
+                <div class="visit-hours">
+                  <span>Check-in</span>
+                  <p>{{row.visit_start != null ? (row.visit_start| date:'hh:mm a') : '---'}}</p>
+                </div>
+                <div class="visit-hours">
+                  <span>Check-out</span>
+                  <p>{{row.visit_end != null ? (row.visit_end| date:'hh:mm a') : '---'}}</p>
+                </div>
+
+                <div class="visit-hours">
+                  <span>Time spend</span>
+                  <p>{{row.visit_time !=0 ? (row.visit_time + ' min') : '---'}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+  <div class="nothing-here" *ngIf="!travelPlanDetail.length">
+    <div class="outer">
+      <div class="innear">
+        <img src="assets/imgs/no_found.svg" alt="" />
+        <p>No Travel Plan Available</p>
+      </div>
+    </div>
+  </div>
+</ion-content>
+<ion-content *ngIf="travel_type == 'month'">
+  <div class="saprate">
+
+
+    <div class="status-bar">
+      <p>Date Created <span>{{travelPlanInfo.date_created ? (travelPlanInfo.date_created | date:'d MMM y') :
+          '---'}}</span>
+      </p>
+    </div>
+    <div class="slab bg-box" style="grid-template-columns :1fr 1fr">
+      <div class="slab-day">
+        <p> {{travelPlanInfo.month_name ? travelPlanInfo.month_name : ''}} - {{travelPlanInfo.year ? travelPlanInfo.year
+          : ''}}</p>
+        <span>Month - Year</span>
+      </div>
+      <div class="slab-day">
+        <p class="{{travelPlanInfo.status}}"> {{travelPlanInfo?.status || '---'}}</p>
+        <span>Status</span>
+      </div>
+      <div class="slab-day">
+        <p class="bg-font">{{travelPlanInfo.working_days ? travelPlanInfo.working_days : '0'}}</p>
+        <span>Working Days</span>
+      </div>
+      <div class="slab-day">
+        <p class="bg-font">{{travelPlanInfo.plan_updated ? travelPlanInfo.plan_updated : '0'}}</p>
+        <span>Plan Submit</span>
+      </div>
+      <div class="slab-day">
+        <p  style="font-size: 20;">{{travelPlanInfo.assigned_to_name}}</p>
+        <span>Created By</span>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="mb100" *ngIf="travelPlanDetail?.length">
+    <div class="travel">
+      <ul class="mb10">
+        <li *ngFor="let row of travelPlanDetail; let i = index;">
+          <span class="vistit-count">{{i+1}}</span>
+          <div class="counter">
+            <div>
+              <h2 class="f12">{{row.state}} - {{row.district}} ({{row.city}})</h2>
+              <div class="visit-time pb10">
+                <div class="visit-hours">
+                  <span>Visit Plan Days</span>
+                  <p>{{row.visit_days ? row.visit_days : '---'}}</p>
+                </div>
+                <div class="visit-hours">
+                  <span>Actuall Visit</span>
+                  <p>{{row.visit_actual?row.visit_actual : '---'}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+  <div class="nothing-here" *ngIf="!travelPlanDetail.length">
+    <div class="outer">
+      <div class="innear">
+        <img src="assets/imgs/no_found.svg" alt="" />
+        <p>No Travel Plan Available</p>
+      </div>
+    </div>
+  </div>
+</ion-content>
+<ion-footer class="af-none">
+
+  <div class="mt16 mb16">
+    <button ion-button class="Buttons wp100" *ngIf="travelMode=='Team' && travelPlanInfo?.status=='Pending'"
+      (click)="changeStatusModal('travel_status')">Change Status</button>
+  </div>
+</ion-footer>

@@ -1,0 +1,136 @@
+<ion-header>
+  <ion-toolbar color="white">
+    <ion-title>
+      <div class="company-logo">
+        <img src="assets/imgs/logo.png" alt="">
+      </div>
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only class="share-text" (click)="announcementModal()">
+        <ion-icon name="notifications" color="secondary"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+    refreshingText="Refreshing...">
+  </ion-refresher-content>
+</ion-refresher>
+
+<div *ngIf="skLoading == false">
+  <div class="slide-image" *ngIf="appbanner.length > 0">
+    <ion-slides *ngIf="appbanner.length " [initialSlide]="0" pager autoplay="1000" speed="1000">
+      <ion-slide *ngFor="let row of appbanner">
+        <img src="{{bannerURL+row.banner}}">
+      </ion-slide>
+    </ion-slides>
+  </div>
+  
+  <div class="pl16 pr16">
+    <div class="center-card">
+      <div class="cs-profile">
+        <img src="{{uploadurl+profile}}" (click)="imageModal(uploadurl+profile)">
+        <ion-icon name="person"></ion-icon>
+      </div>
+      
+      <div class="profile-progress">
+        <h1>{{'Welcome'}}</h1>
+        <h2>{{influencer_detail.name | titlecase}}</h2>
+      </div>
+    </div>
+    
+    
+    <div class="home-btn-group">
+      <div class="outline-btn" (click)="goToComplaint()">
+        <i class="material-icons">support_agent</i>
+        {{'Complaint'}}
+      </div>
+      
+      <div class="outline-btn" (click)="goToSpare()">
+        <i class="material-icons">build</i>
+        {{'Spare'}}
+      </div>
+
+      <div class="outline-btn" (click)="goToInvoice()">
+        <i class="material-icons">build</i>
+        {{'Invoice'}}
+      </div>
+      
+      <div class="outline-btn" (click)="goToAbout();">
+        <i class="material-icons">info</i>
+        {{'About Us'}}
+      </div>
+      
+      <div class="outline-btn" (click)="goToContact();">
+        <i class="material-icons">contact_phone</i>
+        {{'Contact Us'}}
+      </div>
+
+      <div class="outline-btn" (click)="goToProfile();">
+        <i class="material-icons">person</i>
+        {{'Profile'}}
+      </div>
+
+    </div>
+    
+  </div>
+  
+</div>
+<ng-container>
+  <div *ngIf="skLoading">
+    <div class="slide-image">
+      <ion-slides>
+        <ion-slide>
+        </ion-slide>
+      </ion-slides>
+    </div>
+    <div class="pl16 pr16">
+      <div class="center-card sk-loading">
+        <div class="cs-profile sk-loading" ></div>
+      </div>
+      <div class="home-btn-group">
+        <ng-container>
+          <div class="outline-btn sk-loading">
+            <div class="icons"></div>
+          </div>
+        </ng-container>
+        <div class="outline-btn sk-loading">
+          <div class="icons"></div>
+          
+        </div>
+        
+        <div class="outline-btn sk-loading">
+          <div class="icons"></div>
+          
+        </div>
+        
+        <div class="outline-btn sk-loading">
+          <div class="icons"></div>
+          
+        </div>
+        <div class="outline-btn sk-loading">
+          <div class="icons"></div>
+          
+        </div>
+        
+        
+        <div class="outline-btn sk-loading">
+          <div class="icons"></div>
+          
+        </div>
+          
+        <div class="outline-btn sk-loading">
+          <div class="icons"></div>
+          
+        </div>
+
+      </div>
+      
+    </div>
+  </div>
+</ng-container>
+
+</ion-content>

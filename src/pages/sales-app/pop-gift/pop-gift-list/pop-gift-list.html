@@ -1,0 +1,86 @@
+<ion-header>
+  <ion-navbar>
+      <ion-title>Pop & Gift</ion-title>
+      <ion-buttons end *ngIf="Navtype == 'POP'">
+        <button style="color: black;" ion-button icon-only (click)="presentPopover($event)">
+            <ion-icon name="more"></ion-icon>
+        </button>
+    </ion-buttons> 
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+
+  <div class="pd-left-right16">
+      <div class="list-box mt16" *ngFor="let list of pop_list; let i=index">
+          <div class="upper">
+              <div class="left-date">
+                  <div class="date-section">
+                      <p>{{list.date_created | date:'d MMM y'}}</p>
+                      <p>Date Created</p>
+                  </div>
+              </div>
+              <div class="right-info">
+                <p>Qty : {{list.qty}}</p>
+            </div>
+          </div>
+          <div class="mid ml12">
+              <div class="content-info">
+                <div class="right-info">
+                <p>{{list.item_name|titlecase}}</p>
+                </div>
+                
+              </div>
+
+          </div>
+          <div style="display:flex;">
+          <div class="lower ml12" *ngIf="list.description !=''">
+            <p>Description</p>
+            <p>{{list.description}}</p>
+        </div>
+        <div class="lower ml12" >
+                  
+          <p>Type </p>
+          
+          <p *ngIf="list.gift_type=='BTL'">BTL</p>
+          <p *ngIf="list.gift_type!='BTL'">POP & GIFT</p>
+          
+        
+          </div>
+        </div>
+
+          <div class="countMainContainer mt10" *ngIf="(Navtype != 'POP')&&(user_data.type != '3' && user_data.type != '7')">
+            <button ion-button round icon-end color="success" class="Buttons wp100"  (click)="popOutgoing(list.pop_id,list.item_name,'Incoming')">
+                Incoming History &nbsp;
+                <i class="openBtn material-icons">south_west</i>
+            </button>
+            <button ion-button round icon-end color="success" class="Buttons wp100" (click)="popOutgoing(list.pop_id,list.item_name,'Outgoing')">
+                Outgoing History &nbsp;
+                <i class="openBtn material-icons">north_east</i>
+            </button>
+        </div>
+
+      </div>
+  </div>
+  <div class="nothing-here" *ngIf="!pop_list.length && load_data == '1'">
+    <div class="outer">
+        <div class="innear">
+            <img src="assets/imgs/no_found.svg" alt="">
+            <p>Data Not Available</p>
+        </div>
+    </div>
+</div>
+<ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)" *ngIf="flag!=1">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="{{'Loading more data...'}}">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
+
+
+
+
+<ion-fab right bottom  *ngIf="(pop_list.length || Navtype != 'POP') && (user_data.type != '3' && user_data.type != '7')">
+	<button ion-fab color="primary" (click)="popGift()" ><ion-icon name="add"></ion-icon></button>
+</ion-fab>
+

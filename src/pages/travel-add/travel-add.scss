@@ -1,0 +1,193 @@
+page-travel-add {
+    
+    .travel-action {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0px 10px;
+        
+        span {
+            font-size: 14px;
+            font-weight: bold;
+        }
+    }
+    
+    
+    .deleteBtn {
+        height: auto;
+        width: auto;
+        padding: 0;
+        background-color: white;
+        box-shadow: none;
+        
+        i {
+            color: red !important;
+            font-size: 20px !important;
+        }
+        
+        &.rm-btn {
+            position: absolute;
+            top: 50%;
+            right: -10px;
+            transform: translateY(-50%);
+            
+            i {
+                font-size: 18px;
+            }
+        }
+    }
+    
+    .travel ul li:after {
+        height: calc(100% + 30px) !important;
+        
+        &:first-child {
+            border: 0px !important;
+        }
+    }
+    
+    
+    
+    .travel ul {
+        padding-left: 60px;
+        padding-right: 24px;
+        border-bottom: 3px dashed #0063a5;
+        margin-left: 0px;
+        
+        
+        li span.km {
+            top: -50%;
+        }
+        
+        &:last-child {
+            border-bottom: 0px;
+        }
+        
+    }
+    .suggentionBoxContainer{
+        
+        h2{
+            text-align: center;
+            font-size: 16px;
+            color: grey;
+        }
+        li{
+            padding: 6px;
+            display: flex;
+            flex-direction: row;
+            border: 0.5px solid rgb(222, 222, 222);
+            margin: 8px;
+            border-radius: 4px;
+            align-items: center;
+            .companyInfo{
+                flex:1;
+                p{
+                    font-size: 12px;
+                    font-weight: 'bold';
+                }
+            }
+            
+            .addButton {
+                width: 100px;
+                font-size: 12px;
+                font-weight: 500;
+                border-radius: 4px;
+                background-color: rgb(238, 253, 238);
+                color:black !important;
+                box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.1);
+            }
+            .materialIcon {
+                font-size: 15px;
+                color: #12b100;
+            } 
+        }
+    }
+}
+
+.travelAlert {
+    text-align: center;
+    
+    .alert-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        i {
+            font-size: 16px;
+        }
+    }
+    
+    .alert-button-group {
+        padding: 5px;
+        justify-content: center;
+    }
+    
+    .alert-button.attendanceAlertBtn {
+        background-color: black;
+        color: white;
+        padding: 4px 30px;
+        margin: auto;
+        border-radius: 5px;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .alert-button.attendanceAlertBtn span {
+        width: 100%;
+        justify-content: center !important;
+    }
+}
+
+.customerListBox {
+    margin-top: 10px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.customerItem {
+    border: 1px solid #eee;
+    
+    padding: 0px 5px;
+    
+}
+
+.dateBox {
+    border-bottom: 1px dashed #aaa;
+    padding: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #999;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+}
+
+
+
+.customerDetail {
+    text-transform: capitalize;
+    padding: 4px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.customerDetail:not(:last-child) {
+    border-bottom: 1px solid #eee;
+}
+.buttonContainer{
+    
+    h2{
+        text-align: center;
+        font-size: 14px;
+        color: rgb(133, 133, 133);
+    }
+    .Buttons{
+        border-radius: 4px;
+        background-color: #02064ec2;
+    }
+}
+
+

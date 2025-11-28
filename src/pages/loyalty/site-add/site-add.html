@@ -1,0 +1,170 @@
+<!--
+  Generated template for the SiteAddPage page.
+  
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+
+<ion-header>
+  <ion-navbar>
+    <ion-title>Add New {{lastPageData.moduleName | titlecase}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <form #f="ngForm" (ngSubmit)="f.form.valid && submit()">
+    <div class="form">
+      <ion-list no-lines class="padding10 pt0">
+        <ion-item [ngClass]="{'error':f.submitted && lead_type?.invalid}">
+          <ion-label floating>Lead Type <strong class="red-text">*</strong></ion-label>
+          <ion-select name="lead_type" [(ngModel)]="data.lead_type" #lead_type="ngModel">
+              <ion-option value="Residential">Residential</ion-option>
+              <ion-option value="Commercial">Commercial</ion-option>
+              <ion-option value="Other">Other</ion-option>
+          </ion-select>
+      </ion-item>
+      <div *ngIf="f.submitted && lead_type.invalid" class="eror">
+        <p *ngIf="lead_type.errors.required">{{'Field is Required'}}</p>
+      </div>
+        <ion-item [ngClass]="{'error':f.submitted && lead_source?.invalid}">
+          <ion-label floating>Lead Source <strong class="red-text">*</strong></ion-label>
+          <ion-select name="lead_source" [(ngModel)]="data.lead_source" #lead_source="ngModel">
+              <ion-option value="Scouting">Scouting</ion-option>
+              <ion-option value="Reference">Reference</ion-option>
+          </ion-select>
+      </ion-item>
+      <div *ngIf="f.submitted && lead_source.invalid" class="eror">
+        <p *ngIf="lead_source.errors.required">{{'Field is Required'}}</p>
+      </div>
+        <ion-item [ngClass]="{'error':f.submitted && lead_size?.invalid}">
+          <ion-label floating>Lead Size <strong class="red-text">*</strong></ion-label>
+          <ion-select name="lead_size" [(ngModel)]="data.lead_size" #lead_size="ngModel">
+              <ion-option value="0-50">0-50</ion-option>
+              <ion-option value="51-100">51-100</ion-option>
+              <ion-option value="101-200">101-200</ion-option>
+              <ion-option value="201-500">201-500</ion-option>
+              <ion-option value="500-Above">500-Above</ion-option>
+          </ion-select>
+      </ion-item>
+      <div *ngIf="f.submitted && lead_size.invalid" class="eror">
+        <p *ngIf="lead_size.errors.required">{{'Field is Required'}}</p>
+      </div>
+
+      <ion-item [ngClass]="{'error':f.submitted && estimate_delivery_date?.invalid}">
+        <ion-label floating>Estimate Deliver Date <strong class="red-text">*</strong></ion-label>
+        <ion-datetime display-format="MMM DD, YYYY" type="text" [min]="TodayDate" name="estimate_delivery_date" #estimate_delivery_date="ngModel"
+          [(ngModel)]="data.estimate_delivery_date" class="calander"></ion-datetime>
+      </ion-item>
+      <div *ngIf="f.submitted && estimate_delivery_date.invalid" class="eror">
+        <p *ngIf="estimate_delivery_date.errors.required">{{'Field is Required'}}</p>
+      </div>
+      <ion-item [ngClass]="{'error':f.submitted && status?.invalid}">
+        <ion-label floating>Status <strong class="red-text">*</strong></ion-label>
+        <ion-select name="status" [(ngModel)]="data.status" #status="ngModel">
+            <ion-option value="Hot">Hot</ion-option>
+            <ion-option value="Warm">Warm</ion-option>
+            <ion-option value="Cold">Cold</ion-option>
+        </ion-select>
+    </ion-item>
+    <div *ngIf="f.submitted && status.invalid" class="eror">
+      <p *ngIf="status.errors.required">{{'Field is Required'}}</p>
+    </div>
+    <ion-item [ngClass]="{'error':f.submitted && next_follow_up_date?.invalid}">
+      <ion-label floating>Next Follow up date <strong class="red-text">*</strong></ion-label>
+      <ion-datetime display-format="MMM DD, YYYY"  [min]="TodayDate" type="text" name="next_follow_up_date" #next_follow_up_date="ngModel"
+        [(ngModel)]="data.next_follow_up_date" class="calander"></ion-datetime>
+    </ion-item>
+    <div *ngIf="f.submitted && next_follow_up_date.invalid" class="eror">
+      <p *ngIf="next_follow_up_date.errors.required">{{'Field is Required'}}</p>
+    </div>
+    <ion-item [ngClass]="{'error':f.submitted && referral_by?.invalid}">
+      <ion-label floating>Referral By  <strong class="red-text">*</strong></ion-label>
+      <ion-select name="referral_by" [(ngModel)]="data.referral_by" #referral_by="ngModel">
+          <ion-option value="CP">CP</ion-option>
+          <ion-option value="Ply Expert">Ply Expert</ion-option>
+          <ion-option value="Ambassador">Ambassador</ion-option>
+          <ion-option value="OEM">OEM</ion-option>
+          <ion-option value="Builder">Builder</ion-option>
+          <ion-option value="Sub-Dealer">Sub-Dealer</ion-option>
+          <ion-option value="Prospect CP">Prospect CP</ion-option>
+      </ion-select>
+  </ion-item>
+  <div *ngIf="f.submitted && referral_by.invalid" class="eror">
+    <p *ngIf="referral_by.errors.required">{{'Field is Required'}}</p>
+  </div>
+    <ion-item [ngClass]="{'error':f.submitted && designation?.invalid}">
+      <ion-label floating>Designation  <strong class="red-text">*</strong></ion-label>
+      <ion-select name="designation" [(ngModel)]="data.designation" #designation="ngModel">
+          <ion-option value="Owner">Owner</ion-option>
+          <ion-option value="Manager">Manager</ion-option>
+          <ion-option value="Relative">Relative</ion-option>
+          <ion-option value="Other">Other</ion-option>
+      </ion-select>
+  </ion-item>
+  <div *ngIf="f.submitted && designation.invalid" class="eror">
+    <p *ngIf="designation.errors.required">{{'Field is Required'}}</p>
+  </div>
+        <ion-item [ngClass]="{'error':f.submitted && name?.invalid}">
+          <ion-label floating>{{'Name'}} <strong class="red-text">*</strong></ion-label>
+          <ion-input type="text" name="name" #name="ngModel" [(ngModel)]="data.name"
+            (ngModelChange)="(data.name!=null)?data.name[0] = data.name[0].toUpperCase():''" required></ion-input>
+        </ion-item>
+        <div *ngIf="f.submitted && name.invalid" class="eror">
+          <p *ngIf="name.errors.required">{{'Field is Required'}}</p>
+        </div>
+
+        <ion-item [ngClass]="{'error':f.submitted && mobile_no?.invalid}">
+          <ion-label floating>{{'Mobile Number'}}<strong class="red-text">*</strong></ion-label>
+          <ion-input type="tel" minlength="10" maxlength="10" name="mobile_no" #mobile_no="ngModel"
+            [(ngModel)]="data.mobile_no" required (keypress)="MobileNumber($event,data.mobile_no)"></ion-input>
+        </ion-item>
+        <div *ngIf="f.submitted && mobile_no.invalid" class="eror">
+          <p *ngIf="mobile_no.errors.required">{{'Field is Required'}}</p>
+        </div>
+        <ion-item [ngClass]="{'error':(f.address && address?.invalid) || (f.submitted && !address.valid)}">
+          <ion-label floating>{{'Address'}}<strong class="red-text">*</strong></ion-label>
+          <ion-input type="text" name="address" #address="ngModel" [(ngModel)]="data.address" required></ion-input>
+        </ion-item>
+        <div *ngIf="f.submitted && address.invalid" class="eror">
+          <p *ngIf="address.errors.required">{{'Field is Required'}}</p>
+        </div>
+        <ion-item [ngClass]="{'error':f.submitted && state?.invalid}">
+          <ion-label floating>{{'State'}}<strong class="red-text">*</strong></ion-label>
+          <ionic-selectable item-content name="state" #state="ngModel" [(ngModel)]="data.state" [items]="state_list"
+            itemValueField="state_name" itemTextField="state_name" [canSearch]="true" [hasVirtualScroll]="true"
+            (ngModelChange)="getDistrictList(data.state.state_name)" required>
+          </ionic-selectable>
+        </ion-item>
+        <div *ngIf="f.submitted && state.invalid" class="eror">
+          <p *ngIf="state.errors.required">{{'Field is Required'}}</p>
+        </div>
+
+        <ion-item [ngClass]="{'error':f.submitted && district?.invalid}">
+          <ion-label floating>{{'District'}}<strong class="red-text">*</strong></ion-label>
+          <ionic-selectable item-content name="district" #district="ngModel" [(ngModel)]="data.district"
+            [items]="district_list" itemValueField="district_name" itemTextField="district_name" [canSearch]="true"
+            [hasVirtualScroll]="true" required>
+          </ionic-selectable>
+        </ion-item>
+        <div *ngIf="f.submitted && district.invalid" class="eror">
+          <p *ngIf="district.errors.required">{{'Field is Required'}}</p>
+        </div>
+
+        <ion-item [ngClass]="{'error':f.submitted && city?.invalid}">
+          <ion-label floating>City <strong class="red-text">*</strong></ion-label>
+          <ion-input type="tel" name="city" [(ngModel)]="data.city" #city="ngModel" 
+            required></ion-input>
+        </ion-item>
+        <div *ngIf="f.submitted && city.invalid" class="eror">
+          <p *ngIf="city.errors.required">{{'Field is Required'}}</p>
+        </div>
+
+      </ion-list>
+      <div class="pl10 pr10">
+        <button ion-button block color="primary" [disabled]="savingFlag">
+          <ion-spinner *ngIf="savingFlag"></ion-spinner>&nbsp;{{data.exist_id ? 'Update' : 'Save'}}
+        </button>
+      </div>
+    </div>
+  </form>
+</ion-content>

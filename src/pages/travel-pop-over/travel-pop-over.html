@@ -1,0 +1,100 @@
+<ion-list *ngIf="NavType=='Dashboard'" class="popover_list">
+  <button ion-item (click)="close('primary')">Primary Dashboard</button>
+  <button ion-item (click)="close('secondary')">Secondary Dashboard</button>
+</ion-list>
+<ion-list *ngIf="NavType=='Travel' && NavType_page=='daily'" class="popover_list">
+  <button ion-item (click)="close('My')">My POA</button> 
+  <button ion-item (click)="close('Team')">Team POA</button>
+</ion-list>
+<ion-list *ngIf="NavType=='Travel' && NavType_page=='month' " class="popover_list">
+  <button ion-item (click)="close('My')">My MJP</button> 
+  <button ion-item (click)="close('Team')">Team MJP</button>
+</ion-list>
+<ion-list *ngIf="NavType=='PrimaryOrd'" class="popover_list">
+  <button ion-item (click)="close('My')">My Order</button>
+  <button ion-item (click)="close('Team')">Team Order</button>
+</ion-list>
+<ion-list *ngIf="NavType=='kra_kpi'" class="popover_list">
+  <button ion-item (click)="close('My')">My Kra/Kpi</button>
+  <button ion-item (click)="close('Team')">Team Kra/Kpi</button>
+</ion-list>
+<ion-list *ngIf="NavType=='SecondaryOrd'" class="popover_list">
+  <button ion-item (click)="close('My')">My Order</button>
+  <button ion-item (click)="close('Team')">Team Order</button>
+</ion-list>
+<ion-list *ngIf="NavType=='Target' && NavType!='leads-details'" class="popover_list">
+  <button ion-item (click)="close('My')">My Target</button>
+  <button ion-item (click)="close('Team')">Team Target</button>
+</ion-list>
+<ion-list *ngIf="NavType=='Event'" class="popover_list">
+  <button ion-item (click)="close('My')">My BTL Activity Planner</button>
+  <button ion-item (click)="close('Team')">Team BTL Activity Planner</button>
+</ion-list>
+<ion-list *ngIf="NavType=='Enquiry'" class="popover_list">
+  <button ion-item (click)="close('My')">My Virtual leads</button>
+  <button ion-item (click)="close('Team')">Team Virtual leads</button>
+</ion-list>
+<ion-list *ngIf="NavType=='Distributor'&& DrType ==1" class="popover_list">
+  <button ion-item (click)="close('My')">My Channel Partner</button>
+  <button ion-item (click)="close('Team')">Team Channel Partner</button>
+</ion-list>
+<ion-list *ngIf="NavType=='Distributor'&& DrType ==8" class="popover_list">
+  <button ion-item (click)="close('My')">My Ply Expert</button>
+  <button ion-item (click)="close('Team')">Team Ply Expert</button>
+</ion-list>
+<ion-list *ngIf="NavType=='Distributor'&& DrType == 13" class="popover_list">
+  <button ion-item (click)="close('My')">My Ambassador</button>
+  <button ion-item (click)="close('Team')">Team Ambassador</button>
+</ion-list>
+<ion-list *ngIf="NavType=='Distributor'&& DrType ==14" class="popover_list">
+  <button ion-item (click)="close('My')">My Builder</button>
+  <button ion-item (click)="close('Team')">Team Builder</button>
+</ion-list>
+<ion-list *ngIf="NavType=='Distributor'&& DrType ==16" class="popover_list">
+  <button ion-item (click)="close('My')">My Secondary OEM</button>
+  <button ion-item (click)="close('Team')">Team Secondary OEM</button>
+</ion-list>
+<ion-list *ngIf="NavType=='Distributor'&& DrType ==3" class="popover_list">
+  <button ion-item (click)="close('My')">My Sub Dealer</button>
+  <button ion-item (click)="close('Team')">Team Sub Dealer</button>
+</ion-list>
+<ion-list *ngIf="NavType=='Distributor'&& DrType==7" class="popover_list">
+  <button ion-item (click)="close('My')">My Primary OEM</button>
+  <button ion-item (click)="close('Team')">Team Primary OEM</button>
+</ion-list>
+<ion-list *ngIf="NavType=='Retailers'" class="popover_list">
+  <button ion-item (click)="close('My')">My Dealers</button>
+  <button ion-item (click)="close('Team')">Team Dealers</button>
+</ion-list>
+<ion-list *ngIf="NavType=='leads-details'" class="popover_list">
+  <button ion-item (click)="go_to('Detail')"><img src="assets/employee.png" height="20px" width="20px" /> Basic
+    Detail</button>
+  <button ion-item (click)="go_to('Checkin')"><img src="assets/check-in.png" height="20px" width="20px" /> Checkin
+    List</button>
+  <button ion-item (click)="go_to('Primary')" *ngIf="DrType!= 8 && DrType != 13 && DrType != 3 && DrType != 14"><img
+      src="assets/order.png" height="20px" width="20px" /> Primary Order</button>
+  <!-- <button
+    ion-item (click)="go_to('Invoice')"><img src="assets/invoice.png" height="20px" width="20px" />  Invoices</button> -->
+  <!-- <button
+    ion-item (click)="go_to('Payment')"><img src="assets/payment-method.png" height="20px"
+      width="20px" />  Payment</button> -->
+  <!-- <button
+    ion-item (click)="go_to('Ledger')"><img src="assets/ledger.png" height="20px" width="20px" />  Ledger</button> -->
+  <!-- <button ion-item
+     (click)="go_to('DistTarget')"><img src="assets/goal.png" height="20px" width="20px" />  Target</button> -->
+  <!-- <button ion-item (click)="go_to('My')"><img src="assets/buy-online.png" height="20px" width="20px" />  Scheme</button> -->
+  <!-- <button ion-item (click)="go_to('POP')"><img src="assets/giftbox.png" height="20px" width="20px" />  POP & Gift</button> -->
+  <!-- <button ion-item *ngIf="DrType != 7" (click)="go_to('Dealer')"><img src="assets/broker.png" height="20px"
+      width="20px" />Retailer</button> -->
+  <button ion-item *ngIf="DrType != 7 && DrType != 3" (click)="go_to('Secondary')"><img src="assets/order.png"
+      height="20px" width="20px" /> Secondary Order</button>
+  <button ion-item *ngIf="DrType == 3 || DrType == 1" (click)="go_to('Stock')"><img src="assets/order.png" height="20px"
+      width="20px" /> Stock Transfer</button>
+</ion-list>
+
+
+<ion-list *ngIf="NavType=='SiteTeamFilter'" class="popover_list">
+  <button ion-item (click)="close('My')">My Lead</button>
+  <button ion-item (click)="close('Team')">Team Lead</button>
+  <button ion-item (click)="closeLead('My')">My Generated Leads</button>
+</ion-list>

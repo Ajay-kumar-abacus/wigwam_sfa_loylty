@@ -1,0 +1,137 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Add Plan of Action</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div class="form">
+    <ion-list no-lines class="padding10 mb10 pt0">
+
+      <ion-item *ngIf="!travelId">
+        <ion-label floating><span>Date <strong>*</strong></span></ion-label>
+        <ion-datetime display-format="MMM DD, YYYY" type="text" [min]="today_date" name="date_from" #date_from="ngModel"
+          [(ngModel)]="travel_data.date_from" class="calander" required
+          (ngModelChange)="getFollowupList();blankForm()"></ion-datetime>
+        <!-- <ion-input type="date" min={{today_date}}   name="date_from" #date_from="ngModel" [(ngModel)]="travel_data.date_from" placeholder="dd/mm/yyyy" required ></ion-input> -->
+      </ion-item>
+
+
+
+      <ion-item>
+        <ion-label floating>Select Type <strong class="reject">*</strong></ion-label>
+        <ion-select name="dr_type" #dr_type="ngModel" interface="action-sheet" [(ngModel)]="travel_data.dr_type"
+          (ngModelChange)="get_customerList(travel_data.dr_type, '')" required>
+          <ng-container *ngFor="let row of networkType">
+            <ion-option *ngIf="row.type != 17" [value]="row.module_name">
+              {{row.type === 1 ? 'Channel partner (Created By HO)' : 
+                (row.type === 7 ? 'Primary OEM (Created by HO)' : 
+                (row.type === 15 ? row.module_name + ' (' + open_lead_count + ' open leads)' : row.module_name))}}
+            </ion-option>
+          </ng-container>
+      
+          <ion-option [value]="'Prospect CP'">Prospect CP ({{prospect_CP_count}} pending Prospect CP)</ion-option>
+        </ion-select>
+      </ion-item>
+      
+
+      <ion-item *ngIf="travel_data.dr_type">
+        <ion-label floating>Select {{travel_data.dr_type}} <strong class="reject">*</strong></ion-label>
+        <ionic-selectable item-content [(ngModel)]="selectedCustomer" [items]="partyList" itemValueField="id"
+          itemTextField="display_name" [canSearch]="true" (onChange)="get_customerList(travel_data.dr_type, '')"
+          (onSearch)="searchData($event);">
+        </ionic-selectable>
+      </ion-item>
+      <div class="buttonContainer"
+        *ngIf="travel_data.dr_type && DrType != 3 && DrType != 4 && DrType != 7 && DrType != 1">
+        <h2>or</h2>
+        <button ion-button block class="Buttons" color="primary" (click)="addNewCustomer(DrType)">
+          <ion-icon name="add"></ion-icon>&nbsp;Add New {{travel_data.dr_type}}
+        </button>
+      </div>
+    </ion-list>
+
+    <div class="suggentionBoxContainer"> 
+      <ul>
+        <h2 *ngIf="followupList.length">Suggetion Box</h2>
+        <li *ngFor="let data of followupList ; let i = index">
+          <div class="companyInfo">
+            <p>{{data.company_name}} ({{data.dr_type_name}})</p>
+          </div>
+          <button ion-button round full class="addButton" [disabled]="data?.checked"
+            (click)="customerAddToList({'dr_type':data.dr_type_name,'dr_type_name':data.dr_type_name,'followup_id':data.id, 'dr_id':data.dr_id,'company_name':data.company_name, 'lastActivity':data.last_activity}); blankValue();">
+            <i *ngIf="!data?.checked" class="material-icons materialIcon">add</i><i *ngIf="data.checked == true"
+              class="material-icons materialIcon">task_alt</i>&nbsp;{{data.checked == true ? "Added" : "Add To List"}}
+          </button>
+        </li>
+      </ul>
+    </div>
+    <div class="pl6 pr6 mt26">
+      <button ion-button round full color="success"
+        [disabled]=" !travel_data.dr_type || !selectedCustomer || !travel_data.date_from"
+        (click)="customerAddToList({'dr_type':travel_data.dr_type,'dr_type_name':travel_data.dr_type, 'dr_id':selectedCustomer.id, 'lastActivity':selectedCustomer.last_activity, 'mobile': travel_data.dr_type == 'Lead' ? selectedCustomer.ownerMobile:selectedCustomer.mobile }); blankValue();">
+        Add To List
+      </button>
+    </div>
+
+  </div>
+
+
+
+
+
+
+  <ng-container *ngIf="dateWiseCustomersList?.length">
+    <div class="travel travel">
+      <ul *ngFor="let row of dateWiseCustomersList; let i = index;" class="mb10">
+        <li>
+          <!-- <span class="vistit-count">
+            <i class="material-icons">directions_transit</i>
+          </span> -->
+          <div class="travel-action">
+            <span>{{row.date | date : 'd MMM y'}} {{row.day}} {{row.totalDistance ? (row.totalDistance + KM) :
+              ''}}</span>
+            <button (click)="removeWholeCustomerList(i)" ion-button class="deleteBtn">
+              <i class="material-icons">delete_sweep</i>
+            </button>
+          </div>
+
+        </li>
+        <li *ngFor="let customer of row.customers; let j = index;">
+          <span class="vistit-count">{{j+1}}</span>
+          <div class="counter">
+            <div>
+              <h2 class="f12">{{customer.company_name ? (customer.company_name | titlecase) : ''}}
+                <span>({{customer.dr_type_name}})</span>
+              </h2>
+              <div class="visit-time pb10">
+                <div class="visit-hours">
+                  <span>Travel Date</span>
+                  <p>{{row.date | date : 'd MMM y'}}</p>
+                </div>
+                <div class="visit-hours">
+                  <span>Last Visit</span>
+                  <p>{{customer.lastActivity ? customer.lastActivity.replace('+', '') : '---'}}</p>
+                </div>
+
+              </div>
+
+              <button (click)="removeCustomer(i, j,customer.dr_id)" ion-button class="deleteBtn rm-btn">
+                <i class="material-icons">remove_circle</i>
+              </button>
+
+
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="pl16 pr16 mb20">
+      <button ion-button round full color="primary" [disabled]="!dateWiseCustomersList?.length" (click)="checkAlert()">
+        Save
+      </button>
+    </div>
+  </ng-container>
+
+</ion-content>

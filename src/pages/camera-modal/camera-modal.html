@@ -1,0 +1,26 @@
+<ion-content>
+  <!-- Footer with Controls -->
+  <ion-footer class="footer-controls" *ngIf="type=='camera'">
+   
+   <div class="control-buttons">
+    <div>
+      <button ion-button clear class="control-btn flash-btn" (click)="toggleFlashMode()">
+        <i class="material-icons">
+          {{ flashMode === 'off' ? 'flash_off' : 
+             (flashMode === 'on' ? 'flash_on' : 'flash_auto') }}
+        </i>
+      </button>
+      <button ion-button clear class="control-btn gallery-btn" (click)="dismiss()">
+       <i class="material-icons">close</i>
+     </button>  
+    </div>
+   
+     <button ion-button clear class="control-btn capture-btn" (click)="capturePhoto()">
+       <ion-icon name="camera"></ion-icon>
+     </button>
+     <button ion-button clear class="control-btn switch-btn" (click)="toggleCamera()">
+       <i class="material-icons">sync</i>
+     </button>
+   </div>
+ </ion-footer>
+ </ion-content>

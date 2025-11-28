@@ -1,0 +1,428 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>BTL Activity Detail</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <h1 class="f16 mb5 d-flex">
+    <span>Information</span>
+    <button *ngIf="MeetType=='Team' && prodstatus=='Pending' && details.date_of_meeting >= this.currentDate"
+      class="statusButton" (click)="statusModal('event_status')">
+      Change Status
+    </button>
+  </h1>
+  <div class="attendance-list flat-list">
+    <div class="slab slab-bg">
+      <div class="slab-day" *ngIf="details.status == 'Completed'">
+        <p>{{ details.date_updated | date:'dd MMM yyyy' }}</p>
+        <span>Execution Date</span>
+    </div>
+    <div class="slab-day" *ngIf="details.status != 'Completed'">
+        <p>{{ details.date_of_meeting | date:'dd MMM yyyy' }}</p>
+        <span>Meeting Date</span>
+    </div>
+    
+      <div class="slab-day">
+        <p>{{details.status}}</p>
+        <span>Status</span>
+      </div>
+      <div class="slab-day">
+        <p>{{details.event_id}}</p>
+        <span>BTL Id</span>
+      </div>
+      <!-- <div class="slab-day" *ngIf="details.status == 'Completed'">
+        <p>{{details.actual_expense}}</p>
+        <span>Actual Exp.</span>
+      </div> -->
+    </div>
+    <div class="center-block mb16">
+      <div class="circle">{{details.event_type | slice:0:1}}</div>
+
+      <h1 class="f12">{{details.event_type| titlecase}}</h1>
+      <p *ngIf="details.event_type == 'In-shop Meet' || details.event_type == 'Nukkad Meet'">Company Name :
+        {{details.company_name ? details.company_name:'---'}}</p>
+
+    </div>
+
+    <div class="slab mt16" style="background-color: bisque;padding: 4px;border-radius: 4px">
+      <div class="slab-day">
+        <p>{{details.total_member ? details.total_member:'---'}}</p>
+        <span>Total Member</span>
+      </div>
+      <div class="slab-day">
+        <p class="bold">{{details.total_budget ? ('₹ '+details.total_budget) :'0'}}</p>
+        <span>Total Budget</span>
+      </div>
+      <div class="slab-day">
+        <p class="bold">{{details.approved_amount ? ('₹ '+details.approved_amount) :'0'}}</p>
+        <span>Approved Amount</span>
+      </div>
+    </div>
+    <div class="slab mt10" style="background-color: bisque;padding: 4px;border-radius: 4px"
+      *ngIf="details.event_type == 'In-shop Meet' || details.event_type == 'Nukkad Meet'">
+      <div class="slab-day">
+        <p class="bold">{{details.contact_person ? details.contact_person:'---'}}</p>
+        <span>Contact Person</span>
+      </div>
+      <div class="slab-day" *ngIf="details.pop_name">
+        <p class="bold">{{details.pop_name ? details.pop_name:'---'}}</p>
+        <span>Gift Detail</span>
+      </div>
+      <div class="slab-day">
+        <p class="bold">{{details.firm_mobile ? details.firm_mobile:'---'}}</p>
+        <span>Mobile Number</span>
+      </div>
+    </div>
+
+
+    <div class="slab mt10" style="background-color: bisque;padding: 4px;border-radius: 4px"
+      *ngIf="details.event_type != 'In-shop Meet' ">
+      <div class="slab-day">
+        <p>{{details.state ? details.state : '---'}}</p>
+        <span>State</span>
+      </div>
+      <div class="slab-day">
+        <p class="bold">{{details.city ? details.city : '---'}}</p>
+        <span>City</span>
+      </div>
+    </div>
+    <div class="slab mt10" style="background-color: bisque;padding: 4px;border-radius: 4px"
+      *ngIf="details.event_type != 'In-shop Meet' && details.event_type != 'Nukkad Meet'">
+      <div class="slab-day">
+        <p class="bold">{{details.module_name}}</p>
+        <span>Expense Sharing Type</span>
+      </div>
+      <div class="slab-day">
+        <p>{{details.expense_sharing_name ? details.expense_sharing_name : '---'}}</p>
+        <span>Expense Sharing CP</span>
+      </div>
+      <div class="slab-day">
+        <p class="bold">{{details.expense_sharing_amount ?details.expense_sharing_amount + ' % ' +
+          '( ₹ ' + details.expense_sharing_amount_percentage + ' )' : '---'}}</p>
+        <span>Expense Sharing Amount</span>
+      </div>
+      
+    </div>
+    <div class="other-block pb0">
+      <p><strong>Venue</strong></p>
+      <p>{{details.venue| titlecase}}</p>
+    </div>
+    <div class="other-block pb0">
+      <p><strong>Description</strong></p>
+      <p>{{details.description| titlecase}}</p>
+    </div>
+
+  </div>
+
+
+
+
+  <div class="list-box mt16" *ngIf="details.status == 'Completed'" (click)="goToExpenseDetail()">
+    <div class="mid mt0">
+      <div class="content-info">
+        <div class="right-info">
+          <p>Actual Expense : ₹ {{details.actual_expense}}</p>
+          <p style="color: blue;"> click here for expense detail</p>
+        </div>
+      </div>
+      <div class="next-forword">
+        <i class="material-icons">chevron_right</i>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="prodstatus != 'Pending'">
+    <div class="round-tab mt16">
+      <ul>
+        <li [ngClass]="TabType==1 ?'active': '' " (click)="TabType=1">
+          <a>Participants Member</a>
+        </li>
+        <li [ngClass]="TabType==2 ? 'active': '' " (click)="TabType=2">
+          <a>BTL Activity Gallery</a>
+        </li>
+      </ul>
+    </div>
+
+    <div *ngIf="details.status == 'Approved'&& isWithinRange(details.date_of_meeting)">
+      <!-- <form #f="ngForm" *ngIf="details.status == 'Approved'"> -->
+      <div class="form">
+
+        <ng-container *ngIf="TabType==1">
+
+          <ion-item class="mb3">
+            <ion-label floating>ADD Participants<span class="red-text">*</span></ion-label>
+            <ion-select interface="action-sheet" name="type" required #type="ngModel" [(ngModel)]="data1.type"
+              (ngModelChange)="data1.type == 'Yes' ? get_list() : ''">
+              <ion-option value="Yes">Registered</ion-option>
+              <ion-option value="NO">Un-Registred</ion-option>
+
+            </ion-select>
+          </ion-item>
+
+
+
+          <ion-item *ngIf="data1.type=='Yes'">
+            <ion-label floating>Select Participant</ion-label>
+            <ionic-selectable item-content name="participant_id" [(ngModel)]="data1.participant_id"
+              [items]="distributor_list" itemValueField="id" itemTextField="display_name" [canSearch]="true"
+              #selectComponent (ngModelChange)="get_list(); Add_list()"
+              (onSearch)="searchData($event);"></ionic-selectable>
+          </ion-item>
+
+          <div class="edit" *ngIf="participentsLength < details.total_member && data1.type=='NO'">
+            <ion-list>
+              <ion-item>
+                <ion-label floating><span>Name</span></ion-label>
+                <ion-input type="text" name="participent_name" #participent_name="ngModel"
+                  [(ngModel)]="data1.participent_name" (keypress)="name($event)"></ion-input>
+              </ion-item>
+          
+              <ion-item [ngClass]="{'error': participent_mobile?.invalid && (participent_mobile.dirty || participent_mobile.touched)}">
+                <ion-label floating><span>Mobile No.</span></ion-label>
+                <ion-input 
+                  type="tel" 
+                  name="participent_mobile" 
+                  #participent_mobile="ngModel"
+                  [(ngModel)]="data1.participent_mobile" 
+                  pattern="^[6-9][0-9]{9}$"
+                  maxlength="10" 
+                  minlength="10"
+                  required
+                  onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                </ion-input>
+              </ion-item>
+              <div *ngIf="participent_mobile?.invalid && (participent_mobile.dirty || participent_mobile.touched)" class="eror">
+                <p *ngIf="participent_mobile.errors?.pattern">Invalid Mobile number</p>
+                <p *ngIf="participent_mobile.errors?.required">Mobile number is required</p>
+                <p *ngIf="participent_mobile.errors?.minlength">Mobile number must be 10 digits</p>
+              </div>
+          
+              <h1 class="f14">Address Information</h1>
+              
+              <ion-item >
+                <ion-label floating>Address<strong class="red-text">*</strong></ion-label>
+                <ion-input type="text" name="address" #address="ngModel" [(ngModel)]="data1.address" required></ion-input>
+              </ion-item>
+            
+          
+              <ion-item >
+                <ion-label floating>Pincode<strong class="red-text">*</strong></ion-label>
+                <ion-input type="tel" minLength="6" maxLength="6" name="pincode"
+                  (input)="data1.pincode.length==6 && getSateteDistrcit()" #pincode="ngModel" [(ngModel)]="data1.pincode"
+                  required></ion-input>
+              </ion-item>
+             
+          
+              <ion-item >
+                <ion-label floating>State <strong class="red-text">*</strong></ion-label>
+                <ion-select interface="action-sheet" name="state" #state="ngModel" [(ngModel)]="data1.state"
+                  (ionChange)="get_district()" required>
+                  <ion-option *ngFor="let row of state_list;let i=index;" value="{{row.state_name}}">{{row.state_name |
+                    titlecase}}</ion-option>
+                </ion-select>
+              </ion-item>
+             
+              
+              <ion-item >
+                <ion-label floating>District <strong class="red-text">*</strong></ion-label>
+                <ion-select interface="action-sheet" name="district" #district="ngModel" [(ngModel)]="data1.district"
+                  (ionChange)="getCityList1()" required>
+                  <ion-option *ngFor="let row of district_list" value="{{row.district_name}}">{{row.district_name}}
+                  </ion-option>
+                </ion-select>
+              </ion-item>
+             
+              <ion-item >
+                <ion-label floating>City <strong class="red-text">*</strong></ion-label>
+                <ion-select interface="action-sheet" name="city" #city="ngModel" [(ngModel)]="data1.city"
+                required>
+                  <ion-option *ngFor="let row of city_list1" value="{{row.city}}">{{row.city}}
+                  </ion-option>
+                </ion-select>
+              </ion-item>
+             
+              
+            </ion-list>
+          </div>
+
+          <div class="buttoncontainer mt16" *ngIf="participentsLength < details.total_member && data1.type=='NO'">
+            <button ion-button fill="outline" class="Buttons"
+              [disabled]="addToListDisable || !data1.participent_name || !data1.city || !data1.participent_mobile || !data1.address || !data1.state || !data1.district || !data1.pincode"
+              (click)="addParticipants()">ADD TO LIST</button>
+          </div>
+
+
+          <div class="product-item-table mt16" *ngIf="TabType==1 && participatsArray">
+            <table>
+              <tr>
+                <th>Name</th>
+                <th class="w90">Mobile No</th>
+                <th class="w50" *ngIf="details.status == 'Approved'&& isWithinRange(details.date_of_meeting)">
+                  Action</th>
+              </tr>
+              <tr *ngFor="let row of participatsArray;let i = index">
+                <td>{{row.participent_name| titlecase }}</td>
+                <td>{{row.participent_mobile}}
+                  <div class="right-date">
+                  </div>
+                </td>
+                <td *ngIf="prodstatus == 'Approved'">
+                  <div class="tag-info pr10">
+                    <button class="transparent"><i class="material-icons red-clr font21"
+                        (click)="deletePerson(row.id,i)">delete_sweep</i></button>
+                  </div>
+                </td>
+              </tr>
+            </table>
+
+          </div>
+
+        </ng-container>
+        <ng-container *ngIf="TabType==2">
+
+          <div class="mt16" *ngIf="details.status == 'Approved'&& isWithinRange(details.date_of_meeting)">
+            <div class="upload-plus-icon">
+              <h1 class="img-heading">Upload BTL Activity Image</h1>
+              <ul>
+                <li class="wp100">
+                  <div class="label">
+                    <button type="button" (click)="cameraModal('event')">
+                      <i class="material-icons">add_photo_alternate</i>
+                    </button>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="upload-plus-icon" *ngIf="TabType==2 && details.uploads">
+            <ul>
+              <li *ngFor="let photo of details.uploads ,let i =index ">
+                <div class="label">
+                  <button type="button">
+                    <img class="up-img" (click)="openDocument(img_url+photo.img_path)" [src]="img_url+photo.img_path">
+                  </button>
+                  <a class="im-delete">
+                    <i class="material-icons" *ngIf="prodstatus == 'Approved' "
+                      (click)="delete_image(photo.id,i)">delete_sweep</i>
+                  </a>
+                </div>
+              </li>
+            </ul>
+            <div class="nothing-here" *ngIf="!details?.uploads.length">
+              <div class="outer">
+                <div class="innear">
+                  <img src="assets/imgs/no_found.svg" alt="">
+                  <p>Data Not Available</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <ion-item>
+          <ion-label floating>Send Gift <strong>*</strong></ion-label>
+          <ion-select interface="action-sheet" name="send_gift" name="send_gift" #send_gift="ngModel"
+            [(ngModel)]="data2.send_gift" required [disabled]="details.event_type == 'Architects Meet'">
+            <ion-option value="Yes">Yes</ion-option>
+            <ion-option value="No">No</ion-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item *ngIf="data2.send_gift == 'Yes'">
+          <ion-label floating>Select Gift <strong>*</strong></ion-label>
+          <ion-select interface="action-sheet" name="pop_id" #pop_id="ngModel" [(ngModel)]="data2.pop_id" required>
+            <ion-option *ngFor="let row of giftList;let i=index;" value="{{row.pop_id}}">{{row.item_name |
+              titlecase}}</ion-option>
+          </ion-select>
+        </ion-item>
+
+
+      </div>
+      <!-- </form> -->
+    </div>
+    <div *ngIf="details.status != 'Approved' && details.status != 'Pending' && TabType==2 ">
+      <div class="upload-doc" *ngIf="details.uploads?.length > 0">
+        <p class="">BTL Activity Images</p>
+        <ul class="no-padding">
+          <li class="image-upload" *ngFor="let val of details.uploads">
+            <img src="{{img_url+val.img_path}}">
+          </li>
+        </ul>
+      </div>
+      <div class="nothing-here" style="height: 50%;" *ngIf="!details.uploads?.length">
+        <div class="outer">
+          <div class="innear">
+            <img src="assets/imgs/No data-pana.png" alt="">
+            <p>Image not Available</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="details.status != 'Approved' && details.status != 'Pending' &&(participatsArray?.length)&& TabType==1">
+      <ng-container>
+        <div class="upload-doc">
+          <p class="">BTL Activity Participents</p>
+          <div class="list-box mt16" *ngFor="let participants of participatsArray">
+            <div class="mid mt0">
+              <div class="content-info">
+                <div class="left-info">
+                  <div class="circle">{{participants.participent_name.substring(0,1).toUpperCase()}}</div>
+                </div>
+                <div class="right-info">
+                  <p>{{participants.participent_name.toUpperCase()}}</p>
+                  <p> Mobile No. : {{participants.participent_mobile ? participants.participent_mobile : '--'}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </ng-container>
+    </div>
+
+
+  </div>
+  <div class="buttoncontainer">
+    <button ion-button class="Buttons" color="success"
+      *ngIf="details.status=='Approved' && isWithinRange(details.date_of_meeting) && ((data2.send_gift == 'No') ||(data2.send_gift == 'Yes' && data2.pop_id))"
+      (click)="submitbutton('status')">Complete BTL Activity</button>
+
+      <button ion-button class="Buttons"  style="background-color: rgb(0, 179, 255);"
+      *ngIf="details.status=='Approved' && isWithinRange(details.date_of_meeting) && ((data2.send_gift == 'No') ||(data2.send_gift == 'Yes' && data2.pop_id))"
+      (click)="submitbutton('Completed')">Add Expense</button>
+
+      <button ion-button class="Buttons"  style="background-color: rgb(0, 179, 255);"
+      *ngIf="details.status=='Completed' && details.expense_id == 0"
+      (click)="submitbutton('CompletedEvent')">Add Expense</button>
+      
+
+  </div>
+  <div class="buttoncontainer mt5">
+    <button ion-button class="Buttons" color="danger" (click)="submitbutton('Cancel')"
+    *ngIf="(details.status=='Approved'  || details.status=='Pending')&& isWithinRange(details.date_of_meeting) ">Cancel
+    BTL Activity</button>
+  </div>
+
+
+  <ng-container
+    *ngIf="(details.status == 'Pending' || details.status == 'Approved') && details.date_of_meeting < this.currentDate">
+    <div class="nothing-here" style="height: 50%;">
+      <div class="outer">
+        <div class="innear">
+          <p><strong>This BTL Activity Is Expired</strong> </p>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <div class="nothing-here" style="height: 50%;"
+    *ngIf="details.status == 'Pending' && details.date_of_meeting >= this.currentDate">
+    <div class="outer">
+      <div class="innear">
+        <p><strong>Waiting For Senior Approval...</strong></p>
+      </div>
+    </div>
+  </div>
+</ion-content>

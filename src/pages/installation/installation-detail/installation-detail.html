@@ -1,0 +1,190 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Installation Detail</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <div class="detais">
+    <div class="capsule-tabs" style="border-bottom: 0px;">
+      <ul>
+        <li [ngClass]="{'active':installation_type == 'Details'}" (click)="installation_type = 'Details';">
+          <p>Details</p>
+        </li>
+        <li [ngClass]="{'active':installation_type == 'Remark'}" (click)="installation_type = 'Remark';">
+          <p>Remark</p>
+        </li>
+        <li [ngClass]="{'active':installation_type == 'Done'}"
+          (click)="installation_type = 'Done';goToClosePage(installtion_detail.id,installtion_detail.customer_mobile,installtion_detail.closing_type)"
+          *ngIf=" installtion_detail.complaint_status=='Done'">
+          <p>Complete</p>
+        </li>
+        <li [ngClass]="{'active':installation_type == 'Reject'}" (click)="installation_type = 'Reject'"
+          *ngIf="installtion_detail.complaint_status=='Reject'">
+          <p>Reject</p>
+        </li>
+      </ul>
+    </div>
+    <div class="attendance-list flat-list" *ngIf="installation_type == 'Details'">
+      <div class="slab slab-bg">
+        <div class="slab-day">
+          <p>
+            {{installtion_detail.date_created | date:'d MMM y'}}
+          </p>
+          <span>Date Created</span>
+        </div>
+        <div class="slab-day">
+          <p>{{installtion_detail.created_name ? (installtion_detail.created_name|titlecase) : '---'}}</p>
+          <span>Created By</span>
+        </div>
+        <div class="slab-day">
+          <p>{{installtion_detail.complain_no ? installtion_detail.complain_no : '---'}}</p>
+          <span>Id</span>
+        </div>
+        <div class="slab-day">
+          <p>{{installtion_detail.pending_at?installtion_detail.pending_at :'--'}}</p>
+          <span>TAT</span>
+        </div>
+
+      </div>
+      <div class="center-block">
+        <div class="circle">{{installtion_detail.customer_name?.substring(0,1).toUpperCase()}}</div>
+        <h1 class="f12">{{installtion_detail.customer_name ? (installtion_detail.customer_name|titlecase) : '---'}}</h1>
+        <p>{{installtion_detail.customer_mobile ? installtion_detail.customer_mobile :
+          '---'}}</p>
+
+      </div>
+      <div class="other-block">
+        <p>
+          <strong>Address :</strong>{{ installtion_detail.city | titlecase }} , {{installtion_detail.district |
+          titlecase }} , {{installtion_detail.state |
+          titlecase}} , {{installtion_detail.pincode}}
+        </p>
+      </div>
+    </div>
+
+
+    <div class="border-container mt16" *ngIf="installation_type == 'Details'">
+      <div class="summary-heading">Product Details</div>
+      <div class="payment-box">
+        <div class="credit-table">
+          <table>
+            <tr>
+              <th class="text-left">Product Details</th>
+              <th class=" w50 text-center">Qty</th>
+            </tr>
+            <ng-container *ngFor="let row of item_details;">
+              <tr>
+                <td>{{ row.product_name |titlecase }}-{{row.product_code |titlecase}}</td>
+                <td class="w50 text-center">{{row.qty}}</td>
+              </tr>
+            </ng-container>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="border-container mt16" *ngIf="installation_type == 'Remark'">
+      <div class="summary-heading">Remarks</div>
+      <ng-container>
+        <div class="pb100">
+          <div class="remarkSent" *ngFor="let row of installation_remark">
+            <p class="remarkMsg">{{row.msg | titlecase}}</p>
+            <div class="dateCreated"><span>({{row.created_by_type}})</span> <span>{{row.date_created | date:'d MMM
+                y'}}</span></div>
+          </div>
+          <div class="nothing-here" *ngIf="installation_remark == 0">
+            <div class="outer">
+              <div class="innear">
+                <img src="assets/imgs/no_found.svg" alt="">
+                <p>Data Not Available</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </ng-container>
+    </div>
+
+    <div class="border-container mt16" *ngIf="installation_type == 'Done'">
+      <div class="summary-heading">Done Details</div>
+      <ng-container>
+
+        <div class="">
+
+          <table>
+            <tr>
+              <th class="w100">Installtion Id</th>
+              <td>{{installtion_detail.complain_no}}</td>
+            </tr>
+            <tr>
+              <th class="w100">Installtion Date</th>
+              <td>{{installtion_detail.closed_date | date:'d MMM y'}}</td>
+            </tr>
+            <tr>
+              <th class="w100">Installtion Remark</th>
+              <td>{{installtion_detail.closing_remark | titlecase}}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="upload-doc mt16">
+          <ul class="no-padding">
+
+            <li class="image-upload" *ngFor="let row of closing_image" (click)="imageModal(bannerURL + row.image)">
+              <img src="{{bannerURL + row.image}}">
+
+            </li>
+          </ul>
+
+        </div>
+
+      </ng-container>
+    </div>
+    <div class="border-container mt16" *ngIf="installation_type == 'Reject'">
+      <div class="summary-heading">Reject Details</div>
+      <ng-container>
+        <div class="">
+          <table>
+            <tr>
+              <th class="w100">Installtion Id</th>
+              <td>{{installtion_detail.complain_no }}</td>
+            </tr>
+            <tr>
+              <th class="w100">Cancel Date</th>
+              <td>{{installtion_detail.closed_date | date:'d MMM y'}}</td>
+            </tr>
+            <tr>
+              <th class="w100">Cancel Remark</th>
+              <td>{{installtion_detail.closing_remark | titlecase}}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="upload-doc mt16">
+          <ul class="no-padding">
+
+            <li class="image-upload" *ngFor="let row of closing_image" (click)="imageModal(bannerURL + row.image)">
+              <img src="{{bannerURL + row.image}}">
+
+            </li>
+          </ul>
+
+        </div>
+
+      </ng-container>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer>
+
+  <div class="pl16 pr16 mb16">
+    <button ion-button block icon-start round color="success"
+      (click)="goToClosePage(installtion_detail.id,installtion_detail.customer_mobile,installtion_detail.closing_type)"
+      *ngIf="installtion_detail.complaint_status=='Pending' && installation_type == 'Details'">Update
+      Status</button>
+  </div>
+
+  <div class="footer-input-block"
+    *ngIf="installation_type == 'Remark' && installtion_detail.complaint_status == 'Pending' ">
+    <textarea type="text" placeholder="Add Remark" name="msg" #msg="ngModel" [(ngModel)]="data.msg"></textarea>
+    <button ion-button icon-start color="success" (click)="addRemark()"><ion-icon name="send"></ion-icon></button>
+  </div>
+</ion-footer>

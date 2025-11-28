@@ -1,0 +1,63 @@
+page-expense-add .localConvHead::after {
+  display: none !important;
+}
+
+page-expense-add .capsule-tabs {
+  margin-bottom: 10px;
+}
+
+page-expense-add .capsule-tabs ul li {
+  padding: 0;
+}
+
+page-expense-add .capsule-tabs ul li .item {
+  background-color: transparent !important;
+  padding-left: 10px !important;
+}
+
+page-expense-add .add_image {
+  width: 100%;
+  text-align: center;
+  background-color: #f9f9fb;
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 16px;
+  -webkit-box-shadow: 4px 3px 10px 0px #f9f9f9;
+          box-shadow: 4px 3px 10px 0px #f9f9f9;
+  border: 1px dashed #b6b6f5;
+  font-size: 10px;
+}
+
+page-expense-add .add_image img {
+  width: 30px !important;
+  display: block;
+  margin: auto;
+}
+
+page-expense-add .accordion {
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  border: 1px dashed #b6b6f5 !important;
+}
+
+page-expense-add .summary-table {
+  border: 1px dashed #b6b6f5 !important;
+  margin-top: 10px;
+}
+
+page-expense-add .summary-table td:nth-child(2) span {
+  background-color: #fff;
+  border: 1px dashed #b6b6f5 !important;
+  background-color: #f9f9fb;
+  padding: 3px 5px;
+  border-radius: 4px;
+}
+
+page-expense-add .edit {
+  margin: 0px;
+  border: 0px !important;
+  border-radius: 6px;
+  padding: 0px !important;
+}
+/*# sourceMappingURL=expense-add.css.map */

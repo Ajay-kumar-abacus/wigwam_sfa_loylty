@@ -1,0 +1,112 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>{{data.type}} Stock {{data.type == 'Transfer' ? 'To' : 'From'}} {{loginDrData.type == 3 ? 'Plumber' : 'Dealer'}}</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <div class="padding16">
+        <div class="edit">
+            <!-- <form name="requestform" #requestform="ngForm" (ngSubmit)="requestform.valid && submitTransferRequest()"> -->
+                <ion-list>
+                    
+                    <!-- <ion-item class="cs-normal-select retailerSelectionBox mt16" >
+                        <ion-label><span>Select Type <span>*</span></span></ion-label>
+                        <ion-select name="type" [(ngModel)]="data.type" #type="ngModel">
+                            <ion-option value="Transfer">Transfer</ion-option>
+                            <ion-option value="Return">Return</ion-option>
+                        </ion-select>
+                    </ion-item> -->
+                    
+                    <ion-item *ngIf="loginDrData.type == 3">
+                        <ion-label floating><span>Search Plumber Number <strong>*</strong></span></ion-label>
+                        <ion-input type="tel" [(ngModel)]="data.mobile" #mobile="ngModel" name="mobile" (keypress)="MobileNumber($event)" min="0" minLength="10" maxLength="10" (ngModelChange)=" getNetworkList(data.mobile)" required></ion-input>
+                    </ion-item>
+                    
+                    <div class="list-box mt10" *ngIf="loginDrData.type == 3 && data.mobile && data.mobile.length == 10 && tempdrData.name">
+                        <div class="mid mt0">
+                            <div class="content-info">
+                                <div class="left-info">
+                                    <div class="circle">{{tempdrData.name ? (tempdrData.name.substring(0,1).toUpperCase()) : ''}}</div>
+                                </div>
+                                <div class="right-info" >
+                                    <p>{{tempdrData.name ? tempdrData.name : '---'}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <ion-item class="cs-normal-select retailerSelectionBox mt16" *ngIf="loginDrData.type != 3">
+                        <ion-label><span>Select {{loginDrData.type == 3 ? ' / Search Plumber' : 'Dealer'}} <span>*</span></span></ion-label>
+                        <ionic-selectable name="drData" item-content [(ngModel)]="data.drData" #drData="ngModel" [items]="networkList" itemValueField="id" itemTextField="name" [hasVirtualScroll]="true" [canSearch]="true" #dealerSelectable (onSearch)="searchNetwork($event)" required></ionic-selectable>
+                    </ion-item>
+                    
+                    <ion-item class="cs-normal-select retailerSelectionBox mt16">
+                        <ion-label><span>Select Product<span>*</span></span></ion-label>
+                        <ionic-selectable item-content name="product" [(ngModel)]="data.product " #product="ngModel" [items]="productList" itemValueField="id" itemTextField="display_name" [hasVirtualScroll]="true" [canSearch]="true" #distributorSelectable (onSearch)="searchProduct($event)" (ngModelChange)="getfieldsClear()" required></ionic-selectable>
+                    </ion-item>
+                    
+                    <ion-item>
+                        <ion-label floating><span>Qty <strong>*</strong></span></ion-label>
+                        <ion-input type="number" name="qty" #qty="ngModel" [(ngModel)]="data.qty" [disabled]= "!data.product" (keypress)="MobileNumber($event)"  (ngModelChange)="getPointCalculation(data);stockCheck(data.qty)" required *ngIf="data.type == 'Transfer'"></ion-input>
+                        <ion-input type="number" name="qty" #qty="ngModel" [(ngModel)]="data.qty" [disabled]= "!data.product" (keypress)="MobileNumber($event)"  required  *ngIf="data.type == 'Return'"></ion-input>
+                    </ion-item>
+                    
+                    <ion-item hidden>
+                        <ion-label floating><span>Points <strong>*</strong></span></ion-label>
+                        <ion-input type="text" name="transferPoints" #transferPoints="ngModel" [(ngModel)]="data.transferPoints" readonly required></ion-input>
+                    </ion-item>
+                    
+                    <div class="mt16">
+                        <button type="text" ion-button class="cs-btn" [disabled]="!data.type || (loginDrData.type == 3 ?  !data.mobile : !data.drData) || !data.product || !data.qty" (click)="addToList()">Add To List</button>
+                    </div>
+                    
+                    <div class="cs-heading1 pl0" *ngIf="add_list.length">
+                        <p>PRODUCT INFORMATION</p>
+                    </div>
+                    
+                    <div class="list-box mt10"  *ngFor="let row of add_list;let i=index">
+                        <div class="mid mt0" style="display: flex;justify-content: space-between;">
+                            <div class="content-info">
+                                <div class="right-info">
+                                    <div class="mt2 mb2" style="display:flex; flex-direction:row">
+                                        <p class="pr2" style="color:rgb(255, 153, 0)">#{{i+1}} </p>
+                                        <p> {{row.product.product_name}} ({{row.product.product_code}})</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tag-info">
+                                <button><i class="material-icons red-clr" (click)="DeleteItem(i)">delete_sweep</i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="three_boxes">
+                            <div class="lower ">
+                                <p class="font10">Qty</p>
+                                <p class="font10">{{row.qty}}</p>
+                            </div>
+                            
+                            <!-- <div class="lower ">
+                                <p class="font10">Scheme Points</p>
+                                <p class="font10">{{row.transferPoints}}</p>
+                            </div> -->
+                        </div>
+                    </div>
+                    
+                    <!-- <ion-item class="cs-textarea1">
+                        <ion-label floating><span>Remark</span></ion-label>
+                        <ion-textarea name="remark" [(ngModel)]="data.remark" #remark="ngModel"></ion-textarea>
+                    </ion-item> -->
+                </ion-list>
+                
+                
+                <div class="text-right mt16">
+                    <button ion-button block color="primary" [disabled]="Submit_button || !add_list.length" (click)="submitTransferRequest()">
+                        <ion-spinner *ngIf="spinnerLoader"></ion-spinner>
+                        Submit
+                    </button>
+                </div>
+                <!-- </form> -->
+            </div>
+        </div>
+    </ion-content>

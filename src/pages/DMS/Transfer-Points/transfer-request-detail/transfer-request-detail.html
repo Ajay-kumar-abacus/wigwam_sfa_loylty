@@ -1,0 +1,134 @@
+<ion-header class="catalogue-header">
+    <ion-navbar>
+        <ion-title>Transfer Request Detail</ion-title>
+    </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+    
+    <div class="list-box">
+        <div class="mid mt0">
+            <div class="content-info">
+                <!-- <div class="left-info" >
+                    <div class="circle">{{transferRequestsDetail.company_name.substring(0,1).toUpperCase()}}</div>
+                </div> -->
+                
+                <div class="right-info" >
+                    <p>{{transferRequestsDetail.company_name}}</p>
+                    <p>{{transferRequestsDetail.name | titlecase}} ({{transferRequestsDetail.mobile}})</p>
+                </div>
+            </div>
+            
+            <div class="tag-info">
+                <a href="tel:{{transferRequestsDetail.mobile}}"><i class="material-icons">phone</i></a>
+            </div>
+        </div>
+        
+        <div class="upper">
+            <div class="left-date">
+                <div class="date-section">
+                    <p>{{transferRequestsDetail.date_created | date:'d MMM y hh:mm a'}}</p>
+                    <p>Date Created</p>
+                </div>
+                
+                <div class="date-section">
+                    <p>{{transferRequestsDetail.total_items ? transferRequestsDetail.total_items : '0'}}</p>
+                    <p>Total Item</p>
+                </div>
+                
+                <div class="date-section">
+                    <p>{{transferRequestsDetail.total_item_qty ? transferRequestsDetail.total_item_qty : '0'}}</p>
+                    <p>Total Item Qty</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="slab mt10">
+            <div class="slab-day">
+                <span>Status</span>
+                <p class="bold" [ngClass]="{'pending' : transferRequestsDetail.status == 'Pending' , 'approved' : transferRequestsDetail.status == 'Approved' , 'reject' : transferRequestsDetail.status == 'Reject'}">{{transferRequestsDetail.status}}</p>
+            </div>
+
+            <div class="slab-day" *ngIf="transferRequestsDetail.status == 'Reject'">
+                <span>{{transferRequestsDetail.status}} Remark</span>
+                <p class="bold">{{transferRequestsDetail.reject_reason}}</p>
+            </div>
+        </div>
+
+        <div class="upload-doc padding0" *ngIf="transferRequestsDetail.bill_image">
+            <div class="">
+                Attachment
+            </div>
+            <ul class="padding0">
+                <li class="image-upload">
+                    <img (click)="imageModal(url+transferRequestsDetail.bill_image)" src="{{url+transferRequestsDetail.bill_image}}">
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="pl16 pr16 mb25">
+        <ng-container>
+            <div class="summary-heading font14 mb8" *ngIf="productDetails.length > 0">ITEM INFORMATION</div>
+          
+            <div class="attendance-list" style="padding : 5px 10px;" *ngFor="let item of productDetails; let i = index;">
+                <div class="center-block flat-block">
+                    <h1>{{item.product_detail}}</h1>
+                    
+                    <ng-container *ngIf="transferRequestsDetail.status == 'Pending'">
+                        <a class="cell-phone" (click)="delete_item(i,item.id,transferRequestsDetail.id)">
+                            <i class="material-icons">delete_sweep</i>
+                        </a>
+                    </ng-container>
+                </div>
+                
+                <div class="slab boder-top1 pt5 mt5 dflex jcc align-center">
+                    <div class="slab-day">
+                        <p class="font10" *ngIf="inputFieldFlag[i] == true">
+                            <input class="w60" name="product_qty" [(ngModel)]="item.product_qty" #product_qty="ngModel" type="number" placeholder="Enter Quantity">
+                        </p>
+                        <p *ngIf="inputFieldFlag[i] == false">{{item.product_qty}}</p>
+                        <span>Qty</span>
+                    </div>
+
+                    <div class="slab-day" *ngIf="transferRequestsDetail.status == 'Pending'">
+                        <button class="slab-btn edit-bg mr10" [disabled]="inputFieldFlag[i] == true" (click)="getEditfieldEnable(i)">
+                            <i class="material-icons">edit</i>
+                        </button>
+                        
+                        <button class="slab-btn save-bg" [disabled]="inputFieldFlag[i] == false" (click)="item_update_data(item,i)">
+                            <i class="material-icons">save</i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+    
+    <div class="padding16" *ngIf="transferRequestsDetail.status == 'Pending'">
+        <div class="edit">
+            <ion-list>
+                <ion-item class="cs-normal-select mt0 mb0">
+                    <ion-label><span>Change Status <strong>*</strong></span></ion-label>
+                    <ion-select name="requestStatus" [(ngModel)]="data.requestStatus" #requestStatus="ngModel" required>
+                        <ion-option value="Approved">Approved</ion-option>
+                        <ion-option value="Reject">Reject</ion-option>
+                    </ion-select>
+                </ion-item>
+                
+                <ion-item class="cs-textarea1" *ngIf="data.requestStatus == 'Reject'">
+                    <ion-label floating><span>Remark</span></ion-label>
+                    <ion-textarea name="remark" [(ngModel)]="data.remark" #remark="ngModel"></ion-textarea>
+                </ion-item>
+            </ion-list>
+        </div>
+        
+        <div class="text-right mt16">
+            <button ion-button block color="primary" [disabled]="(Submit_button) || !data.requestStatus || ((data.requestStatus=='Reject' && !data.remark) ?true:false)" (click)="ChangeRequestStatus(data,transferRequestsDetail)">
+                <ion-spinner *ngIf="spinnerLoader"></ion-spinner>
+                Submit
+            </button>
+        </div>
+    </div>
+</ion-content>

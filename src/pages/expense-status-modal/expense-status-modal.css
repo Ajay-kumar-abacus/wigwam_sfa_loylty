@@ -1,0 +1,71 @@
+page-expense-status-modal .transprant-bg {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+page-expense-status-modal .work-modal {
+  padding: 16px;
+  height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+page-expense-status-modal .work-modal-bg {
+  width: 100%;
+  background: #fff;
+  border-radius: 10px;
+  padding: 16px;
+  -webkit-box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.5);
+          box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.5);
+}
+
+page-expense-status-modal .work-modal-bg .head {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin: -16px -16px 16px -16px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #cccccc;
+}
+
+page-expense-status-modal .work-modal-bg .head h2 {
+  font-size: 16px;
+}
+
+page-expense-status-modal .work-modal-bg .head a.close {
+  line-height: 0px;
+}
+
+page-expense-status-modal .work-modal-bg .head a.close i {
+  font-size: 20px;
+  color: #64104b;
+}
+
+page-expense-status-modal .work-modal-bg ion-item {
+  padding-left: 0px;
+}
+
+page-expense-status-modal ion-label {
+  font-size: 14px !important;
+}
+
+page-expense-status-modal .approvedAmtLabel {
+  margin: 0 !important;
+}
+/*# sourceMappingURL=expense-status-modal.css.map */

@@ -1,0 +1,143 @@
+<ion-header>
+
+    <ion-navbar>
+        <ion-title *ngIf="Type == 'My'">Leads</ion-title>
+        <ion-title *ngIf="Type != 'My'">Team's Leads</ion-title>
+        <ion-buttons end *ngIf="teamCount > 0">
+            <button ion-button icon-only (click)="presentPopover($event,'SiteTeamFilter')">
+                <ion-icon name="more"></ion-icon>
+            </button>
+        </ion-buttons>
+
+    </ion-navbar>
+    <div class="text-line" style="top: 158px;right:22px" *ngIf="filter.date">
+        <div class="lf-text">
+            <p>Date</p>
+            <p>{{filter.date | date:'d MMM y'}}</p>
+        </div>
+        <div class="rf-text">
+            <i class="material-icons" (click)="filter.date='';getSiteList()">cancel</i>
+        </div>
+    </div>
+    <ion-toolbar color="white">
+        <div class="capsule-tabs mb10" style="border-bottom: 0px;">
+            <ul>
+                <li [ngClass]="{'active':activeTab == 'Open'}" (click)="activeTab = 'Open';getSiteList()">
+                    <p>Open<span>{{statusCount?.open_count}}</span></p>
+                </li>
+
+                <li [ngClass]="{'active':activeTab == 'Win-F'}" (click)="activeTab = 'Win-F';getSiteList()">
+                    <p>Win-F<span>{{statusCount?.winf_count}}</span></p>
+                </li>
+                <li [ngClass]="{'active':activeTab == 'Win-C'}" (click)="activeTab = 'Win-C';getSiteList()">
+                    <p>Win-C<span>{{statusCount?.winc_count}}</span></p>
+                </li>
+                <li [ngClass]="{'active':activeTab == 'Lost'}" (click)="activeTab = 'Lost';getSiteList()">
+                    <p>Lost<span>{{statusCount?.lost_count}}</span></p>
+                </li>
+            </ul>
+        </div>
+
+        <div class="search add-search">
+            <div class="filter pb10">
+                <ion-searchbar (keyup)="getSiteList()" [(ngModel)]="search" name="search">
+                </ion-searchbar>
+                <a class="date-pick">
+                    <label class="chedate">
+                        <input type="date" name="date" [max]="date" [(ngModel)]="filter.date"
+                            (ngModelChange)="getSiteList()" />
+                        <i class="material-icons">date_range</i>
+                    </label>
+                </a>
+            </div>
+        </div>
+    </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+
+
+    <div class="edit flat" *ngIf="Type=='Team'">
+        <ion-list>
+            <ion-item class="cs-normal-select retailerSelectionBox mt0 mb0">
+                <ion-label>Select Team Member</ion-label>
+                <ionic-selectable item-content name="data" [(ngModel)]="selectData.team" [items]="user_list"
+                    itemValueField="id" itemTextField="name" [canSearch]="true" #selectComponent
+                    (ngModelChange)="getSiteList()"></ionic-selectable>
+            </ion-item>
+        </ion-list>
+    </div>
+
+
+
+
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+            refreshingText="Refreshing...">
+        </ion-refresher-content>
+    </ion-refresher>
+
+    <div class="pd-left-right16 mt16 mb100">
+        <ng-container *ngFor="let data of siteList">
+            <div class="attendance-list p6" (click)="goToSiteDetail(data.id)">
+                <div class="slab slab-bg" style="justify-content: space-between;">
+                    <div class="slab-day">
+                        <p>{{data.date_created | date:'d MMM y'}}</p>
+                        <span>Date Created</span>
+                    </div>
+                    <div class="slab-day">
+                        <p>{{data.type}}</p>
+                        <span>Type</span>
+                    </div>
+                    <div class="slab-day">
+                        <p>{{data.siteId}}</p>
+                        <span>Site Id</span>
+                    </div>
+                </div>
+                <div class="center-block">
+                    <div class="circle">{{data.ownerName.substring(0,1).toUpperCase()}}</div>
+                    <h1 class="f12">{{data.ownerName | titlecase}} ({{data.owner_designation ? data.owner_designation :
+                        '---'}})</h1>
+                    <p>{{data.ownerMobile}}</p>
+                    <a class="cell-phone" href="tel:{{data.ownerMobile}}"><i class="material-icons">phone</i></a>
+                </div>
+                <div class="other-block pb0">
+                    <p><strong>Created By Name :</strong>
+                        {{data.created_by_name ? data.created_by_name : ''}}
+                    </p>
+                </div>
+                <div class="other-block pb0" *ngIf="data.state  || data.district  || data.city  || data.area">
+                    <p><strong>Address :</strong>
+                        {{data.address}} {{data.area}} {{data.district}} {{data.state}}
+                    </p>
+                </div>
+                <div class="next-forword">
+                    <i class="material-icons">chevron_right</i>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+
+
+    <div class="nothing-here" *ngIf="load_data == 1">
+
+        <div class="outer">
+            <div class="innear">
+                <img src="assets/imgs/no_found.svg" alt="">
+                <p>Data Not Available</p>
+            </div>
+        </div>
+    </div>
+
+    <ion-fab right bottom>
+        <button ion-fab color="primary" (click)="addSite()" *ngIf="activeTab == 'Open'">
+            <ion-icon name="add"></ion-icon>
+        </button>
+    </ion-fab>
+
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)" *ngIf="flag!=1">
+        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="{{'Loading more data...'}}">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+</ion-content>

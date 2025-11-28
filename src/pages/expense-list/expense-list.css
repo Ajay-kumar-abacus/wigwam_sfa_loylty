@@ -1,0 +1,92 @@
+page-expense-list .tab {
+  background-color: red;
+  border-radius: "6px 0px 0px 6px";
+}
+
+page-expense-list .filterDate {
+  background: #eee;
+  padding: 4px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+page-expense-list .cs-list-item {
+  padding-top: 0;
+}
+
+page-expense-list .updateStatusBox {
+  height: 32px;
+  overflow: hidden;
+}
+
+page-expense-list .updateStatusBox ion-label {
+  margin: 0;
+  font-weight: bold;
+  max-width: 70%;
+}
+
+page-expense-list .updateStatusBox ion-item {
+  font-size: 10px;
+  padding-left: 3px;
+}
+
+page-expense-list .updateStatusBox ion-item .input-wrapper {
+  height: 20px;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+page-expense-list .updateStatusBox ion-item ion-select {
+  max-width: 100%;
+  padding: 0;
+  padding-right: 2px;
+}
+
+page-expense-list .updateStatusBox ion-item ion-select .select-icon {
+  margin-top: -4px;
+}
+
+page-expense-list .updateStatusBox ion-item ion-select .select-text {
+  min-width: 70px;
+}
+
+page-expense-list .updateStatusBox ion-item ion-select .select-placeholder {
+  display: none;
+}
+
+page-expense-list .cs-top.pendingBg {
+  padding-top: 8px !important;
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+page-expense-list .cs-top.pendingBg .inr-rupy {
+  background-color: #fff;
+  color: black;
+  border: 1px dashed black;
+  padding: 3px;
+  border-radius: 3px;
+}
+
+page-expense-list .cs-top.approvedBg {
+  padding-top: 8px !important;
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+page-expense-list .cs-top.rejectedBg {
+  padding-top: 8px !important;
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+page-expense-list .col-box {
+  background-color: #f9f9f9;
+  padding: 3px !important;
+  border-radius: 5px;
+  text-align: center;
+}
+/*# sourceMappingURL=expense-list.css.map */

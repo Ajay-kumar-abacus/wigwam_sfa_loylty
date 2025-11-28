@@ -1,0 +1,85 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>POP Requisition</ion-title>
+  </ion-navbar>
+  <ion-toolbar color="white">
+    <div class=" mb10">
+      <ion-segment [(ngModel)]="activeTab">
+        <ion-segment-button value="Pending" (click)="getPopRequisitionList('Pending')">
+          Pending
+        </ion-segment-button>
+        <ion-segment-button value="Approved" (click)="getPopRequisitionList('Approved')">
+          Approved
+        </ion-segment-button>
+        <ion-segment-button value="Rejected" (click)="getPopRequisitionList('Rejected')">
+          Rejected
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+
+   
+  </ion-toolbar>
+  <ion-toolbar>
+    <div class="search add-search">
+      <div class="filter mt10 mb10">
+        <ion-searchbar (ngModelChange)="getPopRequisitionList()" [(ngModel)]="filter.name" name="name"></ion-searchbar>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <div class="nothing-here" *ngIf="PopRequisitionData.length <= 0">
+    <div class="outer">
+      <div class="innear">
+        <img src="assets/imgs/no_found.svg" alt="">
+        <p>Data Not Available</p>
+      </div>
+    </div>
+  </div>
+  <div class="pd-left-right16 mt16 mb100">
+    <div class="attendance-list" *ngFor="let data of PopRequisitionData" (click)="support_detail(data.id)">
+      <div class="slab slab-bg">
+        <div class="slab-day">
+          <p>{{data.date_created != '0000-00-00 00:00:00' ? (data.date_created | date:'d MMM yyy , hh:mm a') : '---' }}
+          </p>
+          <span>Date Created</span>
+        </div>
+        <div class="slab-day">
+          <p># {{data.id}}</p>
+          <span>Gift Type Id</span>
+        </div>
+      </div>
+      <div class="center-block">
+        <div class="circle">{{data.gift_type?.substring(0,1).toUpperCase()}}</div>
+        <h1 class="f12">{{data.gift_type?.toUpperCase()}}</h1>
+        <p><strong>QTY:</strong> {{data.qty}}</p>
+      </div>
+      <div class="other-block pb0" *ngIf="data.gift_type=='POP Material'">
+        <p><strong>Item Name :</strong> {{data.item_name}}</p>
+      </div>
+      <div class="other-block pb0" *ngIf="activeTab=='Approved'">
+        <p><strong>Approved Qty :</strong> {{data.approved_qty}}</p>
+      </div>
+      <div class="other-block pb0">
+        <p><strong>Remark :</strong> {{data.remark}}</p>
+      </div>
+    </div>
+
+
+
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)" *ngIf="flag!=1">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </div>
+
+  <ion-fab right bottom (click)="goPopRequisitionAdd()" *ngIf="Frompage != 'audit'">
+    <button ion-fab color="primary"><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
+</ion-content>

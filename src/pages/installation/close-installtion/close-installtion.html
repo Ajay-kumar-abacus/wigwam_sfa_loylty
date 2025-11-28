@@ -1,0 +1,94 @@
+<!--
+  Generated template for the CloseInstalltionPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>Close Installtion</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <form name="f" #f="ngForm">
+    <div class="form">
+      <ion-list no-lines class="padding10">
+        <ion-item [ngClass]="{'error':f.submitted && complaint_status?.invalid}" >
+          <ion-label floating>Status<span>*</span></ion-label>
+          <ion-select name="complaint_status" #complaint_status="ngModel" [(ngModel)]="formData.complaint_status" required>
+            <ion-option value="Done">Done</ion-option>
+            <ion-option value="Reject">Reject</ion-option>
+          </ion-select>
+        </ion-item>
+        <div *ngIf="f.submitted && complaint_status?.invalid" class="eror">
+          <p *ngIf="complaint_status.errors.required">{{'Field is Required'}}</p>
+        </div>
+
+        <ion-item [ngClass]="{'error':f.submitted && remarks ?.invalid}" *ngIf="formData.complaint_status=='Done' ">
+          <ion-label floating>Remark <strong>*</strong></ion-label>
+          <ion-textarea name="remarks" #remarks="ngModel" [(ngModel)]="formData.remarks" required></ion-textarea>
+        </ion-item>
+        <div class="eror" *ngIf="f.submitted && remarks?.invalid">
+          <p> {{ 'This field is required'}}</p>
+        </div>
+
+        <ion-item [ngClass]="{'error':f.submitted && status_reason ?.invalid}" *ngIf="formData.complaint_status=='Reject' ">
+          <ion-label floating>Reject Reason <strong>*</strong></ion-label>
+          <ion-textarea name="status_reason" #status_reason="ngModel" [(ngModel)]="formData.status_reason" required></ion-textarea>
+        </ion-item>
+        <div class="eror" *ngIf="f.submitted && status_reason?.invalid">
+          <p> {{ 'This field is required'}}</p>
+        </div>
+
+      </ion-list>
+      
+      <div class="add-new padding0">
+        <div class="uplode-image">
+          <ul>
+            <li *ngFor="let pic of image_data;let i = index;">
+              <img src="{{pic.image}}">
+              <button><i class="material-icons" (click)="remove_image(i)">clear</i></button>
+            </li>
+            <li (click)="image_data.length < 5 ?  captureImageVideo() : showLimit()">
+              <label>
+                <input type="file" style="display: none;">
+                <div class="other">
+                  <a ><i class="material-icons" >camera_alt</i></a>
+                </div>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      
+      
+      <div class="enquiry-btn add-btns mt20">
+        <button ion-button  class="Buttons1" (click)="send_otp('Confirm');" *ngIf="sendOTP==false "><p>Confirm</p></button>
+      </div>
+      
+      <div *ngIf="Otp_verify==true"> 
+        <ion-list class="mb20">
+          <ion-item class="cs-textarea">
+            <ion-input placeholder="Enter OTP" type="text"  (keypress)="MobileNumber($event)" name="otp"  #otp="ngModel" [(ngModel)]="data.otp" minLength="6" maxLength="6" (input)="verify_otp(data.otp)" required ></ion-input>
+          </ion-item>
+        </ion-list>
+        <div *ngIf="f.submitted && otp?.invalid" class="eror">
+          <p *ngIf="otp.errors.required">{{'OTP is Required'}}</p>
+        </div>
+      </div>
+      <div class="enquiry-btn add-btns mt20" *ngIf="Otp_verify==true && !data.otp">
+        <button ion-button class="Buttons1" (click)="send_otp('Confirm');" *ngIf="sendOTP==true">
+          <p>Resend OTP</p>
+        </button>
+      </div>
+      
+      <div class="enquiry-btn add-btns mt20"  *ngIf=" OTP_flag==true">
+        <button ion-button block class="Buttons1 green-color" style="letter-spacing: 1px;" [disabled]="isDisabled" (click)="closeComplaint()">
+          <p> Submit</p>
+        </button>
+      </div>
+    </div>
+  </form>
+</ion-content>

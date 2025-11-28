@@ -1,0 +1,62 @@
+
+<ion-header>
+    <ion-navbar>
+        <ion-title>Return Detail</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <div class="list-box">
+        <div class="mid mt0">
+            <div class="content-info">                
+                <div class="right-info" >
+                    <p *ngIf="returnPointData.company_name">{{returnPointData.company_name}}</p>
+                    <p>{{returnPointData.returner_detail | titlecase}}</p>
+                </div>
+            </div>
+            
+            <div class="tag-info">
+                <a href="tel:{{returnPointData.mobile}}"><i class="material-icons">phone</i></a>
+            </div>
+        </div>
+        
+        <div class="upper">
+            <div class="left-date">
+                <div class="date-section">
+                    <p>{{returnPointData.date_created| date:'d MMM y'}}</p>
+                    <p>Date Created</p>
+                </div>
+                
+                <div class="date-section">
+                    <p>{{returnPointData.total_items ? returnPointData.total_items : '0'}}</p>
+                    <p>Total Item</p>
+                </div>
+                
+                <div class="date-section">
+                    <p>{{returnPointData.total_items_qty ? returnPointData.total_items_qty : '0'}}</p>
+                    <p>Total Item Qty</p>
+                </div>
+            </div>
+        </div>
+\    </div>
+    
+    <div class="pl16 pr16 mb25">
+        <ng-container>
+            <div class="summary-heading font14 mb8" *ngIf="productDetails && productDetails.length">ITEM INFORMATION</div>
+            
+            
+            <div class="attendance-list" style="padding : 5px 10px;" *ngFor="let item of productDetails; let i = index;">
+                <div class="center-block flat-block">
+                    <h1>{{item.product_detail}}</h1>
+                </div>
+                
+                <div class="slab slab-three boder-top1 pt5 mt5 dflex jcc align-center">
+                    <div class="slab-day">
+                        <p>{{item.product_qty}}</p>
+                        <span>Qty</span>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</ion-content>

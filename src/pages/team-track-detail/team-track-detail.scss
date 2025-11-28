@@ -1,0 +1,270 @@
+
+    // Map container
+    #map {
+      z-index: 1;
+    }
+  
+    // Custom marker styles
+    :host ::ng-deep .custom-user-marker {
+      .marker-circle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #3880ff;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+        border: 2px solid white;
+        transition: transform 0.2s ease;
+        
+        &:hover {
+          transform: scale(1.1);
+        }
+      }
+    }
+  
+    // Bottom sheet
+    .bottom-sheet {
+      position: absolute;
+      bottom: -100%;
+      left: 0;
+      right: 0;
+      height: auto;
+      max-height: 80vh;
+      background-color: white;
+      border-radius: 24px 24px 0 0;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+      z-index: 999;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      padding-bottom: 30px;
+      
+      &.open {
+        transform: translateY(-140%);
+      }
+    }
+  
+    .bottom-sheet-header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 12px 16px;
+      position: relative;
+      
+      .handle {
+        width: 40px;
+        height: 5px;
+        background-color: #ddd;
+        border-radius: 3px;
+      }
+      
+      .close-button {
+        position: absolute;
+        right: 16px;
+        top: 12px;
+        font-size: 24px;
+        color: #666;
+      }
+    }
+  
+    .bottom-sheet-content {
+      padding: 0 20px 20px;
+    }
+  
+    // User header section
+    .user-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 24px;
+      
+      .avatar {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        margin-right: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        
+        span {
+          color: black;
+          font-size: 32px;
+          font-weight: bold;
+        }
+      }
+      
+      .user-info {
+        flex: 1;
+        
+        h2 {
+          margin: 0 0 4px;
+          font-size: 20px;
+          font-weight: 600;
+          color: #333;
+        }
+        
+        .role {
+          margin: 0 0 8px;
+          color: #666;
+          font-size: 14px;
+        }
+        
+        .status-indicator {
+          display: flex;
+          align-items: center;
+          font-size: 14px;
+          color: #555;
+          
+          .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 6px;
+            
+            &.active { background-color: #10dc60; }
+            &.idle { background-color: #ffce00; }
+            &.on-break { background-color: #7044ff; }
+            &.en-route { background-color: #ff4961; }
+          }
+        }
+      }
+    }
+  
+    // Details section
+    .details-section {
+      background-color: #f8f9fa;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 24px;
+      
+      .detail-item {
+        display: flex;
+        margin-bottom: 16px;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+        
+        ion-icon {
+          font-size: 24px;
+          color: #3880ff;
+          margin-right: 16px;
+          margin-top: 3px;
+        }
+        
+        div {
+          flex: 1;
+          
+          h3 {
+            margin: 0 0 4px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #444;
+          }
+          
+          p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.4;
+          }
+        }
+      }
+    }
+  
+    // Action buttons
+    .action-buttons {
+      display: flex;
+      justify-content: space-between;
+      
+      .action-button {
+        flex: 1;
+        border: none;
+        background-color: transparent;
+        border-radius: 10px;
+        padding: 12px 0;
+        margin: 0 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: background-color 0.2s ease;
+        
+        &:first-child {
+          margin-left: 0;
+        }
+        
+        &:last-child {
+          margin-right: 0;
+        }
+        
+        ion-icon {
+          font-size: 24px;
+          margin-bottom: 6px;
+        }
+        
+        span {
+          font-size: 14px;
+          font-weight: 500;
+        }
+        
+        &.details {
+          color: #3880ff;
+        }
+        
+        &.call {
+          color: #10dc60;
+        }
+        
+        &.message {
+          color: #7044ff;
+        }
+        
+        &:active {
+          background-color: rgba(0, 0, 0, 0.05);
+        }
+      }
+    }
+
+    .custom-user-marker {
+        .marker-circle {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background-color: #3880ff;
+          color: white;
+          font-weight: bold;
+          font-size: 16px;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+          border: 2px solid white;
+        }
+      }
+      .map-back-button {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        z-index: 9999;
+        background-color: white;
+        color: black;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        font-size: 16px;
+      }
+      
+  

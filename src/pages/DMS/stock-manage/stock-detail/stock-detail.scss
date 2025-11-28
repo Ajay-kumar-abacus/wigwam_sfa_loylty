@@ -1,0 +1,70 @@
+page-stock-detail {
+    .list-box
+    {
+        border: 0px;
+        box-shadow: 0px 3px 4px 0px #cccccc !important;
+        padding: 5px;
+        border-radius: 5px;
+        
+        .upper
+        {
+            margin: 0;
+            border: 0px;
+            padding: 5px 0px 5px 0px;
+            
+            .left-date 
+            {
+                .date-section 
+                {
+                    p 
+                    {
+                        display: flex;
+                        
+                        &:nth-child(1) 
+                        {
+                            font-size: 12px;
+                        }
+                        
+                        &:nth-child(2) 
+                        {
+                            font-size: 11px;
+                            margin-top: 5px !important;
+                            white-space: nowrap;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    .mid
+    {
+        .content-info
+        {
+            .right-info
+            {
+                p
+                {
+                    // color: #000000;
+                }
+            }
+        }
+    }
+    
+    .transation-tabel
+    {
+        padding: 0px !important;
+
+        table
+        {
+            tr
+            {
+                td
+                {
+                    background: #e4fce4;
+                    padding: 7px 10px;
+                }
+            } 
+        } 
+    } 
+}

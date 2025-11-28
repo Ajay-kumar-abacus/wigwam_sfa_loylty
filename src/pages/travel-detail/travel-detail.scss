@@ -1,0 +1,174 @@
+page-travel-detail {
+    .Buttons{
+        display:flex;
+        width:45%;
+        background-color: #0b9900;
+        
+    }
+    .travelDetail.capsule-tabs {
+
+
+
+
+
+        li {
+            color: #999;
+        }
+
+        li.active {
+            background-color: #f0f0f0 !important;
+            font-weight: bold;
+            border-radius: 5px 5px 0 0;
+            color: #000;
+        }
+    }
+
+    .bg-box {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-column-gap: 0;
+
+        .slab-day {
+            padding: 5px 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+
+            p {
+                &.bg-font {
+                    font-size: 2rem;
+                }
+            }
+        }
+
+        &.sm-box {
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            background: #f0f0f0;
+
+            .slab-day {
+                padding: 5px;
+
+                p {
+                    &.bg-font {
+                        font-size: 1.5rem;
+                    }
+                }
+            }
+        }
+    }
+
+
+    .saprate {
+        background: #e4ffdb;
+        border-bottom: 2.5px dashed #2fff2f;
+    }
+
+    .status-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 10px 5px 10px;
+        font-size: 14px;
+
+        span {
+            font-weight: bold;
+            margin-left: 5px !important;
+        }
+    }
+
+
+
+
+    .red {
+        color: red;
+    }
+
+    .editBtn {
+        margin-right: 5px;
+
+        .edit {
+            background: #e2ecff;
+            padding: 5px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+
+            i.material-icons {
+                font-size: 18px;
+            }
+        }
+    }
+
+    .d-flex {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    button.statusBtn {
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 12px;
+        border-radius: 4px;
+        grid-column-gap: 4px;
+        border: 1px solid #999;
+        // text-decoration: underline;
+        // color: #2f2fc6;
+    }
+
+    button.statusBtn i {
+        font-size: 14px;
+    }
+
+    h1.f16 {
+        align-items: center;
+    }
+
+    .travel ul {
+        padding-left: 60px;
+        padding-right: 24px;
+        border-bottom: 3px dashed #0063a5;
+        margin-left: 0px;
+
+        li span.km {
+            top: -50%;
+        }
+
+        &:last-child {
+            border-bottom: 0px;
+        }
+
+    }
+
+    .travel ul li:after {
+        height: calc(100% + 30px) !important;
+
+        &:first-child {
+            border: 0px !important;
+        }
+    }
+
+    .deleteBtn {
+        height: auto;
+        width: auto;
+        padding: 0;
+        background-color: white;
+        box-shadow: none;
+
+        i {
+            color: red !important;
+            font-size: 20px !important;
+        }
+
+        &.rm-btn {
+            position: absolute;
+            top: 50%;
+            right: -10px;
+            transform: translateY(-50%);
+
+            i {
+                font-size: 18px;
+            }
+        }
+    }
+}

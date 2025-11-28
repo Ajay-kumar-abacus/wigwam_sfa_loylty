@@ -1,0 +1,145 @@
+<ion-header>    
+  <ion-navbar>
+    <ion-title>Team Member</ion-title>
+
+  </ion-navbar>
+      <ion-toolbar>
+
+        <div class="search add-search">
+            <div class="filter">
+                  <div class="edit m4" style="flex: 1;">
+                    <ion-list>
+                      <ng-container>
+                        <ion-item class="cs-normal-select retailerSelectionBox mt0 mb0">
+                          <ion-label>Select User</ion-label>
+                          <ionic-selectable item-content name="data" [(ngModel)]="data" [items]="assignUserList" itemValueField="id"
+                            itemTextField="name" (onChange)="getuserlist()" [canSearch]="true" #selectComponent></ionic-selectable>
+                        </ion-item>
+                      </ng-container>
+                    </ion-list>
+                  </div>
+              
+                <a class="date-pick">
+                    <label class="chedate">
+                        <input type="date" name="date" [(ngModel)]="filter.date"
+                            (ngModelChange)="getuserlist()" />
+                        <i class="material-icons">date_range</i>
+                    </label>
+                </a>
+            </div>
+        </div>
+        <ion-buttons end>
+          <button class="sortIcon" (click)="refresh()">
+            <i class="material-icons">refresh</i>
+          </button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<div class="text-line" *ngIf="filter.date">
+  <div class="lf-text">
+      <p>Date</p>
+      <p>{{filter.date | date:'d MMM y'}}</p>
+  </div>
+  <div class="rf-text">
+      <i class="material-icons" (click)="filter.date='';getuserlist()">cancel</i>
+  </div>
+</div>
+<ion-content>   
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+        refreshingText="Refreshing...">
+    </ion-refresher-content>
+</ion-refresher>
+
+<div class="tabs-count">
+  <div class="tab-content"
+       [ngClass]="{'active-tab': filter.tab == 'Present'}"
+       (click)="getuserlist('Present')">
+      <p>{{usersDataCount.total_present}}</p>
+      <span>Present</span>
+  </div>
+
+  <div class="tab-content"
+       [ngClass]="{'active-tab': filter.tab == 'Absent'}"
+       (click)="getuserlist('Absent')">
+      <p>{{usersDataCount.total_absent}}</p>
+      <span>Absent</span>
+  </div>
+
+  <div class="tab-content"
+       [ngClass]="{'active-tab': filter.tab == 'Leave'}"
+       (click)="getuserlist('Leave')">
+      <p>{{usersDataCount.total_leave}}</p>
+      <span>Leave</span>
+  </div>
+
+  <div class="tab-content"
+       [ngClass]="{'active-tab': filter.tab == 'Holiday'}"
+       (click)="getuserlist('Holiday')">
+      <p>{{usersDataCount.total_weekly_off}}</p>
+      <span>Holiday</span>
+  </div>
+</div>
+
+
+<div class="pd-left-right16 mt16 mb100">
+  <div class="attendance-list" style="padding:0px 10px" *ngFor="let item of user_list" (click)="item.user_data.attendence_status == 'Present' ? GoToDetail(item) : null">
+    
+    <div class="User-center-block">
+
+        <div class="circle">
+          <i class="material-icons" *ngIf="!item.user_data.image || item.user_data.image ==''">person</i>
+          <img *ngIf="item.user_data.image" (click)="imageModal(upload_url+item.user_data.image)" src="{{upload_url+item.user_data.image}}">
+        </div>
+        <div>
+
+          <h1 class="ml8">{{item.user_data.name}} - {{item.user_data.employee_id}}</h1>
+          <p class="ml8">{{item.user_data.mobile}}</p>
+        </div>
+        <div class="left-auto">
+          <div class="attendance"
+          [ngClass]="{'leave':item.user_data.attendence_status=='Leave', 'absent':item.user_data.attendence_status == 'Absent', 'present':item.user_data.attendence_status == 'Present', 'holiday':item.user_data.attendence_status == 'Holiday','weeklyOff':item.user_data.attendence_status == 'Weekly Off' }">
+          {{item.user_data.attendence_status}}
+      </div>
+  </div>
+    </div>
+    <div class="other-block pb0">
+      <div class="type-visit">
+        <div class="types">
+          <p class="labels">Punch-In</p>
+          <p>{{item.attendance_data?.start_time ? (item.attendance_data?.start_time != "00:00:00" ? (item.attendance_data?.start_time_date | date:'hh:mm a') : '---') : '---'}}</p>
+
+        </div>
+        <div class="types">
+          <p class="labels">First Check-In</p>
+          <p>{{item.first_checkin?.visit_start ? (item.first_checkin?.visit_start | date:'hh:mm a') : '---'}}</p>
+        </div>
+        <div class="types">
+          <p class="labels">Last Check-In</p>
+          <p>{{item.last_checkin?.visit_start ? (item.last_checkin?.visit_start | date:'hh:mm a') : '---'}}</p>
+
+        </div>
+        <div class="types">
+          <p class="labels">Punch-Out</p>
+          <p>{{item.attendance_data?.stop_time ? (item.attendance_data?.stop_time != "00:00:00"   ? (item.attendance_data?.stop_time_date | date:'hh:mm a') : '---') : '---'}}</p>
+
+        </div>
+      </div>
+    </div>
+    <div class="next-forword" *ngIf="item.user_data.attendence_status=='Present'">
+      <i class="material-icons">chevron_right</i>
+    </div>
+  </div>
+</div>
+<div class="nothing-here" *ngIf="!user_list.length">
+  <div class="outer">
+      <div class="innear">
+          <img src="assets/imgs/no_found.svg" alt="">
+          <p>Team Data Available</p>
+      </div>
+  </div>
+</div>
+</ion-content> 
+
+
+

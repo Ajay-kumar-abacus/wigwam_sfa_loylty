@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Add Spare Part</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <form name="f" #f="ngForm" (ngSubmit)="f.valid && saveInstallation()">
+    <div class=" form">
+      <ion-list no-lines class="padding10">
+        <ion-list no-lines class="padding10">
+          <div class="cs-heading1 pl0">
+            <p>Spare Part</p>
+          </div>
+          <ion-item [ngClass]="{'error':f.submitted && part_id?.invalid}">
+            <ion-label floating>Select Spare<span>*</span></ion-label>
+            <ionic-selectable item-content #part_id="ngModel" [(ngModel)]="spareData.part_id" [items]="spare_list"
+              itemValueField="id" itemTextField="part_detail" [canSearch]="true" #distributorSelectable
+              (ngModelChange)="getSpareParts(spareData.part_id)" (onSearch)="searchSpare(spareData.part_name,$event);"
+              (onClose)="closeDealer()" [disabled]="(disableSelect == true || disableSelectFromCheckin == true)"
+              [ngModelOptions]="{standalone: true}">
+            </ionic-selectable>
+          </ion-item>
+          <div *ngIf="f.submitted && part_id.invalid" class="eror">
+            <p *ngIf="part_id.errors.required">{{'Field is Required'}}</p>
+          </div>
+          <ion-item>
+            <ion-label floating>Qty<span>*</span></ion-label>
+            <ion-input type="text" name="qty" #qty="ngModel" [(ngModel)]="spareData.qty" (input)="max()"
+              onkeypress="return event.charCode>=48 && event.charCode<=57"></ion-input>
+          </ion-item>
+        </ion-list>
+      </ion-list>
+      <div class="mt16">
+        <button type="text" ion-button class="cs-btn" (click)="addToList()"
+          [disabled]="!spareData.part_id || !spareData.qty">Add To List</button>
+      </div>
+
+      <div class="cs-heading1 pl0" *ngIf="add_list.length">
+        <p>Spare Information</p>
+      </div>
+
+      <div class="list-box mt10" *ngFor="let row of add_list;let i=index">
+        <div class="mid mt0" style="display: flex;justify-content: space-between;">
+          <div class="content-info">
+            <div class="right-info">
+              <div class="mt2 mb2" style="display:flex; flex-direction:row">
+                <p class="pr2" style="color:rgb(255, 153, 0)">#{{i+1}} </p>
+                <p class="font14"> {{row.part_name | titlecase}} ({{row.part_no | titlecase}})</p>
+              </div>
+            </div>
+          </div>
+          <div class="tag-info">
+            <a><i class="material-icons red-clr" (click)="DeleteItem(i)">delete_sweep</i></a>
+          </div>
+        </div>
+
+        <div class="three_boxes">
+          <div class="lower ">
+            <p class="font10">Qty</p>
+            <p class="font10">{{row.qty}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="enquiry-btn add-btns mt20" *ngIf="add_list.length">
+        <button ion-button block class="h40 green-color" style="letter-spacing: 1px;">
+          <p> Submit</p>
+        </button>
+      </div>
+    </div>
+  </form>
+</ion-content>

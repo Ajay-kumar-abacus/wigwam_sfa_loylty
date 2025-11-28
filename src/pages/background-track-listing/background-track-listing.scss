@@ -1,0 +1,285 @@
+page-background-track-listing {
+    .User-center-block {
+        // position: relative;
+        // padding: 0px 40px 0px 40px;
+        margin-top: 10px;
+        flex-direction: row;
+        display: flex;
+        align-items: center;
+    
+        .circle {
+            // position: absolute;
+            // top: 0px;
+            // left: 0px;
+     
+            color: #353535;
+            background: #dadada;
+            width: 55px;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 100%;
+            font-size: 20px;
+            font-weight: bold;
+            box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.1);
+            border: 2px solid #fff;
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
+        }
+    
+        h1 {
+            font-size: 14px;
+            line-height: 20px;
+            font-weight: bold;
+        }
+    
+        p {
+            font-size: 12px;
+            line-height: 20px;
+            opacity: 0.9;
+        }
+    
+        a.cell-phone {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            font-size: 20px;
+            line-height: 14px;
+            transform: translateY(-50%);
+    
+            i {
+                color: var(--success);
+                font-size: 20px;
+            }
+        }
+    
+        &.flat-block {
+            margin-top: 0px;
+            padding: 0px 40px 0px 0px;
+    
+            a.cell-phone {
+                i {
+                    color: var(--danger);
+                    font-size: 20px;
+                }
+            }
+        }
+    
+    }
+    
+    .tabs-count {
+        display: grid;
+        align-items: center;
+        justify-content: center;
+        grid-column-gap: 6px;
+        padding: 10px 16px;
+        justify-content: space-around;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        
+        .tab-content {
+            text-align: center;
+            background: #ccc;
+            padding: 5px;
+            border-radius: 6px;
+            box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.1);
+            
+            
+            p{
+                font-size: 16px;
+                font-weight: 600;
+            }
+            
+            span{
+                font-size: 11px;
+            }
+            
+            &.present{
+                background: #e7ffbd;
+            }
+            &.absent{
+                background: #fff4cd;
+            }
+            &.leave{
+                background: #ffbdbd;
+            }
+            &.holiday{
+                background: #eae3ff;
+            }
+
+        }
+    }
+
+    .type-visit {
+        display: flex;
+        align-items: center;
+        // background: #f9f9f9; 
+
+        .types {
+            width: 100%;
+            text-align: center;
+            // padding: 5px;
+            margin-top: 6px;
+            margin-bottom: 6px;
+            position: relative;
+            justify-content: center;
+            font-size: 10px;
+            display: flex;
+            text-align: center;
+            align-items: center;
+            flex-direction: column;
+            grid-column-gap: 6px;
+
+            span {
+                width: 10px;
+                height: 10px;
+                border: 1px solid #ccc;
+                display: inline-block;
+                background: #fff;
+                border-radius: 10px;
+                position: relative;
+
+
+                &.active {
+
+                    &:after {
+                        content: "done";
+                        font-family: 'Material Icons';
+                        position: absolute;
+                        margin: 0px;
+                        top: 50%;
+                        left: 3px;
+                        left: 0px;
+                        font-family: 'Material Icons';
+                        font-weight: normal;
+                        font-style: normal;
+                        font-size: 8px;
+                        line-height: 1;
+                        letter-spacing: normal;
+                        text-transform: none;
+                        display: inline-block;
+                        white-space: nowrap;
+                        word-wrap: normal;
+                        color: #000000;
+                        transform: translateY(-50%);
+                        width: 10px;
+                        height: 10px;
+                        background: #3fc002;
+                        color: #fff;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 10px;
+                    }
+                }
+
+                &.deactive {
+
+                    &:after {
+                        content: "close";
+                        font-family: 'Material Icons';
+                        position: absolute;
+                        margin: 0px;
+                        top: 50%;
+                        left: 3px;
+                        left: 0px;
+                        font-family: 'Material Icons';
+                        font-weight: normal;
+                        font-style: normal;
+                        font-size: 8px;
+                        line-height: 1;
+                        letter-spacing: normal;
+                        text-transform: none;
+                        display: inline-block;
+                        white-space: nowrap;
+                        word-wrap: normal;
+                        color: #000000;
+                        transform: translateY(-50%);
+                        width: 10px;
+                        height: 10px;
+                        background: #ff5f5f;
+                        color: #fff;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 10px;
+                    }
+                }
+            }
+
+
+
+            .labels{
+                padding-top: 2px;
+                font-size: 10px;
+                font-weight: bold;
+              }
+
+            &:first-child {
+                &:after {
+                    background: transparent;
+                }
+            }
+
+        }
+    }
+
+    .attendance {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 5px;
+        font-size: 12px;
+        font-weight: bold;
+        border-radius: 4px;
+
+
+        &.present {
+            background: #e7ffbd;
+        }
+
+        &.absent {
+            background: #fff4cd;
+        }
+
+        &.leave {
+            background: #ffbdbd;
+        }
+
+        &.working {
+            background: #eae3ff;
+        }
+
+        &.weeklyOff,
+        &.holiday {
+            background: #d0d0d0;
+        }
+    }
+    .edit {
+        margin: 0px;
+        border: none !important;
+        border-radius: none;
+        padding: 0px !important;
+        background-color: white;
+    box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.2);
+    }
+
+    /* In your background-track-listing.scss or global styles */
+.tabs-count .tab-content.active-tab {
+    background-color: var(--theme-color, #4caf50); /* Or your desired active color */
+    color: white; /* Example text color */
+    border-bottom: 2px solid var(--theme-color-dark, #388e3c); /* Example border */
+  }
+  
+  /* Optional: Default styles for non-active tabs */
+  .tabs-count .tab-content {
+    background-color: #f0f0f0; /* Example default background */
+    color: #333; /* Example default text color */
+    /* Add other default styles */
+  }
+  
+}

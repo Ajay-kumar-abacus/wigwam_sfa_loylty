@@ -1,0 +1,99 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Send Stock Request</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <div class="padding16">
+        <div class="edit">
+            <!-- <form name="requestform" #requestform="ngForm" (ngSubmit)="requestform.valid && submitTransferRequest()"> -->
+                <ion-list>
+                    <ion-item class="cs-normal-select retailerSelectionBox mt16" >
+                        <ion-label><span>Select Distributor <span>*</span></span></ion-label>
+                        <ionic-selectable name="drData" item-content [(ngModel)]="data.drData" #drData="ngModel" [items]="networkList" itemValueField="id" itemTextField="name" [hasVirtualScroll]="true" [canSearch]="true" #dealerSelectable (onSearch)="searchNetwork($event)" required></ionic-selectable>
+                    </ion-item>
+                    
+                    <ion-item class="mb0 cs-normal-select retailerSelectionBox mt16">
+                        <ion-label><span>Select Product<span>*</span></span></ion-label>
+                        <ionic-selectable item-content name="product" [(ngModel)]="data.product" #product="ngModel" [items]="productList" itemValueField="id" itemTextField="display_name" [hasVirtualScroll]="true" [canSearch]="true" #distributorSelectable (onSearch)="searchProduct($event)" (ngModelChange)="getfieldsClear()" required></ionic-selectable>
+                    </ion-item>
+                    
+                    <ion-item >
+                        <ion-label floating><span>Qty <strong>*</strong></span></ion-label>
+                        <ion-input type="number" name="qty" #qty="ngModel" [(ngModel)]="data.qty" [disabled]= "!data.product" (keypress)="MobileNumber($event)"  (ngModelChange)="getPointCalculation(data)" required></ion-input>
+                    </ion-item>
+                    
+                    <ion-item hidden>
+                        <ion-label floating><span>Points <strong>*</strong></span></ion-label>
+                        <ion-input type="text" name="requested_points" #requested_points="ngModel" [(ngModel)]="data.requested_points" readonly required></ion-input>
+                    </ion-item>
+                    
+                    <div class="mt16">
+                        <button type="text" ion-button class="cs-btn" [disabled]="!data.drData || !data.product || !data.qty" (click)="addToList()">Add To List</button>
+                    </div>
+                    
+                    <div class="cs-heading1 pl0" *ngIf="add_list.length">
+                        <p>PRODUCT INFORMATION</p>
+                    </div>
+                    
+                    <div class="list-box mt10"  *ngFor="let row of add_list;let i=index">
+                        <div class="mid mt0" style="display: flex;justify-content: space-between;">
+                            <div class="content-info">
+                                <div class="right-info">
+                                    <div class="mt2 mb2" style="display:flex; flex-direction:row">
+                                        <p class="pr2" style="color:rgb(255, 153, 0)">#{{i+1}} </p>
+                                        <p> {{row.product.product_name}} ({{row.product.product_code}})</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tag-info">
+                                <button><i class="material-icons red-clr" (click)="DeleteItem(i)">delete_sweep</i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="three_boxes">
+                            <div class="lower ">
+                                <p class="font10">Qty</p>
+                                <p class="font10">{{row.qty}}</p>
+                            </div>
+
+                            <!-- <div class="lower ">
+                                <p class="font10">Scheme Points</p>
+                                <p class="font10">{{row.requested_points}}</p>
+                            </div> -->
+                        </div>
+                    </div>
+                    
+                    <!-- <ion-item class="cs-textarea1">
+                        <ion-label floating><span>Description</span></ion-label>
+                        <ion-textarea name="description" [(ngModel)]="data.description" #description="ngModel"></ion-textarea>
+                    </ion-item> -->
+                </ion-list>
+                
+                <div class="upload-doc">
+                    <div class="">
+                        Attachment
+                    </div>
+                    <ul class="padding0">
+                        <li class="add-image" (click)="onUploadChange()">
+                            <i class="material-icons">add_a_photo</i>
+                        </li>
+                        <li class="image-upload" *ngFor="let image of selectImage;index as i">
+                            <img src="{{image}}">
+                            <button class="del" (click)="delete_img(i)"><i class="material-icons">delete_sweep</i></button>
+                        </li>
+                    </ul>
+                </div>
+                
+                
+                <div class="text-right mt16" *ngIf="add_list.length">
+                    <button ion-button block color="primary" [disabled]="Submit_button || !add_list.length" (click)="submitTransferRequest()">
+                        <ion-spinner *ngIf="spinnerLoader"></ion-spinner>
+                        Submit
+                    </button>
+                </div>
+            <!-- </form> -->
+        </div>
+    </div>
+</ion-content>

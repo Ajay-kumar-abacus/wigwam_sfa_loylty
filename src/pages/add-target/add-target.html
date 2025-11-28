@@ -1,0 +1,330 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Add {{salesTargetType}} Target / Projection</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content *ngIf="salesTargetType == 'Primary'">
+  <div class="form">
+    <ion-list no-lines class="padding10 mb10 pt0">
+      <ion-item>
+        <ion-label floating><span>Select Month <strong class="reject">*</strong></span></ion-label>
+        <ion-select [(ngModel)]="target_data.month" interface="action-sheet" [disabled]="targetItem.length"
+          (ngModelChange)="setYear(target_data.month)">
+          <ion-option *ngFor="let row of remainingMonths" [value]="row">{{ row.name }} - {{row.year}}</ion-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Select Type <strong class="reject">*</strong></ion-label>
+        <ion-select name="dr_type" #dr_type="ngModel" [(ngModel)]="target_data.dr_type" interface="action-sheet"
+          (ngModelChange)="get_customerList(target_data.dr_type)" required>
+          <ng-container *ngFor="let item of networList">
+            <ion-option *ngIf="item.type == 1 || item.type == 7"
+              [value]="item.module_name">{{item.module_name}}</ion-option>
+          </ng-container>
+          <ion-option value="Prospect CP">Prospect CP</ion-option>
+        </ion-select>
+
+      </ion-item>
+
+      <ion-item *ngIf="target_data.dr_type">
+        <ion-label floating>Select {{target_data.dr_type}} <strong class="reject">*</strong></ion-label>
+        <ionic-selectable item-content [(ngModel)]="selectedCustomer" [items]="partyList" itemValueField="id"
+          itemTextField="display_name" [canSearch]="true">
+        </ionic-selectable>
+      </ion-item>
+      <ion-item class="cs-normal-select retailerSelectionBox" *ngIf="selectedCustomer">
+        <ion-label floating>Projection (Tons)<strong class="red-text">*</strong></ion-label>
+        <ion-input type="number" name="target_ton" [(ngModel)]="target_data.target_ton" #size="ngModel"
+          (ngModelChange)="(target_data.target_ton == '' || target_data.target_ton == null || target_data.target_ton<1 )?(addToListButton = true):(addToListButton = false);"
+          onkeypress="return event.charCode>=48 && event.charCode<=57"></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <div class="pl6 pr6">
+      <button ion-button round full color="primary" [disabled]="addToListButton || target_data.target_ton == '' " (click)="addTargetPlan()">
+        Add To List
+      </button>
+    </div>
+
+  </div>
+  <div class="list-box mt10 m16" *ngFor="let row of targetItem;let i=index">
+    <div class="mid mt0" style="display: flex;justify-content: space-between;">
+      <div class="content-info">
+        <div class="right-info">
+          <p style="color:rgb(4, 81, 169)">{{row.dr_name}}</p>
+        </div>
+      </div>
+      <div class="tag-info">
+        <button><i class="material-icons red-clr" (click)="DeleteItem(i)">delete_sweep</i></button>
+      </div>
+    </div>
+
+    <div class="three_boxes">
+      <div class="lower">
+        <p class="font10">Month - Year</p>
+        <p class="font10">{{row.month}} - {{row.year}}</p>
+      </div>
+      <div class="lower ml5">
+        <p class="font10">Projection (Tons)</p>
+        <p class="font10">{{row.target_ton}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="pl16 pr16 mb20" *ngIf="targetItem.length">
+    <button ion-button round full color="success" [disabled]="!targetItem?.length|| buttonDisable"
+      (click)="checkAlert()">
+      Save
+    </button>
+  </div>
+
+</ion-content>
+
+<ion-content *ngIf="salesTargetType == 'Visit'">
+  <div class="form">
+    <ion-list no-lines class="padding10 mb10 pt0">
+
+
+      <ion-item>
+        <ion-label floating><span>Select Month <strong class="reject">*</strong></span></ion-label>
+        <ion-select [(ngModel)]="target_data.month" [disabled]="targetItem.length" interface="action-sheet"
+          (ngModelChange)="setYear(target_data.month)">
+          <ion-option *ngFor="let row of remainingMonths" [value]="row">{{ row.name }} - {{row.year}}</ion-option>
+        </ion-select>
+      </ion-item>
+      <!-- <ion-item class="cs-normal-select retailerSelectionBox">
+        <ion-label floating>Lead Count <strong class="red-text">*</strong></ion-label>
+        <ion-input type="number" name="lead" [(ngModel)]="target_data.lead" #size="ngModel"
+          onkeypress="return event.charCode>=48 && event.charCode<=57"></ion-input>
+      </ion-item> -->
+      <ion-item class="cs-normal-select retailerSelectionBox">
+        <ion-label floating>BTL Count <strong class="red-text">*</strong></ion-label>
+        <ion-input type="number" name="btl" [(ngModel)]="target_data.btl" #size="ngModel"
+          onkeypress="return event.charCode>=48 && event.charCode<=57"></ion-input>
+      </ion-item>
+      <!-- <ion-item class="cs-normal-select retailerSelectionBox">
+        <ion-label floating>PlyExpert Count <strong class="red-text">*</strong></ion-label>
+        <ion-input type="number" name="plyExpert" [(ngModel)]="target_data.plyExpert" #size="ngModel"
+          onkeypress="return event.charCode>=48 && event.charCode<=57"></ion-input>
+      </ion-item> -->
+      <!-- <ion-item class="cs-normal-select retailerSelectionBox">
+        <ion-label floating>Ambassador Count <strong class="red-text">*</strong></ion-label>
+        <ion-input type="number" name="ambassador" [(ngModel)]="target_data.ambassador" #size="ngModel"
+          onkeypress="return event.charCode>=48 && event.charCode<=57"></ion-input>
+      </ion-item> -->
+      <!-- <ion-item class="cs-normal-select retailerSelectionBox">
+        <ion-label floating>OEM Count <strong class="red-text">*</strong></ion-label>
+        <ion-input type="number" name="oem" [(ngModel)]="target_data.oem" #size="ngModel"
+          onkeypress="return event.charCode>=48 && event.charCode<=57"></ion-input>
+      </ion-item> -->
+      <!-- <ion-item class="cs-normal-select retailerSelectionBox">
+        <ion-label floating>Builder Count <strong class="red-text">*</strong></ion-label>
+        <ion-input type="number" name="builder" [(ngModel)]="target_data.builder" #size="ngModel"
+          onkeypress="return event.charCode>=48 && event.charCode<=57"></ion-input>
+      </ion-item> -->
+
+    </ion-list>
+
+  </div>
+  <div class="pl16 pr16 mb20">
+    <!-- <button ion-button round full color="success"
+      [disabled]="!target_data.builder || !target_data.oem ||!target_data.ambassador|| !target_data.plyExpert|| !target_data.lead ||!target_data.btl|| buttonDisable"
+      (click)="checkAlert()">
+      Save
+    </button> -->
+    <button ion-button round full color="success"
+      [disabled]="!target_data.btl|| buttonDisable"
+      (click)="checkAlert()">
+      Save
+    </button>
+  </div>
+
+</ion-content>
+
+<ion-content *ngIf="salesTargetType == 'Secondary'">
+  <div class="form">
+    <ion-list no-lines class="padding10 mb10 pt0">
+
+      <ion-item>
+        <ion-label floating><span>Select Month <strong class="reject">*</strong></span></ion-label>
+        <ion-select [(ngModel)]="target_data.month" [disabled]="targetItem.length" interface="action-sheet"
+          (ngModelChange)="setYear(target_data.month)">
+          <ion-option *ngFor="let row of remainingMonths" [value]="row">{{ row.name }} - {{row.year}}</ion-option>
+        </ion-select>
+      </ion-item>
+
+
+      <ion-item>
+        <ion-label floating>Select Type <strong class="red-text">*</strong></ion-label>
+        <ion-select name="dr_type" [(ngModel)]="target_data.dr_type" #dr_type="ngModel" interface="action-sheet"
+          (ngModelChange)="get_customerList(target_data.dr_type)" required>
+          <ng-container *ngFor="let item of networList">
+            <ion-option *ngIf="item.type == 13 || item.type == 8 || item.type == 14 || item.type == 16 "
+              [value]="item.module_name">{{item.module_name}}</ion-option>
+             
+          </ng-container>
+          <ion-option 
+          [value]="Lead">Lead</ion-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item *ngIf="target_data.dr_type">
+        <ion-label floating>Select {{target_data.dr_type}} <strong class="reject">*</strong></ion-label>
+        <ionic-selectable item-content [(ngModel)]="selectedCustomer" [items]="partyList" itemValueField="id"
+          itemTextField="display_name" [canSearch]="true">
+        </ionic-selectable>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Supplier Type</ion-label>
+        <ion-select interface="action-sheet" name="customer_type" #customer_type="ngModel"
+            [(ngModel)]="target_data.customer_type" required
+            (ionChange)="getAssignedDistributor(target_data.customer_type)">
+            <ion-option value="1">Channel Partner</ion-option>
+            <ion-option value="3">Sub Dealer</ion-option>
+        </ion-select>
+    </ion-item>
+
+      <ion-item *ngIf="selectedCustomer">
+        <ion-label floating>Select Supplier <strong class="reject">*</strong></ion-label>
+        <ionic-selectable item-content [(ngModel)]="selectedSupplier" [items]="assignDistributorList"
+          itemValueField="id" itemTextField="display_name" [canSearch]="true">
+        </ionic-selectable>
+      </ion-item>
+      <ion-item class="cs-normal-select retailerSelectionBox" *ngIf="selectedCustomer">
+        <ion-label floating>Number of Sheets <strong class="red-text">*</strong></ion-label>
+        <ion-input type="number" name="target_ton" [(ngModel)]="target_data.target_ton" #size="ngModel"
+          (ngModelChange)="(target_data.target_ton == '' || target_data.target_ton == null || target_data.target_ton<1 )?(addToListButton = true):(addToListButton = false);"
+          onkeypress="return event.charCode>=48 && event.charCode<=57"></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <div class="pl6 pr6">
+      <button ion-button round full color="primary" [disabled]="addToListButton || target_data.target_ton == ''" (click)="addTargetPlan()">
+        Add To List
+      </button>
+    </div>
+
+  </div>
+  <div class="list-box mt10 m16" *ngFor="let row of targetItem;let i=index">
+    <div class="mid mt0" style="display: flex;justify-content: space-between;">
+      <div class="content-info">
+        <div class="right-info">
+          <p style="color:rgb(4, 81, 169)">{{row.dr_name}}</p>
+        </div>
+      </div>
+      <div class="tag-info">
+        <button><i class="material-icons red-clr" (click)="DeleteItem(i)">delete_sweep</i></button>
+      </div>
+    </div>
+
+    <div class="three_boxes">
+      <div class="lower">
+        <p class="font10">Month - Year</p>
+        <p class="font10">{{row.month}} - {{row.year}}</p>
+      </div>
+      <div class="lower ml5">
+        <p class="font10">Number of Sheets</p>
+        <p class="font10">{{row.target_ton}}</p>
+      </div>
+    </div>
+    <div class="three_boxes">
+      <div class="lower">
+        <p class="font10">Supplied By</p>
+        <p class="font10">{{row.supplier_name}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="pl16 pr16 mb20" *ngIf="targetItem.length">
+    <button ion-button round full color="success" [disabled]="!targetItem?.length || buttonDisable"
+      (click)="checkAlert()">
+      Save
+    </button>
+  </div>
+
+</ion-content>
+
+<ion-content *ngIf="salesTargetType == 'Stock Transfer'">
+  <div class="form">
+    <ion-list no-lines class="padding10 mb10 pt0">
+
+      <ion-item>
+        <ion-label floating><span>Select Month <strong class="reject">*</strong></span></ion-label>
+        <ion-select interface="action-sheet" [(ngModel)]="target_data.month" [disabled]="targetItem.length"
+          (ngModelChange)="setYear(target_data.month)">
+          <ion-option *ngFor="let row of remainingMonths" [value]="row">{{ row.name }} - {{row.year}}</ion-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Select {{target_data.dr_type}} <strong class="reject">*</strong></ion-label>
+        <ionic-selectable item-content [(ngModel)]="selectedCustomer" [items]="partyList" itemValueField="id"
+          itemTextField="display_name" [canSearch]="true" (ngModelChange)="getAssignedDistributor(1)">
+        </ionic-selectable>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Supplier Type</ion-label>
+        <ion-select interface="action-sheet" name="customer_type" #customer_type="ngModel"
+            [(ngModel)]="target_data.customer_type" required
+            (ionChange)="getAssignedDistributor(target_data.customer_type)">
+            <ion-option value="1" [selected]="true">Channel Partner</ion-option>
+        </ion-select>
+    </ion-item>
+      <ion-item *ngIf="selectedCustomer">
+        <ion-label floating>Select Supplier <strong class="reject">*</strong></ion-label>
+        <ionic-selectable item-content [(ngModel)]="selectedSupplier" [items]="assignDistributorList"
+          itemValueField="id" itemTextField="display_name" [canSearch]="true">
+        </ionic-selectable>
+      </ion-item>
+      <ion-item class="cs-normal-select retailerSelectionBox" *ngIf="selectedCustomer">
+        <ion-label floating>Number of Sheets <strong class="red-text">*</strong></ion-label>
+        <ion-input type="number" name="target_ton" [(ngModel)]="target_data.target_ton" #size="ngModel"
+          (ngModelChange)="(target_data.target_ton == '' || target_data.target_ton == null || target_data.target_ton<1 )?(addToListButton = true):(addToListButton = false);"
+          onkeypress="return event.charCode>=48 && event.charCode<=57"></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <div class="pl6 pr6">
+      <button ion-button round full color="primary" [disabled]="addToListButton || target_data.target_ton == ''" (click)="addTargetPlan()">
+        Add To List
+      </button>
+    </div>
+
+  </div>
+  <div class="list-box mt10 m16" *ngFor="let row of targetItem;let i=index">
+    <div class="mid mt0" style="display: flex;justify-content: space-between;">
+      <div class="content-info">
+        <div class="right-info">
+          <p style="color:rgb(4, 81, 169)">{{row.dr_name}}</p>
+        </div>
+      </div>
+      <div class="tag-info">
+        <button><i class="material-icons red-clr" (click)="DeleteItem(i)">delete_sweep</i></button>
+      </div>
+    </div>
+
+    <div class="three_boxes">
+      <div class="lower">
+        <p class="font10">Month - Year</p>
+        <p class="font10">{{row.month}} - {{row.year}}</p>
+      </div>
+      <div class="lower ml5">
+        <p class="font10">Number of Sheets</p>
+        <p class="font10">{{row.target_ton}}</p>
+      </div>
+    </div>
+    <div class="three_boxes">
+      <div class="lower">
+        <p class="font10">Supplied By</p>
+        <p class="font10">{{row.supplier_name}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="pl16 pr16 mb20" *ngIf="targetItem.length">
+    <button ion-button round full color="success" [disabled]="!targetItem?.length || buttonDisable"
+      (click)="checkAlert()">
+      Save
+    </button>
+  </div>
+
+</ion-content>

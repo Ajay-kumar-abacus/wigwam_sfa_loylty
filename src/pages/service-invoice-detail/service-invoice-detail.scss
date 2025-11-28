@@ -1,0 +1,77 @@
+page-service-invoice-detail {
+    .pb100 {
+    padding-bottom: 1px !important;
+    }
+.remarkSent {
+		width: 100%;
+		font-size: 10px;
+		text-align: right;
+		border-bottom: 1px solid #f0f0f0;
+		padding: 5px 16px;
+        height: 50%;
+
+		.remarkMsg {
+			font-size: 12px;
+			line-height: 20px;
+			color: #000;
+		}
+
+		.dateCreated span {
+			font-size: 11px;
+			color: #0e0e0e;
+			margin: 5px 0px !important;
+			display: inline-block;
+			font-weight: 600;
+		}
+
+		&:last-child {
+			border-bottom: 0px;
+		}
+
+		&:nth-child(odd) {
+			background: #f8f8f8;
+		}
+	}
+	table {
+		width: 100%;
+		box-sizing: border-box;
+		table-layout: fixed;
+		border-collapse: collapse;
+
+		tr {
+			border-bottom: 1px solid #bcbcbc;
+
+			th,
+			td {
+				padding: 10px 5px;
+				font-size: 12px;
+			}
+
+			th {
+				vertical-align: top;
+				text-align: left;
+				background: #f8f8f8;
+				color: #000000;
+			}
+
+			td {
+				padding-left: 10px;
+				line-height: 20px;
+
+				a {
+					text-transform: capitalize;
+					float: right;
+				}
+
+				p {
+					font-size: 13px;
+					line-height: 20px;
+				}
+			}
+
+			&:last-child {
+				border-bottom: 0px;
+			}
+		}
+	}
+}

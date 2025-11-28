@@ -1,0 +1,205 @@
+<ion-header class="catalogue-header">
+    <ion-navbar>
+        <ion-title>Primary Order Detail</ion-title>
+        <ion-buttons end>
+
+            <button ion-button icon-only (click)="exportPdf()" class="exportPdfBtn">
+
+                <ng-container *ngIf="pdfLoader">
+                    <ion-spinner class="black-spinner"></ion-spinner>
+                    Exporting
+                </ng-container>
+                <ng-container *ngIf="!pdfLoader">
+                    <img src="assets/imgs/pdf.png" alt="#">
+                    Export PDF
+                </ng-container>
+            </button>
+        </ion-buttons>
+
+    </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+    <div class="fix-container">
+        <div class="attendance-list flat-list">
+            <div class="center-block">
+                <div class="circle">{{userDetail.company_name?.trim().substring(0,1).toUpperCase()}}</div>
+                <h1>{{userDetail.company_name}}</h1>
+                <p>{{userDetail.name}} - {{userDetail.mobile}}</p>
+                <a class="cell-phone" href="tel:{{userDetail?.mobile}}"><i class="material-icons">phone</i></a>
+            </div>
+        </div>
+        <div class="">
+            <ion-segment [(ngModel)]="summary">
+                <ion-segment-button value="active">
+                    Order Summary
+                </ion-segment-button>
+                <ion-segment-button value="inactive">
+                    Item Summary
+                </ion-segment-button>
+            </ion-segment>
+        </div>
+    </div>
+
+
+
+    <div [ngSwitch]="summary" class="pl16 pr16 mb50">
+        <ng-container *ngSwitchCase="'active'">
+            <div class="border-container mt16 mb16">
+                <div class="summary-heading">Order Details</div>
+                <div class="payment-box">
+                    <div class="credit-table">
+                        <table>
+                            <tr>
+                                <td>Order Id</td>
+                                <td class="w130">{{userDetail.order_no}}</td>
+                            </tr>
+                            <tr>
+                                <td>Status</td>
+                                <td class="w130">
+                                    <span
+                                        class="badge-padding text-center  {{userDetail.order_status}}">{{userDetail.order_status}}</span>
+                                </td>
+                            </tr>
+                            <tr *ngIf="userDetail.order_type">
+                                <td>Order Type</td>
+                                <th>{{userDetail?.order_type}}</th>
+                            </tr>
+                            <tr>
+                                <td>Total Item</td>
+                                <th>{{userDetail?.order_item}}</th>
+                            </tr>
+                            <tr>
+                                <td>Total Item Qty.</td>
+                                <th>{{userDetail.total_order_qty||'N/A'}}</th>
+                            </tr>
+                            <tr>
+                                <td>Total Amount</td>
+                                <th> &#x20B9; {{(userDetail.totalPriceAfterGST | number:'1.2-2' )||'N/A'}}</th>
+                            </tr>
+                            <tr>
+                                <td>Total Weight</td>
+                                <th>{{(userDetail.weight | number:'1.2-2' )||'N/A'}} Ton</th>
+                            </tr>
+                            <tr>
+                                <td>Warehouse</td>
+                                <th>{{userDetail.warehouse||'N/A'}}</th>
+                            </tr>
+                            <tr>
+                                <td>Estimate delivery date</td>
+                                <th>{{userDetail.estimate_delivery_date ? (userDetail.estimate_delivery_date | date :
+                                    'dd MMM yyyy'):'N/A'}}</th>
+                            </tr>
+
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="upload-doc" *ngIf="userDetail.order_images && userDetail.order_images.length > 0">
+                <p class="">Upload Bill</p>
+                <ul class="no-padding">
+                    <li class="image-upload" *ngFor="let val of userDetail.order_images;let i = index;">
+                        <img (click)="imageModal(constant.upload_url1+'orderPdf/'+val.doc)"
+                            src="{{constant.upload_url1+'orderPdf/'+val.doc}}">
+                        <button class="del"><i class="material-icons"
+                                (click)="delete_Image(index,val.id)">delete_sweep</i></button>
+                    </li>
+                </ul>
+            </div>
+
+
+            <ng-container
+                *ngIf="userDetail.reason_reject && userDetail.reason_reject != '' || userDetail.order_create_remark && userDetail.order_create_remark != '' || userDetail.pre_close_remark && userDetail.pre_close_remark != ''">
+                <div class="notes">
+                    <p *ngIf="userDetail.reason_reject && userDetail.reason_reject != ''"><span>Reason of Referred
+                            Back</span> {{userDetail.reason_reject}}</p>
+                    <p *ngIf="userDetail.order_create_remark && userDetail.order_create_remark != ''"><span>Order
+                            Remark</span> {{userDetail.order_create_remark}}</p>
+                    <p *ngIf="userDetail.pre_close_remark && userDetail.pre_close_remark != ''"><span>Pre Close
+                            Remark</span> {{userDetail.pre_close_remark}}</p>
+                </div>
+            </ng-container>
+            <div class="notes">
+                <p *ngIf="userDetail.shipping_address && userDetail.shipping_address != ''">
+                   Shipping Address <span>{{userDetail.shipping_address}}</span>
+                </p>
+            </div>
+
+            <!-- <ng-container *ngIf="(userDetail.order_status != 'Reject' && userDetail.order_status != 'despatched' && userDetail.order_status != 'in_loading')">
+                <button color="success" round outline block ion-button icon-start (click)="ADD_Item(userDetail.id)">
+                  <ion-icon name="create"></ion-icon>
+                  Edit Order Item Details
+                </button>
+              </ng-container> -->
+            <ng-container *ngIf="userDetail.editFlag==1">
+                <button color="success" round outline block ion-button icon-start (click)="ADD_Item(userDetail.id)">
+                    <ion-icon name="create"></ion-icon>
+                    Edit Order Item Details
+                </button>
+            </ng-container>
+
+        </ng-container>
+
+
+
+
+        <ng-container *ngSwitchCase="'inactive'">
+            <div class="summary-heading">Item Details</div>
+
+
+            <div class="attendance-list" *ngFor="let order of orderitem;let i = index;">
+                <div class="center-block flat-block"
+                    [ngClass]="{'pr0': userDetail.order_status!='Pending' && userDetail.order_status!='Draft'}">
+                    <h1>{{order.product_name}} ({{order.product_code}})</h1>
+                    <!-- <ng-container *ngIf="(userDetail.order_status=='Pending' || userDetail.order_status=='Draft') && orderitem.length > 1" >
+                        <a class="cell-phone" (click)="delete_item(i,order.id,order.order_id)"><i class="material-icons">delete</i></a>
+                    </ng-container> -->
+                </div>
+                <div class="slab slab-three boder-top1 pt10 mt10">
+
+                    <div class="slab-day">
+                        <p>{{order.brand}}</p>
+                        <span>Brand</span>
+                    </div>
+                    <div class="slab-day">
+                        <p>{{order.thickness}}</p>
+                        <span>Thickness</span>
+                    </div>
+                    <div class="slab-day">
+                        <p>{{order.size}}</p>
+                        <span>Size</span>
+                    </div>
+
+                    <div class="slab-day">
+                        <p>{{order.qty}}</p>
+                        <span>Qty</span>
+                    </div>
+
+                    <div class="slab-day">
+                        <p>{{order.weight | number:'1.2-2'}} Kg</p>
+                        <span>Weight</span>
+                    </div>
+                    <div class="slab-day">
+                        <p>{{order.total_weight | number:'1.2-2'}} Kg</p>
+                        <span>Total Weight</span>
+                    </div>
+                    <div class="slab-day">
+                        <p> &#x20B9; {{order.total_price_with_freight | number:'1.2-2'}}</p>
+                        <span>Total Amount</span>
+                    </div>
+
+
+
+                </div>
+            </div>
+
+        </ng-container>
+    </div>
+</ion-content>
+
+<!-- <div class="endcheck" *ngIf="(userDetail.order_status == 'Draft' )">
+    <a (click)="changeStatus()">Submit Order</a>
+</div> -->

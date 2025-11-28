@@ -1,0 +1,191 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Expense Add</ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content>
+
+    <form name="outstation_form" #outstation_form="ngForm"
+        (ngSubmit)="outstation_form.valid && outstation_form.submitted && submitNewExpense(outstation_form)">
+        <div class="form">
+            
+            <ion-list no-lines class="padding10 pt0">
+                <ion-item [ngClass]="{'error':outstation_form.submitted && claimDate?.invalid}">
+                    <ion-label floating><span>Claim Date<strong>*</strong></span></ion-label>
+                    <ion-datetime display-format="MMM DD, YYYY"  min={{getLastMonthDate()}} max={{today_date}} [disabled]="this.item.length>0" type="date" name="claimDate" #claimDate="ngModel" [(ngModel)]="expense.claimDate"
+                        class="calander date" required>
+                    </ion-datetime>
+                </ion-item>
+                <div *ngIf="outstation_form.submitted && claimDate.invalid" class="eror">
+                    <p *ngIf="claimDate.errors.required">Field is Required</p>
+                </div>
+
+                <ion-item [ngClass]="{'error':outstation_form.submitted && travelClass?.invalid}">
+                    <ion-label floating><span>Expense Type<strong>*</strong></span></ion-label>
+                    <ion-select interface="action-sheet" name="travelClass" [(ngModel)]="travelForm.travelClass"
+                        #travelClass="ngModel" (ngModelChange)="blankClassValue()">
+                        <!-- <ion-option *ngIf="allowanceData.bike != ''" value="Bike">Bike</ion-option>
+                        <ion-option *ngIf="allowanceData.car != ''" value="Car">Car</ion-option> -->
+                        <ion-option *ngIf="allowanceData.flight == '1'" value="Flight">Flight</ion-option>
+                        <ion-option *ngIf="allowanceData.trainSC == '1' " value="Train">Train</ion-option>
+                        <ion-option *ngIf="allowanceData.busAC == '1'" value="Bus">Bus</ion-option>
+                        <ion-option *ngIf="allowanceData.auto == '1'" value="Auto">Auto/Uber</ion-option>
+                        <ion-option *ngIf="allowanceData.taxi == '1'" value="Taxi">Taxi</ion-option>
+                        <ion-option *ngIf="allowanceData.logding == '1'" value="Logding">Logding</ion-option>
+                        <ion-option *ngIf="allowanceData.boarding == '1'" value="Boarding">Boarding</ion-option>
+                        <ion-option *ngIf="allowanceData.tolltax == '1'" value="Tolltax">Tolltax</ion-option>
+                        <ion-option *ngIf="allowanceData.miscellaneous == '1'" value="Miscellaneous">OOP (Out of
+                            Pocket)</ion-option>
+
+                    </ion-select>
+                </ion-item>
+
+                <ng-container *ngIf="travelForm.travelClass == 'Bike' || travelForm.travelClass == 'Car'">
+                    <ion-item [ngClass]="{'error':outstation_form.submitted && distance?.invalid}">
+                        <ion-label floating><span>Distance (KM)</span></ion-label>
+                        <ion-input type="number" name="distance" #distance="ngModel" [(ngModel)]="travelForm.distance"
+                            onkeypress="return event.charCode>=48 && event.charCode<=57"
+                            (input)="calculateTravelAmount2()"></ion-input>
+                    </ion-item>
+                </ng-container>
+                <ng-container
+                *ngIf="travelForm.travelClass == 'Miscellaneous' || travelForm.travelClass == 'Boarding'|| travelForm.travelClass == 'Logding'|| travelForm.travelClass == 'Auto' ">
+
+                <ion-item>
+                    <ion-label floating>City<strong class="reject">*</strong></ion-label>
+                    <ionic-selectable item-content [(ngModel)]="travelForm.city" name="city" [items]="city_list"
+                        itemValueField="city" itemTextField="city" [canSearch]="true" (onSearch)="getCityList($event.text);" (ngModelChange)="travelForm.travelAmount=''">
+                    </ionic-selectable>
+                </ion-item>
+            </ng-container>
+
+                <ng-container
+                    *ngIf=" travelForm.travelClass == 'Tolltax' || travelForm.travelClass == 'Taxi'|| travelForm.travelClass == 'Bus'|| travelForm.travelClass == 'Train' || travelForm.travelClass == 'Flight'">
+
+                    <ion-item>
+                        <ion-label floating>Location From<strong class="reject">*</strong></ion-label>
+                        <ionic-selectable item-content [(ngModel)]="travelForm.locationfrom" name="locationfrom" [items]="city_list"
+                            itemValueField="city" itemTextField="city" [canSearch]="true" (onSearch)="getCityList($event.text); ">
+                        </ionic-selectable>
+                    </ion-item>
+                </ng-container>
+                <ng-container
+                *ngIf="travelForm.travelClass == 'Tolltax' || travelForm.travelClass == 'Taxi'|| travelForm.travelClass == 'Bus'|| travelForm.travelClass == 'Train' || travelForm.travelClass == 'Flight'">
+
+                    <ion-item>
+                        <ion-label floating>Location To<strong class="reject">*</strong></ion-label>
+                        <ionic-selectable item-content name="locationto" [(ngModel)]="travelForm.locationto" [items]="city_list"
+                            itemValueField="city" itemTextField="city" [canSearch]="true" (onSearch)="getCityList($event.text); ">
+                        </ionic-selectable>
+                    </ion-item>
+                </ng-container>
+
+                <ion-item [ngClass]="{'error':outstation_form.submitted && travelAmount?.invalid}">
+                    <ion-label floating><span>Amount</span></ion-label>
+                    <ion-input type="number" name="travelAmount" [(ngModel)]="travelForm.travelAmount"
+                        onkeypress="return event.charCode>=48 && event.charCode<=57" #travelAmount="ngModel"
+                        (input)="CheckAllowance()"
+                        [readonly]="travelForm.travelClass == 'Bike' || travelForm.travelClass == 'Car'"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                    <ion-label floating><span>Remark</span></ion-label>
+                    <ion-textarea name="remark" #remark="ngModel" [(ngModel)]="travelForm.remark"></ion-textarea>
+                </ion-item>
+                <div class="upload-doc mt0 pl10 pr10" *ngIf="travelForm.travelClass">
+                    <ul class="no-padding">
+                        <li class="add_image mt0" *ngIf="image_data.length<5"
+                            (click)="image_data.length <= 6?  captureMedia() : showLimit()">
+                            <img src="assets/imgs/upload_imae_icon.png" alt="">
+                            Upload your Bill <span>here</span>
+                        </li>
+                    </ul>
+                </div>
+                <button type="button" ion-button block color="primary" class="mt16" (click)="addToList()">Add To
+                    List</button>
+            </ion-list>
+
+
+            <div class="pl10 pr10" *ngIf="item.length > 0">
+                <div class="cs-heading1 pl0">
+                    <p>Expense List</p>
+                </div>
+                <div class="list-box mt10" *ngFor="let row of item;let i=index">
+                    <div class="three_boxes">
+                        <div class="lower">
+                            <p class="font10">Mode</p>
+                            <p class="font10">{{row.modeOfTravel}}</p>
+                        </div>
+                        <div class="lower ml5" *ngIf="row.modeOfTravel == 'Bike' ||  row.modeOfTravel == 'Car'">
+                            <p class="font10">Distance</p>
+                            <p class="font10">{{row.distance ? (row.distance + ' Km') : '---'}}</p>
+
+                        </div>
+                        <!-- <div class="lower ml5" *ngIf="row.modeOfTravel == 'Flight' ||  row.modeOfTravel == 'Train'||row.modeOfTravel == 'Bus' ||  row.modeOfTravel == 'Taxi'||row.modeOfTravel == 'Tolltax' ||  row.modeOfTravel == 'Logding'||row.modeOfTravel == 'Boarding' ||  row.modeOfTravel == 'Miscellaneous'">
+                            <p class="font10">Location From</p>
+                            <p class="font10">{{row.locationfrom ? (row.locationfrom ) : '---'}}</p>
+
+                        </div>
+                        <div class="lower ml5" *ngIf="row.modeOfTravel == 'Flight' ||  row.modeOfTravel == 'Train'||row.modeOfTravel == 'Bus' ||  row.modeOfTravel == 'Taxi'||row.modeOfTravel == 'Tolltax' ||  row.modeOfTravel == 'Logding'||row.modeOfTravel == 'Boarding' ||  row.modeOfTravel == 'Miscellaneous'">
+                            <p class="font10">Location To</p>
+                            <p class="font10">{{row.locationto ? (row.locationto) : '---'}}</p>
+
+                        </div>
+                        <div class="lower ml5" *ngIf="row.modeOfTravel == 'Auto'">
+                            <p class="font10">City</p>
+                            <p class="font10">{{row.city ? (row.city) : '---'}}</p>
+
+                        </div> -->
+                        <div class="lower ml5">
+                            <p class="font10">Amount</p>
+                            <p class="font10">{{row.amount ? ('Rs. ' + row.amount) : '--'}}</p>
+                        </div>
+
+                        <div class="lower ml5">
+                            <div class="tag-info text-center">
+                                <a><i class="material-icons red-clr" (click)="listdelete(i)">delete_sweep</i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="three_boxes">
+                        <div class="lower">
+                            <p class="font10">Remark</p>
+                            <p class="font10">{{row.remark ? row.remark: '--'}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+            <div class="upload-doc mt0 pl10 pr10">
+                <ul class="no-padding">
+                    <!-- <li class="image-upload" *ngFor="let pic of image_data;let i = index;">
+                        <img src="{{pic}}">
+                        <button class="del"><i class="material-icons"
+                                (click)="remove_image(i)">delete_sweep</i></button>
+                    </li> -->
+                    <li class="image-upload" *ngFor="let pic of image_data; let i = index;">
+                        <img src="{{ pic.image }}">
+                        <button class="del" (click)="remove_image(i, pic.travelClass)"><i
+                                class="material-icons">delete_sweep</i></button>
+                    </li>
+                    <!-- <li class="add_image mt0" *ngIf="image_data.length<5"
+                        (click)="image_data.length <= 6?  captureMedia() : showLimit()">
+                        <img src="assets/imgs/upload_imae_icon.png" alt="">
+                        Upload your Bill <span>here</span>
+                    </li> -->
+                </ul>
+
+                <div class="text-right" *ngIf="item.length > 0  ">
+                    <button [disabled]="Submit_button" ion-button block color="success" type="submit"
+                        class="mt16"><ion-spinner *ngIf="spinnerLoader"></ion-spinner>Submit</button>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+</ion-content>

@@ -1,0 +1,297 @@
+page-expense-detail .cs-list-item-localConv {
+  background: #ffffff;
+  -webkit-box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.2);
+          box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.2);
+  padding: 0px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+page-expense-detail .cs-list-item-localConv .cs-top {
+  border-bottom: 1px dashed #ccc;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: start !important;
+      -ms-flex-pack: start !important;
+          justify-content: flex-start !important;
+}
+
+page-expense-detail .cs-list-item-localConv .cs-top .list-content {
+  position: relative;
+  padding-right: 10px;
+  padding-left: 10px;
+  margin-right: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+page-expense-detail .cs-list-item-localConv .cs-top .list-content p {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 14px;
+}
+
+page-expense-detail .cs-list-item-localConv .cs-top .list-content span {
+  font-size: 10px;
+  color: #000000;
+  opacity: 0.7;
+}
+
+page-expense-detail .cs-list-item-localConv .cs-top .list-content:after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 2px;
+  height: 100%;
+  background: #ccc;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+
+page-expense-detail .cs-list-item-localConv .cs-top .list-content:last-child {
+  margin-right: 0px;
+}
+
+page-expense-detail .cs-list-item-localConv .cs-top .list-content:last-child:after {
+  background: none;
+}
+
+page-expense-detail .cs-list-item-localConv .cs-top .type-bg {
+  font-size: 9px;
+  background: #969696;
+  padding: 2px 3px;
+  border-radius: 4px;
+  color: #fff;
+  border: 1px solid #fff;
+  -webkit-box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.2);
+          box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.2);
+}
+
+page-expense-detail .cs-list-item-localConv .middle-content {
+  padding-top: 10px;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: auto auto auto auto;
+      grid-template-columns: auto auto auto auto;
+  grid-column-gap: 5px;
+}
+
+page-expense-detail .cs-list-item-localConv .middle-content .col-box {
+  padding: 0px;
+}
+
+page-expense-detail .cs-list-item-localConv .middle-content .col-box span {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 14px;
+}
+
+page-expense-detail .cs-list-item-localConv .middle-content .col-box span.remark {
+  font-weight: normal;
+}
+
+page-expense-detail .cs-list-item-localConv .middle-content .col-box p {
+  font-size: 10px;
+  color: #000000;
+  opacity: 0.7;
+}
+
+page-expense-detail .cs-list-item-localConv .middle-content .col-box p span {
+  font-size: 12px;
+  font-weight: 500 !important;
+  line-height: 14px;
+  color: #000;
+}
+
+page-expense-detail .cs-list-item-localConv .middle-content.middle-bdr {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-grid-columns: inherit;
+      grid-template-columns: inherit;
+  grid-column-gap: inherit;
+  grid-row-gap: inherit;
+}
+
+page-expense-detail .cs-list-item-localConv .middle-content.middle-bdr .col-box {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #cccc;
+  margin-left: -1px;
+  position: relative;
+}
+
+page-expense-detail .cs-list-item-localConv .middle-content.middle-bdr .col-box .cs-action {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+
+page-expense-detail .cs-list-item-localConv .middle-content.one-column {
+  -ms-grid-columns: auto;
+      grid-template-columns: auto;
+}
+
+page-expense-detail .cs-list-item-localConv .middle-content.two-column {
+  -ms-grid-columns: auto auto;
+      grid-template-columns: auto auto;
+}
+
+page-expense-detail .cs-list-item-localConv p.inr-rupy {
+  font-size: 12px;
+  font-weight: 600;
+  color: #55a9e4;
+}
+
+page-expense-detail .cs-list-item-localConv .travel-type {
+  font-size: 11px;
+  font-weight: 600;
+  padding-top: 10px;
+}
+
+page-expense-detail .cs-list-item-localConv .type-head {
+  margin: -10px -10px 10px -10px;
+  padding: 10px;
+  background: #ededed;
+  font-size: 12px;
+  font-weight: 600;
+  border-bottom: 1px solid #cccccc;
+}
+
+page-expense-detail .cs-list-item-localConv .type-body {
+  border: 1px solid #969696;
+  -webkit-box-shadow: inset 0 0 4px #b5b5b5;
+          box-shadow: inset 0 0 4px #b5b5b5;
+  margin-bottom: 25px;
+}
+
+page-expense-detail .cs-list-item-localConv .type-body p {
+  font-size: 11px;
+  line-height: 20px;
+  margin-top: -9px !important;
+  margin-left: 7px !important;
+  background: #fff;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  color: #000;
+  font-weight: 500;
+  padding: 0px 2px;
+}
+
+page-expense-detail .cs-list-item-localConv .type-body ul {
+  margin-bottom: -9px;
+  margin-left: 7px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 7px;
+}
+
+page-expense-detail .cs-list-item-localConv .type-body ul li {
+  background: #e0e0e0;
+  padding: 2px 4px;
+  border-radius: 2px;
+  margin-right: 8px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+page-expense-detail .cs-list-item-localConv .type-body ul li span {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+page-expense-detail .cs-list-item-localConv .type-body ul li:last-child {
+  margin-right: 0px;
+}
+
+page-expense-detail .cs-list-item-localConv:last-child {
+  margin-bottom: 0px;
+}
+
+page-expense-detail .cs-top {
+  background-color: #f9f9f9;
+  margin: 0 !important;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+}
+
+page-expense-detail .cs-top .list-content {
+  margin-right: 0 !important;
+}
+
+page-expense-detail .callbtnBg {
+  background-color: #fff;
+  border-bottom-left-radius: 50%;
+  padding: 5px;
+  border-top-right-radius: 10px;
+  margin-right: -10px;
+  margin-top: -8px;
+}
+
+page-expense-detail .callbtnBg i {
+  font-size: 16px !important;
+}
+
+page-expense-detail .mid {
+  margin: 0 !important;
+  padding: 8px !important;
+}
+
+page-expense-detail .middle-content {
+  margin: 0 !important;
+  padding: 8px !important;
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+}
+
+page-expense-detail .middle-content .col-box {
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  padding: 4px !important;
+}
+
+page-expense-detail .summary-table {
+  border: 1px dashed #b6b6f5;
+  border-radius: 5px !important;
+  -webkit-box-shadow: 0 0 10px 0px #eee;
+          box-shadow: 0 0 10px 0px #eee;
+}
+
+page-expense-detail .summary-table table td:nth-child(1) {
+  text-align: left !important;
+}
+
+page-expense-detail .summary-table table td span {
+  background-color: #f9f9f9 !important;
+  padding: 2px 6px !important;
+}
+/*# sourceMappingURL=expense-detail.css.map */

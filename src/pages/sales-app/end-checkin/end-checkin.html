@@ -1,0 +1,470 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title *ngIf="checkin_type!='planned'">Unplanned Check-In</ion-title>
+        <ion-title *ngIf="checkin_type=='planned'">Planned Check-In</ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content>
+
+
+    <!-- Not Other Check IN Start -->
+    <div class="pl16 pr16 pt10" *ngIf="checkin_data.other_name == ''">
+        <div class="attendance-list">
+            <div class="center-block mb16">
+                <div class="circle" *ngIf="checkin_data.dr_name">{{checkin_data.dr_name?.substring(0,1).toUpperCase()}}
+                </div>
+                <div class="circle" *ngIf="!checkin_data.dr_name">{{checkin_data.name?.substring(0,1).toUpperCase()}}
+                </div>
+                <ng-container *ngIf="checkin_data.dr_type != 1">
+                <h1 class="f12" *ngIf="checkin_data.dr_name">{{checkin_data.dr_name?.toUpperCase()}}
+                    {{checkin_data.dr_type_name ? ('('+checkin_data.dr_type_name +')') : ''}}</h1>
+
+                <h1 class="f12" *ngIf="!checkin_data.dr_name">{{checkin_data.name?.toUpperCase()}}
+                    {{checkin_data.dr_type_name ? ('('+checkin_data.dr_type_name +')') : ''}}</h1>
+                </ng-container>
+                <ng-container *ngIf="checkin_data.dr_type == 1">
+                    <h1 class="f12" *ngIf="checkin_data.dr_name">{{checkin_data.dr_name?.toUpperCase()}}
+                        </h1>
+    
+                    <h1 class="f12" *ngIf="!checkin_data.dr_name">{{checkin_data.name?.toUpperCase()}}
+                        </h1>
+                    </ng-container>
+
+                <p *ngIf="checkin_data.dr_name">{{checkin_data.name ? (checkin_data.name | titlecase) : ''}}
+                    {{checkin_data.dr_mobile_no ? ( '('+
+                    checkin_data.dr_mobile_no +')') : ''}} </p>
+                <p *ngIf="!checkin_data.dr_name"> {{checkin_data.dr_mobile_no ? ( '('+
+                    checkin_data.dr_mobile_no +')') : ''}} </p>
+            </div>
+            <div class="other-block pb0" *ngIf="address">
+                <p> <strong>Address :</strong> {{checkin_data.address}} {{checkin_data.state | titlecase}}
+                    {{checkin_data.district | titlecase}}
+                    {{checkin_data.city | titlecase}} {{checkin_data.area | titlecase}} {{checkin_data.pincode}}
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- if new retailer add this section shows -->
+
+    <!-- ----WORKING---- -->
+    <div class="vstime m16">
+        <p>Check-in Time</p>
+        <p>{{checkin_data.visit_start | date: 'h:mm a'}}</p>
+    </div>
+    <div class="countMainContainer">
+        <div class="counters-box or-gr" (click)="go_to('Checkin')">
+            <div class="top-layer">
+                <i class="material-icons ">my_location</i>
+                <h6>{{distributor_detail.last_checkin_day != "N/A" ? (distributor_detail.last_checkin_day == 0 ?'Today'
+                    : distributor_detail.last_checkin_day + ' '+" day's ago") : '---'}}</h6>
+            </div>
+            <div class="bottom-layer">
+                <p>{{distributor_detail.last_checkin != "N/A" ? (distributor_detail.last_checkin | date:'d MMM yyy'):
+                    '---' }}</p>
+                <span>Last Activity Day</span>
+            </div>
+        </div>
+        <div class="counters-box bl-gr" (click)="go_to('Primary')"
+            *ngIf="checkin_data.dr_type!= 8 && checkin_data.dr_type != 13 && checkin_data.dr_type != 3 && checkin_data.dr_type != 14 && checkin_data.dr_type != 15 && checkin_data.dr_type != 16">
+            <div class="top-layer">
+                <i class="material-icons ">shopping_cart</i>
+                <h6>
+                    {{distributor_detail.primary_ton ?(distributor_detail.primary_ton | number:'1.2-2') + ' Ton' : 0}}
+                </h6>
+            </div>
+            <div class="bottom-layer">
+                <p>
+                    {{distributor_detail.last_order != "N/A" ? (distributor_detail.last_order | date:'d MMM yyy'):
+                    "---"}}
+                </p>
+                <span>Last Primary Order</span>
+            </div>
+        </div>
+        <div class="counters-box pn-gr" (click)="go_to('Secondary')" *ngIf=" checkin_data.dr_type == 8 || checkin_data.dr_type == 13 || checkin_data.dr_type == 14 || checkin_data.dr_type == 16 ||checkin_data.dr_type == 15||checkin_data.dr_type == 3 ||checkin_data.dr_type == 1 ">
+            <div class="top-layer">
+                <i class="material-icons ">shopping_cart</i>
+                <h6>
+                    {{(checkin_data.dr_type == 3 || checkin_data.dr_type == 1) ? distributor_detail.dis_secondary_sheet :
+                    distributor_detail.secondary_sheet}}
+                </h6>
+            </div>
+            <div class="bottom-layer" >
+                <p>
+                    {{(checkin_data.dr_type == 3 || checkin_data.dr_type == 1) ? (distributor_detail.dis_secondary_sheet_date != '' ?
+                    (distributor_detail.dis_secondary_sheet_date
+                    | date:'d MMM yyy') : '---') : (distributor_detail.secondary_sheet_date != '' ?
+                    (distributor_detail.secondary_sheet_date | date:'d MMM yyy') : '---')}}
+
+                </p>
+                <span>Last Secondary Order</span>
+            </div>
+        </div>
+
+        <div class="counters-box pr-gr" (click)="go_to('Stock')"
+            *ngIf="checkin_data.dr_type == 3 ||checkin_data.dr_type == 1 ">
+            <div class="top-layer">
+                <i class="material-icons ">inventory_2</i>
+                <h6>
+                    {{checkin_data.dr_type == 3 ? distributor_detail.stock_sheet : distributor_detail.dis_stock_sheet}}
+                </h6>
+            </div>
+            <div class="bottom-layer">
+                <p>
+                    {{checkin_data.dr_type == 3 ? (distributor_detail.stock_sheet_date != '' ?
+                    (distributor_detail.stock_sheet_date
+                    | date:'d MMM yyy') : '---') : (distributor_detail.dis_stock_sheet_date != '' ?
+                    (distributor_detail.dis_stock_sheet_date | date:'d MMM yyy') : '---')}}
+                </p>
+                <span>Last Stock Transfer</span>
+            </div>
+        </div>
+        <ng-container *ngIf="checkin_data.dr_type == 1 || checkin_data.dr_type == 7">
+        <div class="counters-box pr-gr" *ngIf="checkin_data.dr_id" style="width:100%;height:40px" (click)="distributor_detail_page(checkin_data.dr_id)">
+        <div class="top-layer">
+            <i class="material-icons ">inventory_2</i><span>Payment Deatils</span>
+        </div>
+        <div class="bottom-layer">
+            
+        </div>
+    </div>
+</ng-container>
+    </div>
+    <form class="pt0" *ngIf="checkin_data.checkin_with_new_dealer!='true'" name="f" #f="ngForm"
+        (ngSubmit)="f.valid && permissionFunction()" padding>
+        <div class="forword-page flat-item mt16">
+
+            <a class="no-height"
+                *ngIf="(checkin_data.dr_type== '1' || checkin_data.dr_type== '3')"
+                (click)="checkin_data.brand_audit_id== 0 ? goToBrandAudit() :''">
+                <p>
+                    <span>
+                        <i *ngIf="checkin_data.brand_audit_id > 0" style="color:green !important;"
+                            class="material-icons">verified</i>
+                        <i *ngIf="checkin_data.brand_audit_id == 0" style="color:red !important;"
+                            class="material-icons red-clr">remove_circle</i>
+                    </span>
+                </p>
+                <span>Brand Audit</span>
+                <div>
+                    <img src="assets/imgs/audit.png" alt="">
+                </div>
+            </a>
+
+            <a class="no-height" *ngIf="checkin_data.dr_type!= '15' && checkin_data.dr_type!= '4'"
+                (click)="goToAddTicket()">
+                <p>
+                    <span>
+                        <i *ngIf="checkin_data.support_id > 0" style="color:green !important;"
+                            class="material-icons">verified</i>
+                        <i *ngIf="checkin_data.support_id == 0 " style="color:red !important;"
+                            class="material-icons red-clr">remove_circle</i>
+                    </span>
+                </p>
+                <span>Raise a ticket </span>
+                <div>
+                    <img src="assets/imgs/Addorder.png" alt="">
+                </div>
+            </a>
+
+
+            <!-- <a class="no-height"
+                *ngIf="checkin_data.dr_type!= '15' && checkin_data.dr_type!= '4'&& checkin_data.dr_type != 16&& checkin_data.dr_type != 7"
+                (click)="checkin_data.site_id == 0 ? goToAddLead() : ''">
+               <p>
+                    <span>
+                        <i *ngIf="checkin_data.site_id > 0" style="color:green !important;"
+                            class="material-icons">verified</i>
+                        <i *ngIf="checkin_data.site_id == 0 " style="color:red !important;"
+                            class="material-icons red-clr">remove_circle</i>
+                    </span>
+                </p>
+                <span>Add Lead </span>
+                <div>
+                    <img src="assets/imgs/lead.png" alt="">
+                </div>
+            </a> -->
+            <a class="no-height" 
+   *ngIf="checkin_data.dr_type != '15' && checkin_data.dr_type != '4' && checkin_data.dr_type != 16 && checkin_data.dr_type != 7"
+   (click)=" goToAddLead() ">
+   <p>
+      <span>
+         <i *ngIf="checkin_data.site_id > 0" style="color:green !important;" class="material-icons">verified</i>
+         <i *ngIf="checkin_data.site_id == 0" style="color:red !important;" class="material-icons red-clr">remove_circle</i>
+      </span>
+   </p>
+   <span>{{ checkin_data.site_id > 0 ? 'Add Another Lead' : 'Add Lead' }}</span>
+   <div>
+      <img src="assets/imgs/lead.png" alt="">
+   </div>
+</a>
+            <!-- <a class="no-height" *ngIf="checkin_data.dr_type == '15'&& checkin_data.order_flag == '0'"
+                (click)="goTo('SecondaryLead')">
+                <p>
+                    <span>
+                        <i *ngIf="checkin_data.order_flag == '1'" style="color:green !important;"
+                            class="material-icons">verified</i>
+                        <i *ngIf="checkin_data.order_flag == '0'" style="color:red !important;"
+                            class="material-icons">remove_circle</i>
+                    </span>
+                </p>
+                <span>Create Stock Transfer</span>
+                <div>
+                    <img src="assets/imgs/Addorder.png" alt="">
+                </div>
+            </a> -->
+
+            <a class="no-height"
+                *ngIf="((checkin_data.dr_type== '1')||(checkin_data.dr_type== '7') )&& ( checkin_data.dr_type!= '4' && checkin_data.dr_type != '15' )&&checkin_data.order_flag == '0'"
+                (click)="goTo('Primary')">
+                <p>
+                    <span>
+                        <i *ngIf="checkin_data.order_flag == '1'" style="color:green !important;"
+                            class="material-icons">verified</i>
+                        <i *ngIf="checkin_data.order_flag == '0'" style="color:red !important;"
+                            class="material-icons red-clr">remove_circle</i>
+                    </span>
+                </p>
+                <span>Create Primary Order</span>
+                <div>
+                    <img src="assets/imgs/Addorder.png" alt="">
+                </div>
+            </a>
+            <a class="no-height"
+                *ngIf="  ((checkin_data.dr_type== '1')||(checkin_data.dr_type== '7') )&& ( checkin_data.dr_type!= '4' && checkin_data.dr_type != '15' )&&checkin_data.order_flag == '1'"
+                (click)="goPrimaryOrderDetail(checkin_data.order_id)">
+                <p>
+                    <span>
+                        <i *ngIf="checkin_data.order_flag == '1'" style="color:green !important;"
+                            class="material-icons">verified</i>
+                        <i *ngIf="checkin_data.order_flag == '0'" style="color:red !important;"
+                            class="material-icons red-clr">remove_circle</i>
+                    </span>
+                </p>
+                <span>Primary Order Details</span>
+                <div>
+                    <img src="assets/imgs/Addorder.png" alt="">
+                </div>
+            </a>
+            <ng-container *ngIf="checkin_data.dr_type == '3'">
+            <a class="no-height"
+                *ngIf=" (checkin_data.dr_type == '3'||checkin_data.dr_type == '8'||checkin_data.dr_type == '13'||checkin_data.dr_type == '14'||checkin_data.dr_type == '16')&&( checkin_data.dr_type!= '4' && checkin_data.dr_type != '15' )&& checkin_data.order_flag == '0'"
+                (click)="goTo('Stock')">
+                <p>
+                    <span>
+                        <i *ngIf="checkin_data.order_flag == '1'" style="color:green !important;"
+                            class="material-icons">verified</i>
+                        <i *ngIf="checkin_data.order_flag == '0'" style="color:red !important;"
+                            class="material-icons">remove_circle</i>
+                    </span>
+                </p>
+                <span>Create Stock Transfer</span>
+                <div>
+                    <img src="assets/imgs/Addorder.png" alt="">
+                </div>
+            </a>
+            <a class="no-height"
+                *ngIf="(checkin_data.dr_type == '3'||checkin_data.dr_type == '8'||checkin_data.dr_type == '13'||checkin_data.dr_type == '15' ||checkin_data.dr_type == '14' || checkin_data.dr_type == '16')&& ( checkin_data.dr_type!= '4' )&&checkin_data.order_flag == '1'"
+                (click)="goSecondaryOrderDetail(checkin_data.order_id)">
+                <p>
+                    <span>
+                        <i *ngIf="checkin_data.order_flag == '1'" style="color:green !important;"
+                            class="material-icons">verified</i>
+                        <i *ngIf="checkin_data.order_flag == '0'" style="color:red !important;"
+                            class="material-icons ">remove_circle</i>
+                    </span>
+                </p>
+                <span>Stock Transfer Details</span>
+                <div>
+                    <img src="assets/imgs/Addorder.png" alt="">
+                </div>
+            </a>
+        </ng-container>
+        <ng-container *ngIf="checkin_data.dr_type != '3'&&checkin_data.dr_type != 15">
+            <a class="no-height"
+            *ngIf=" (checkin_data.dr_type == '15'||checkin_data.dr_type == '8'||checkin_data.dr_type == '13'||checkin_data.dr_type == '14'||checkin_data.dr_type == '16')&&( checkin_data.dr_type!= '4')&& checkin_data.order_flag == '0'"
+            (click)="goTo('Secondary')">
+            <p>
+                <span>
+                    <i *ngIf="checkin_data.order_flag == '1'" style="color:green !important;"
+                        class="material-icons">verified</i>
+                    <i *ngIf="checkin_data.order_flag == '0'" style="color:red !important;"
+                        class="material-icons">remove_circle</i>
+                </span>
+            </p>
+            <span>Create Secondary Order</span>
+            <div>
+                <img src="assets/imgs/Addorder.png" alt="">
+            </div>
+        </a>
+        <a class="no-height"
+            *ngIf="(checkin_data.dr_type == '3'||checkin_data.dr_type == '8'||checkin_data.dr_type == '13'||checkin_data.dr_type == '15' ||checkin_data.dr_type == '14' || checkin_data.dr_type == '16')&& ( checkin_data.dr_type!= '4' )&&checkin_data.order_flag == '1'"
+            (click)="goSecondaryOrderDetail(checkin_data.order_id)">
+            <p>
+                <span>
+                    <i *ngIf="checkin_data.order_flag == '1'" style="color:green !important;"
+                        class="material-icons">verified</i>
+                    <i *ngIf="checkin_data.order_flag == '0'" style="color:red !important;"
+                        class="material-icons ">remove_circle</i>
+                </span>
+            </p>
+            <span>Secondary Order Details</span>
+            <div>
+                <img src="assets/imgs/Addorder.png" alt="">
+            </div>
+        </a>
+    </ng-container>
+    <ng-container *ngIf="checkin_data.dr_type == 15">
+        <a class="no-height"
+        *ngIf=" (checkin_data.dr_type == '15'||checkin_data.dr_type == '8'||checkin_data.dr_type == '13'||checkin_data.dr_type == '14'||checkin_data.dr_type == '16')&&( checkin_data.dr_type!= '4')&& checkin_data.order_flag == '0'"
+        (click)="goTo('SecondaryLead')">
+        <p>
+            <span>
+                <i *ngIf="checkin_data.order_flag == '1'" style="color:green !important;"
+                    class="material-icons">verified</i>
+                <i *ngIf="checkin_data.order_flag == '0'" style="color:red !important;"
+                    class="material-icons">remove_circle</i>
+            </span>
+        </p>
+        <span>Create Secondary Order Lead</span>
+        <div>
+            <img src="assets/imgs/Addorder.png" alt="">
+        </div>
+    </a>
+    <a class="no-height"
+        *ngIf="(checkin_data.dr_type == '3'||checkin_data.dr_type == '8'||checkin_data.dr_type == '13'||checkin_data.dr_type == '15' ||checkin_data.dr_type == '14' || checkin_data.dr_type == '16')&& ( checkin_data.dr_type!= '4' )&&checkin_data.order_flag == '1'"
+        (click)="goSecondaryOrderDetail(checkin_data.order_id)">
+        <p>
+            <span>
+                <i *ngIf="checkin_data.order_flag == '1'" style="color:green !important;"
+                    class="material-icons">verified</i>
+                <i *ngIf="checkin_data.order_flag == '0'" style="color:red !important;"
+                    class="material-icons ">remove_circle</i>
+            </span>
+        </p>
+        <span>Secondary Order Details</span>
+        <div>
+            <img src="assets/imgs/Addorder.png" alt="">
+        </div>
+    </a>
+</ng-container>
+            <a class="no-height" (click)="goTo('FollowUp')"
+                *ngIf="(checkin_data.dr_type != 'Other')&&(checkin_data.dr_type != '0')&& checkin_data.dr_type!= '11' && checkin_data.followup_flag == '1'">
+                <p>
+                    <span>
+                        <i *ngIf="checkin_data.followup_flag == '1'" style="color:green "
+                            class="material-icons">verified</i>
+                        <i *ngIf="checkin_data.followup_flag == '0'" style="color:red !important;"
+                            class="material-icons">remove_circle</i>
+                    </span>
+                </p>
+                <span>Create Followup<strong style="color: red;">*</strong></span>
+                <div>
+                    <img src="assets/imgs/createFollowup.png" alt="">
+                </div>
+            </a>
+            <!-- <a class="no-height" (click)="image_data.length < 6 ? cameraModal('camera') : showLimit()">
+                <p><span>
+                        <i *ngIf="image_data.length>0" style="color:green !important;"
+                            class="material-icons">verified</i>
+                        <i *ngIf="image_data.length==0" style="color:red !important;"
+                            class="material-icons">remove_circle</i>
+                    </span>
+                </p>
+             
+                <span>Take Check Out Image <strong style="color: red;">*</strong></span>
+                <div>
+                    <img src="assets/imgs/upload_imae_icon.png" alt="">
+                </div>
+            </a> -->
+        </div>
+
+
+        <div class="add-new p0 pt16" *ngIf="image_data.length > 0">
+            <h4 class="f14">Documents</h4>
+            <div class="uplode-image f12">
+                <ul>
+                    <li *ngFor="let pic of image_data;let i = index;">
+                        <img src="{{pic}}">
+                        <button><i class="material-icons" (click)="remove_image(i)">clear</i></button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- <div class="form form pr0 pt0 pl0 pb0">
+            <ion-list no-lines>
+
+                <ion-item class="multiselectionSelectionBox">
+                    <ion-label floating>Topic of Discussion<strong class="red-text">*</strong> </ion-label>
+                    <ionic-selectable item-content name="checklist" [(ngModel)]="checkin.checklist" [items]="Folders"
+                        itemValueField="id" itemTextField="name" [canSearch]="true" #selectComponent [isMultiple]="true"
+                        (ngModelChange)="findTopics()"></ionic-selectable>
+                </ion-item>
+               
+                <ion-item [ngClass]="{'error': (f.submitted && description?.invalid)}">
+                    <ion-label floating>Customer Remark <span>*</span></ion-label>
+                    <ion-textarea name="description" #description="ngModel" [(ngModel)]="checkin.description"
+                        onpaste="return false;" required></ion-textarea>
+                </ion-item>
+                <div *ngIf="f.submitted && description.invalid" class="eror">
+                    <p *ngIf="description.errors.required">{{'Field is Required'}}</p>
+                </div>
+            </ion-list>
+        </div> -->
+        <div class="form form pr0 pt0 pl0 pb0">
+            <ion-list no-lines>
+
+                <ion-item [ngClass]="{'error':f.submitted && followupType?.invalid}" *ngIf="checkin_data.followup_flag != '1'">
+                    <ion-label floating>Create Followup<span class="red-text">*</span></ion-label>
+                    <ion-select  interface="action-sheet" name="followupType" required
+                        #followupType="ngModel"  [(ngModel)]="checkin.followupType" (ngModelChange)="get_followup()">
+                        <ion-option value="Yes">yes</ion-option>
+                        <ion-option value="NO">No</ion-option>
+
+                    </ion-select>
+                </ion-item>
+
+              <!-- <ion-item class="multiselectionSelectionBox">
+                <ion-label floating>Topic of Discussion<strong class="red-text">*</strong> </ion-label>
+                <ionic-selectable item-content name="checklist" [(ngModel)]="checkin.checklist" [items]="Folders"
+                  itemValueField="id" itemTextField="name" [canSearch]="true" #selectComponent [isMultiple]="true"
+                  (ngModelChange)="findTopics()"></ionic-selectable>
+              </ion-item> -->
+              <ion-item class="multiselectionSelectionBox">
+                <ion-label floating>Topic of Discussion<strong class="red-text">*</strong> </ion-label>
+                <ionic-selectable item-content name="checklist" [(ngModel)]="checkin.checklist" [items]="Folders"
+                                  itemValueField="id" itemTextField="name" [canSearch]="true" #selectComponent [isMultiple]="true"
+                                  (ngModelChange)="findTopics()">
+                  <!-- Use [class] directive to apply dynamic class based on noMeetingFlag -->
+                  <ion-option *ngFor="let folder of Folders" [value]="folder" [class.red-text]="folder.id === 17 && noMeetingFlag">
+                    {{ folder.name }}
+                  </ion-option>
+                </ionic-selectable>
+              </ion-item>
+          
+              <ion-item [ngClass]="{'error': (f.submitted && description?.invalid)}">
+                <ion-label floating>Customer Remark <span style="color:red">*</span></ion-label>
+                <ion-textarea name="description" #description="ngModel" [(ngModel)]="checkin.description"
+                  onpaste="return false;" [required]="!noMeetingFlag"></ion-textarea>
+              </ion-item>
+          
+              <div *ngIf="f.submitted && description.invalid" class="eror">
+                <p *ngIf="description.errors.required">{{'Field is Required'}}</p>
+              </div>
+            </ion-list>
+          </div>
+          
+        <div class="wp100 mt16">
+            <button color="theme" [disabled]="spinnerLoader" ion-button block><ion-spinner
+                    *ngIf="spinnerLoader"></ion-spinner>&nbsp;check out</button>
+        </div>
+        <!-- </div> -->
+
+    </form>
+    <!-- ----WORKING END---- -->
+
+
+
+
+
+</ion-content>

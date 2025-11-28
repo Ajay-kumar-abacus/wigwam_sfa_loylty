@@ -1,0 +1,244 @@
+<!--
+  Generated template for the AddinvoicePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>Add Invoice</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+  <form name="f" #f="ngForm" (ngSubmit)="f.valid && addInvoice()">
+
+    <div class=" form">
+      <ion-list no-lines class="padding10">
+
+        <ion-list no-lines>
+          <ion-item [ngClass]="{'error':f.submitted && invoice_type?.invalid}">
+            <ion-label floating>Select Invoice Type<span>*</span></ion-label>
+            <ion-select name="invoice_type" #invoice_type="ngModel" [(ngModel)]="formData.invoice_type" required>
+              <ion-option value="Service">Service</ion-option>
+              <ion-option value="Spare Part">Spare Part</ion-option>
+            </ion-select>
+          </ion-item>
+          <div *ngIf="f.submitted && invoice_type?.invalid" class="eror">
+            <p *ngIf="invoice_type.errors.required">{{'Invoice Type is Required'}}</p>
+          </div>
+
+
+        </ion-list>
+
+
+        <ng-container *ngIf="formData.invoice_type=='Spare Part'">
+          <ion-item [ngClass]="{'error':f.submitted && part_id?.invalid}">
+            <ion-label floating>Select Part<span>*</span></ion-label>
+            <ion-select name="part_id" [(ngModel)]="tmpformData.part_id" #part_id="ngModel" required
+              (ngModelChange)="partDetail(tmpformData.part_id)">
+              <ion-option *ngFor="let row of spare_list" value="{{row.part_id}}">{{row.part_name}}
+              </ion-option>
+            </ion-select>
+          </ion-item>
+          <div *ngIf="f.submitted && part_id?.invalid" class="eror">
+            <!-- <p *ngIf="part_id.errors.required">{{'This Field is Required'}}</p> -->
+          </div>
+
+          <div style="display: flex; justify-content: space-between;">
+            <ion-item [ngClass]="{'error':f.submitted && totalQty?.invalid}" style="width: 90px;">
+              <ion-label floating>Qty<span>*</span></ion-label>
+              <ion-input type="text" name="totalQty" #totalQty="ngModel" [(ngModel)]="tmpformData.totalQty"
+                onkeypress="return event.charCode>=48 && event.charCode<=57" readonly></ion-input>
+            </ion-item>
+            <div *ngIf="f.submitted && totalQty?.invalid" class="eror">
+              <!-- <p *ngIf="assigned_qty.errors.required">{{'This Field is Required'}}</p> -->
+            </div>
+
+
+            <ion-item [ngClass]="{'error':f.submitted && mrp?.invalid}" style="width: 90px;">
+              <ion-label floating>Rate<span>*</span></ion-label>
+              <ion-input type="text" name="mrp" #mrp="ngModel" [(ngModel)]="tmpformData.mrp"
+                onkeypress="return event.charCode>=48 && event.charCode<=57" readonly></ion-input>
+            </ion-item>
+            <div *ngIf="f.submitted && mrp?.invalid" class="eror">
+              <!-- <p *ngIf="price.errors.required">{{'This Field is Required'}}</p> -->
+            </div>
+
+
+            <ion-item [ngClass]="{'error':f.submitted && discount?.invalid}" style="width: 90px;">
+              <ion-label floating>Discount(%)</ion-label>
+              <ion-input type="text" name="discount" #discount="ngModel" [(ngModel)]="tmpformData.discount"
+                onkeypress="return event.charCode>=48 && event.charCode<=57"
+                (ngModelChange)="calculation()"></ion-input>
+            </ion-item>
+
+            <div *ngIf="f.submitted && discount?.invalid" class="eror">
+              <!-- <p *ngIf="discount.errors.required">{{'This Field is Required'}}</p> -->
+            </div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+            <ion-item [ngClass]="{'error':f.submitted && amount?.invalid}" style="width: 90px;">
+              <ion-label floating>Amount<span>*</span></ion-label>
+              <ion-input type="text" name="amount" #amount="ngModel" [(ngModel)]="tmpformData.amount"
+                onkeypress="return event.charCode>=48 && event.charCode<=57" readonly></ion-input>
+            </ion-item>
+            <a ion-fab color="success" style=" border-radius:1%;" (click)="addToList()"
+              *ngIf="formData.invoice_type=='Spare Part' &&  tmpformData.totalQty"><ion-icon name="add"></ion-icon></a>
+          </div>
+
+        </ng-container>
+
+
+
+
+        <ng-container no-lines style="display: flex; justify-content: space-between;"
+          *ngIf="formData.invoice_type=='Service'">
+
+          <ion-item [ngClass]="{'error':f.submitted && amount?.invalid}" style="width: 250px;">
+            <ion-label floating>Amount<span>*</span></ion-label>
+            <ion-input type="text" name="amount" #amount="ngModel" [(ngModel)]="formData.amount"
+              onkeypress="return event.charCode>=48 && event.charCode<=57" required
+              (ngModelChange)="calculate(formData.amount)"></ion-input>
+          </ion-item>
+          <div *ngIf="f.submitted && amount?.invalid" class="eror">
+            <!-- <p *ngIf="Amount.errors.required">{{'Amount is Required'}}</p> -->
+          </div>
+
+          <ion-item [ngClass]="{'error':f.submitted && discount_amount?.invalid}" style="width: 250px;">
+            <ion-label floating>Discount</ion-label>
+            <ion-input type="text" name="discount_amount" #discount_amount="ngModel"
+              [(ngModel)]="formData.discount_amount" onkeypress="return event.charCode>=48 && event.charCode<=57"
+              (ngModelChange)="calculate(formData.amount);max();"></ion-input>
+          </ion-item>
+          <!-- <div *ngIf="f.submitted && Discount?.invalid" class="eror">
+            <p *ngIf="Amount.errors.required">{{'Amount is Required'}}</p>
+          </div> -->
+
+
+        </ng-container>
+
+
+
+        <div class="list-box mt10" *ngIf="formData.invoice_type=='Spare Part'">
+          <div *ngFor="let row of add_list; let i = index">
+            <div class="mid mt0" style="display: flex;justify-content: space-between;">
+              <div class="content-info">
+                <div class="right-info">
+                  <div class="mt2 mb2 ml2" style="display:flex; flex-direction:row">
+                    <p class="pr2" style="color:rgb(255, 153, 0)">
+                      #{{i+1}}
+                    </p>
+                    <p class="font14">
+                      {{row.part_name|titlecase}}
+                      <!-- {{row.part_name | titlecase}} ({{row.part_no | titlecase}}) -->
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="tag-info">
+                <a><i class="material-icons red-clr" (click)="DeleteItem(i)">delete_sweep</i></a>
+              </div>
+            </div>
+
+            <div class="three_boxes">
+              <div class="lower ">
+                <p class="font10">Qty</p>
+                <p class="font10">
+                  {{row.totalQty}}
+                  <!-- {{row.qty}} -->
+                </p>
+              </div>
+              <div class="lower ">
+                <p class="font10">Rate</p>
+                <p class="font10">
+
+                  {{row.mrp}}
+                </p>
+              </div>
+              <div class="lower ">
+                <p class="font10">Discount(%)</p>
+                <p class="font10">
+
+                  {{row.discount}}
+                </p>
+              </div>
+              <div class="lower ">
+                <p class="font10">Amount</p>
+                <p class="font10">
+
+                  {{row.amount}}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="border-container mt16" *ngIf="formData.amount && formData.invoice_type=='Service'">
+          <!-- <div class="summary-heading">Summary</div> -->
+          <ng-container>
+            <div class="pb100">
+              <div class="remarkSent">
+                <p class="remarkMsg">Sub Total</p>
+                <div class="dateCreated"><span>{{formData.amount}}</span></div>
+              </div>
+              <div class="remarkSent">
+                <p class="remarkMsg">Discount</p>
+                <div class="dateCreated"><span>{{formData.discount_amount}}</span></div>
+              </div>
+              <div class="remarkSent">
+                <p class="remarkMsg">GST(18%)</p>
+                <div class="dateCreated"><span>{{formData.gst_amount}}</span></div>
+              </div>
+              <div class="remarkSent">
+                <p class="remarkMsg">Net Amount</p>
+                <div class="dateCreated"><span>{{formData.final_amount}}</span></div>
+              </div>
+            </div>
+
+          </ng-container>
+        </div>
+
+
+        <div class="border-container mt16" *ngIf="formData.invoice_type!='Service'&& add_list.length">
+
+          <ng-container>
+            <div class="pb100">
+              <div class="remarkSent">
+                <p class="remarkMsg">Sub Total</p>
+                <div class="dateCreated"><span>{{formData.amount}}</span></div>
+              </div>
+              <div class="remarkSent">
+                <p class="remarkMsg">Discount</p>
+                <div class="dateCreated"><span>{{formData.discount_amount}}</span></div>
+              </div>
+              <div class="remarkSent">
+                <p class="remarkMsg">GST(18%)</p>
+                <div class="dateCreated"><span>{{formData.gst_amount}}</span></div>
+              </div>
+              <div class="remarkSent">
+                <p class="remarkMsg">Net Amount</p>
+                <div class="dateCreated"><span>{{formData.final_amount}}</span></div>
+              </div>
+            </div>
+
+          </ng-container>
+        </div>
+
+
+        <div class="enquiry-btn add-btns mt20"
+          *ngIf="formData.invoice_type=='Service'||(formData.invoice_type!='Service'&& add_list.length)">
+          <button ion-button class="Buttons1">
+            <p>Submit</p>
+          </button>
+        </div>
+      </ion-list>
+
+    </div>
+
+  </form>
+
+</ion-content>

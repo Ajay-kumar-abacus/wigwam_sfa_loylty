@@ -1,0 +1,22 @@
+
+<ion-header >
+	<ion-navbar>
+		<ion-title>
+		Customer Network
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+
+
+<ion-content padding class="listing mt0">
+	<div class="home-btn-group">
+		<ng-container *ngFor="let row of networkType">
+		<div class="outline-btn" (click)="goToMainDistributorListPage(row.type,row.module_name)" *ngIf="row.type != 17">
+			<div class="icons"><i class="material-icons">storefront</i></div>
+			{{row.module_name}}
+		</div>
+		</ng-container>
+	</div>
+</ion-content>
+
+

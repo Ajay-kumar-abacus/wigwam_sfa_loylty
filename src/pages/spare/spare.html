@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Spare Part</ion-title>
+  </ion-navbar>
+  <ion-toolbar>
+    <div class="search add-search">
+      <div class="filter">
+        <ion-searchbar type='text' name='search' [(ngModel)]="filter.search" (keyup)="getSpareParts()">
+        </ion-searchbar>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <div class="container padding16">
+    <div class="main" *ngFor="let list of spare_list; let i = index">
+      <div class="part1">
+        <span class="circle">{{list.assigned_qty}}</span>
+        <span>{{list.part_name | titlecase}}-{{list.part_no | titlecase}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="nothing-here" style="height: 50%;" *ngIf="!spare_list?.length">
+    <div class="outer">
+      <div class="innear">
+        <img src="assets/imgs/no_found.svg" alt="">
+        <p>Data Not Available</p>
+      </div>
+    </div>
+  </div>
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)" *ngIf="flag!=1">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="{{'Loading more data...'}}">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

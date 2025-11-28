@@ -1,0 +1,84 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Stock</ion-title>
+    </ion-navbar>
+    <ion-toolbar>
+        <div class="search add-search">
+            <div class="filter">
+                <ion-searchbar type='text' name="master_search" [(ngModel)]="filter.master_search"
+                    (keyup)="getStockList(ActiveTab)"></ion-searchbar>
+            </div>
+        </div>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+            refreshingText="Refreshing...">
+        </ion-refresher-content>
+    </ion-refresher>
+    <div class="capsule-tabs">
+        <ul>
+            <li [ngClass]="{'active' : ActiveTab=='in_stock'}" (click)="ActiveTab='in_stock' ;getStockList(ActiveTab)">
+                <p>In Stock
+                    <span>{{stockCounts.in_stock}}</span>
+                </p>
+            </li>
+
+            <li [ngClass]="{'active' : ActiveTab=='out_stock'}" (click)="ActiveTab='out_stock';getStockList(ActiveTab)">
+                <p>Out Of Stock
+                    <span>{{stockCounts.out_stock}}</span>
+                </p>
+            </li>
+        </ul>
+    </div>
+
+    <!-- <div class="capsule-buttons">
+        <ul>
+            <i class="material-icons">filter_list</i>
+            
+            <li class="active">
+                <p>Latest Stock</p>
+            </li>
+            
+            <li>
+                <p>Top Seller</p>
+            </li>
+            
+            <li>
+                <p>Least Seller</p>
+            </li>
+        </ul>
+    </div> -->
+
+    <div class="pd-left-right16">
+        <div class="list-box mt16" *ngFor="let row of stockListing" (click)="goOnStockDetail(row);">
+            <div class="mid mt0">
+                <div class="content-info jcc">
+
+                    <div class="right-info">
+                        <p>{{row.product_detail}}</p>
+
+                    </div>
+
+                    <div class="left-info">
+                        <div class="circle">{{row.current_stock}}</div>
+                    </div>
+                </div>
+                <div class="tag-info">
+                    <a><i class="material-icons">chevron_right</i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="nothing-here" *ngIf="!stockListing?.length">
+        <div class="outer">
+            <div class="innear">
+                <img src="assets/imgs/no_found.svg" alt="">
+                <p>Data Not Available</p>
+            </div>
+        </div>
+    </div>
+</ion-content>

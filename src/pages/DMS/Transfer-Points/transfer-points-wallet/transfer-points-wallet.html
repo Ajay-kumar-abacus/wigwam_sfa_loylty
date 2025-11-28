@@ -1,0 +1,113 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Transfer Points Wallet</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <div class="my-wallet">
+        <div class="pts-icon">
+            <i class="material-icons">account_balance_wallet </i>
+            Total Points
+        </div>
+        <div class="pts">
+            {{pointsDetail.total_points}}
+        </div>
+    </div>
+    
+    <div class="my-wallet">
+        <div class="pts-icon">
+            <i class="material-icons">account_balance_wallet </i>
+            Transfer Points
+        </div>
+        <div class="pts">
+            {{pointsDetail.transfer_points}}
+        </div>
+    </div>
+    
+    <div class="my-wallet">
+        <div class="pts-icon">
+            <i class="material-icons">account_balance_wallet </i>
+            Balance Points
+        </div>
+        <div class="pts">
+            {{pointsDetail.balance_points}}
+        </div>
+    </div>
+    
+    <div class="capsule-tabs">
+        <ul>
+            <li [ngClass]="{'active' : ActiveTab=='recieved_transaction'}" (click)="ActiveTab='recieved_transaction' ;gettransactionsDetail(ActiveTab)">
+                <p>Received Transaction
+                    <span>{{transactionCounts.recievedPoints}}</span>
+                </p>
+            </li>
+            
+            <li [ngClass]="{'active' : ActiveTab=='send_transaction'}" (click)="ActiveTab='send_transaction';gettransactionsDetail(ActiveTab)">
+                <p>Send Transaction
+                    <span>{{transactionCounts.transferPoints}}</span>
+                </p>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="pl16 pr16 mt15 mb50">
+        <div class="attendance-list" *ngFor="let row of transactionsDetail">
+            <div class="slab slab-bg">
+                <div class="slab-day">
+                    <p>{{row.date_created| date:'d MMM y'}}</p>
+                    <span>Date created</span>
+                </div>
+                
+                <div class="slab-day" *ngIf="ActiveTab=='recieved_transaction'">
+                    <p>{{row.credit}}</p>
+                    <span>Points Received</span>
+                </div>
+                <div class="slab-day" *ngIf="ActiveTab=='send_transaction'">
+                    <p>{{row.debit}}</p>
+                    <span>Points Send</span>
+                </div>
+            </div>
+            
+            <div class="center-block">
+                <div class="circle">{{row.party_name?.substring(0,1).toUpperCase()}}</div>
+                <h1 *ngIf="ActiveTab=='recieved_transaction'">Received From : {{row.party_name | titlecase}}</h1>
+                <h1 *ngIf="ActiveTab=='send_transaction'">Send To : {{row.party_name | titlecase}}</h1>
+                <p>Code / Mobile : {{row.party_code ? row.party_code : '-'}} / {{row.mobile ? row.mobile : ''}}</p>
+            </div>
+            
+            <div class="slab mt16">
+                <div class="slab-day">
+                    <span>Product Name</span>
+                    <p class="bold">{{row.product_name ? row.product_name : '-'}}</p>
+                </div>
+                <div class="slab-day">
+                    <span>Product Code</span>
+                    <p class="bold">{{row.product_code ? row.product_code : '-'}}</p>
+                </div>
+                <div class="slab-day">
+                    <span>Qty</span>
+                    <p class="bold">{{row.product_qty ? row.product_qty : '-'}}</p>
+                </div>
+            </div>
+            
+            <div class="slab mt16" *ngIf="row.remark">
+                <div class="slab-day">
+                    <span>Remark</span>
+                    <p class="bold">{{row.remark ? row.remark : '-'}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="nothing-here" style="height: 50%;" *ngIf="!transactionsDetail?.length">
+        <div class="outer">
+            <div class="innear">
+                <img src="assets/imgs/no_found.svg" alt="">
+                <p>Data Not Available</p>
+            </div>
+        </div>
+    </div>
+    
+</ion-content>
+
