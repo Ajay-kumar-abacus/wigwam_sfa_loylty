@@ -35,7 +35,7 @@ import { NewsPageModule } from '../pages/news/news.module';
 import { NewsDetailPageModule } from '../pages/news-detail/news-detail.module';
 import { FeedbackPageModule } from '../pages/feedback/feedback.module';
 import { DbserviceProvider } from '../providers/dbservice/dbservice';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ConstantProvider } from '../providers/constant/constant';
 import { HttpModule } from '@angular/http';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
@@ -292,10 +292,10 @@ import { InstallationDetailPageModule } from '../pages/installation/installation
 import { InstallationListPageModule } from '../pages/installation/installation-list/installation-list.module';
 
 //------------------------------------------ While production build --------------------------------------------------------------
-//  import { BackgroundGeolocation } from 'cordova-background-geolocation-lt';   
+ import { BackgroundGeolocation } from 'cordova-background-geolocation-lt';   
  
 // --------------------- --------------------- While serve app --------------------------------------------------------------
-import BackgroundGeolocation from 'cordova-background-geolocation-lt';   
+// import BackgroundGeolocation from 'cordova-background-geolocation-lt';   
 import { ServiceHomePageModule } from '../pages/service-home/service-home.module';
 import { AddPaymentPage } from '../pages/add-payment/add-payment';
 import { ServiceInvoicePage } from '../pages/service-invoice/service-invoice';
@@ -337,6 +337,9 @@ import { WalletInfluencerWalletPageModule } from '../pages/wallet-influencer-wal
 import { CameraModalPageModule } from '../pages/camera-modal/camera-modal.module';
 import { CameraPreview } from '@ionic-native/camera-preview';
 import { TeamTrackDetailPageModule } from '../pages/team-track-detail/team-track-detail.module';
+export function createTranslateLoader(http: HttpClient) {
+    return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 @NgModule({
     declarations: [

@@ -26,8 +26,6 @@ import { Device } from '@ionic-native/device';
 import {Market} from '@ionic-native/market'
 import { ServiceHomePage } from '../pages/service-home/service-home';
 import { PrivacyPolicyPage } from '../pages/privacy-policy/privacy-policy';
-import { SelectRegistrationTypePage } from '../pages/select-registration-type/select-registration-type';
-import { TabsPage } from '../pages/tabs/tabs';
 
 
 export interface PageInterface {
