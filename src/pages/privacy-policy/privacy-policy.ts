@@ -28,7 +28,7 @@ export class PrivacyPolicyPage {
 
   goTo(){
     this.storage.set('userPermission', 'true');
-    this.navCtrl.push(SelectRegistrationTypePage);
+    this.navCtrl.push(LoginPage);
   } 
 
   openPrivacyPolicy(){

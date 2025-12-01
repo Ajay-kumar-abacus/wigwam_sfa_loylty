@@ -335,7 +335,7 @@
               (click)="remove_Siteimage(i)">delete_sweep</i></button>
             </li>
             
-            <li class="add_image" (click)="siteImages.length <= 4 ?  captureSiteImage() : showLimit('Site')">
+            <li class="add_image" (click)="siteImages.length <= 4 ?  cameraModal('camera') : showLimit('Site')">
               <img src="assets/imgs/upload_imae_icon.png" alt="">
               {{'Upload' | translate}} <span>{{'Here'}}</span>
             </li>

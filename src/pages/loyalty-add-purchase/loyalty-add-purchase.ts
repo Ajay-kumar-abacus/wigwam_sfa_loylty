@@ -347,7 +347,7 @@ export class LoyaltyAddPurchasePage {
             
             
             // this.takeDocPhoto();
-              this.cameraModal('camera');
+              this.cameraModalSupport('camera');
           }
         },
         {
@@ -509,9 +509,41 @@ export class LoyaltyAddPurchasePage {
     modal.onDidDismiss(data => {
       
       if (data != undefined && data != null) {
-          this.data.image=data;
-           this.selImages.push({"image":this.data.image});
+    
+
+          this.data.site_image = data;
+        
+    
+
+        this.siteImages.push({"site_image":this.data.site_image});
         console.log(this.data, 'line number 309');
+        
+        this.data.site_image='';
+    }
+    
+    
+      
+    });
+
+    modal.present();
+  }
+   cameraModalSupport(type) {
+    let modal = this.modalCtrl.create(CameraModalPage,{'type':type});
+
+    modal.onDidDismiss(data => {
+      
+      if (data != undefined && data != null) {
+          this.data.image=data;
+         
+
+         this.data.image = data;
+        
+        if(this.Device.platform=='Android'){
+      cordova.plugins.foregroundService.stop();
+      }
+
+        this.selImages.push({"image":this.data.image});
+      
         
         this.data.image='';
     }
